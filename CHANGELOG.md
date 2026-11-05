@@ -10,3 +10,4 @@
 - Casos activos: enlace del folio a ServiceNow, búsqueda, orden por columna, mini barra de rezago y vista cómoda/compacta.
 - Campanita de alertas: folios Alto/Crítico con 2 días o más.
 - Copiar / descargar cada sección como imagen, exportar a Excel (CSV) e imprimir a PDF.
+- Pantalla de carga con animaciones: borde punteado en movimiento, icono flotante con ondas, archivo de ejemplo que cae al recuadro, estado al arrastrar y al procesar, pasos con iconos.

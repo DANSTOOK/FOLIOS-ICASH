@@ -56,6 +56,14 @@ VOLUMEN
   el encabezado fijo; el Top de incidencias muestra las 8 primeras y "Ver todas".
 - Las imágenes descargadas incluyen la tabla completa aunque no quepa en pantalla.
 
+PÁGINA Y VERSIONES
+- Página para compartir: https://danstook.github.io/FOLIOS-ICASH/
+- La página solo cambia al crear una release (v0.1.0, v0.2.0, ...).
+- Cada release trae el HTML adjunto para descargarlo.
+- Rollback: en GitHub, Actions > "Rollback a una versión" > Run workflow >
+  escribir la versión anterior (ej. v0.1.0).
+- Historial de cambios: CHANGELOG.md
+
 PRIVACIDAD
 El archivo se procesa solo en tu equipo; no se envía a ningún servidor.
 Sin internet funciona igual (solo cambia la fuente a la del sistema).

@@ -4,7 +4,12 @@ Página web de un solo archivo que convierte el export de incidentes de ServiceN
 (cajas inteligentes iCash) en un reporte de seguimiento: quién tiene cada folio, por
 plaza y plataforma (Glory / Administrativo / ATIS), con días de rezago y semáforo.
 
+**Página para probarlo:** https://danstook.github.io/FOLIOS-ICASH/
+
 ## Uso
+
+En la página de arriba, o descargando `Reporte Folios iCash.html` (también viene
+adjunto en cada [Release](https://github.com/DANSTOOK/FOLIOS-ICASH/releases)):
 
 1. En ServiceNow exporta la lista de incidentes a Excel
    (`incident - AAAA-MM-DDThhmmss.xlsx`).
@@ -35,3 +40,22 @@ No requiere instalación ni internet (sin internet usa la fuente del sistema).
 
 Cada sección se puede copiar o descargar como imagen. Exporta a Excel (CSV) e
 imprime a PDF. Más detalle en `LEEME.txt`.
+
+## Versiones y rollback
+
+La página publicada **solo cambia cuando se crea una release**. Los ajustes
+pequeños se guardan en `main` sin tocar la página; los cambios grandes se
+publican como una versión nueva.
+
+| Paso | Qué pasa |
+|---|---|
+| Se sube una etiqueta `vX.Y.Z` | El workflow **Release y publicación** crea la Release (con el HTML adjunto) y publica esa versión en la página. |
+| Algo salió mal | Pestaña **Actions → Rollback a una versión → Run workflow**, escribir la versión anterior (ej. `v0.1.0`). La página vuelve a esa versión en ~1 minuto. |
+
+- Numeración: empieza en `v0.1.0`. Cambio grande → `v0.2.0`, `v0.3.0`…
+  Corrección dentro de una versión → `v0.2.1`.
+- La versión publicada se ve en el encabezado del reporte, junto al subtítulo.
+- El historial de cambios está en [CHANGELOG.md](CHANGELOG.md).
+
+**Configuración única:** en el repositorio, Settings → Pages → Build and
+deployment → Source: **GitHub Actions**.

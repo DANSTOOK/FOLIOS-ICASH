@@ -471,7 +471,7 @@ body.compact #casesCard .tw{max-height:720px}
     <div class="mark" aria-hidden="true"><i data-ic="sheet" data-s="22"></i></div>
     <div class="ttl">
       <h1>Estatus de folios iCash</h1>
-      <small>Cajas inteligentes &nbsp;·&nbsp; Incidentes ServiceNow</small>
+      <small>Cajas inteligentes &nbsp;·&nbsp; Incidentes ServiceNow &nbsp;·&nbsp; <span id="appVer" title="Versión publicada">__APP_VERSION__</span></small>
     </div>
     <div class="sp"></div>
     <div class="meta hidden" id="hdrMeta"></div>
@@ -627,7 +627,9 @@ const ICONS = {
   user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
 };
 const ic = (n, s) => `<svg class="ic" viewBox="0 0 24 24"${s ? ` style="--s:${s}px"` : ''} aria-hidden="true">${ICONS[n] || ''}</svg>`;
-const paintIcons = (root = document) => root.querySelectorAll('i[data-ic]').forEach(el => { el.outerHTML = ic(el.dataset.ic, el.dataset.s); });
+// La versión la escribe GitHub al publicar (release); abierto desde el equipo dice "versión local"
+{ const v = document.getElementById('appVer'); if (v && v.textContent.includes('APP_VERSION')) v.textContent = 'versión local'; }
+const paintIcons =(root = document) => root.querySelectorAll('i[data-ic]').forEach(el => { el.outerHTML = ic(el.dataset.ic, el.dataset.s); });
 paintIcons();
 const PLATS = ['GLORY','ADMVO','ATIS','L2','OTRO'];
 const PL = { GLORY:'Glory', ADMVO:'Administrativo', ATIS:'ATIS', L2:'L2', OTRO:'Otro' };

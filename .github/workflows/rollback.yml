@@ -1,0 +1,55 @@
+# Rollback: vuelve a publicar en la página una versión anterior (una release existente).
+# Uso: pestaña Actions > "Rollback a una versión" > Run workflow > escribir la versión (ej. v0.1.0).
+# No borra nada: el código de main y las releases quedan igual; solo cambia lo que ve la gente en la página.
+name: Rollback a una versión
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versión a publicar (ej. v0.1.0). Ver la lista en Releases.'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Validar que la versión existe
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          gh release view "$VERSION" --repo "$GITHUB_REPOSITORY" > /dev/null \
+            || { echo "::error::La versión $VERSION no existe. Revisa la lista en Releases."; exit 1; }
+
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ inputs.version }}
+
+      - name: Preparar sitio
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          mkdir -p _site
+          cp "Reporte Folios iCash.html" _site/index.html
+          sed -i "s|__APP_VERSION__|${VERSION} (rollback)|g" _site/index.html
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

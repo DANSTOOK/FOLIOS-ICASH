@@ -403,6 +403,25 @@ table.pt{border-collapse:collapse;width:100%}
 @media print{#casesCard .tw{max-height:none;overflow:visible}}
 
 
+/* ===== tarjeta resumen: Región · Plazas · CI sin resolver ===== */
+.sumcard{display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:16px;margin-bottom:18px}
+.sbox{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.sbox-h{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f3f4f6;padding:12px 18px;font-size:15.5px;color:var(--ink)}
+.sbox-h svg.ic{color:#4f46e5;--s:16px;margin-right:4px}
+.sbox-b{padding:18px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.sbox select{width:100%;font:inherit;font-size:15.5px;color:var(--ink);padding:10px 40px 10px 16px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='%230f172a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.sbox select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-50)}
+.sbox select:disabled{cursor:default;opacity:1;background-image:none}
+.ibtn{border:0;background:none;color:#64748b;padding:2px;border-radius:8px;display:grid;place-items:center}
+.ibtn:hover{color:var(--brand);background:#e5e7eb}
+.ibtn:hover svg{transform:rotate(90deg)}
+.ibtn svg{transition:transform .3s}
+.bignum{font-size:58px;font-weight:300;line-height:1;text-align:center;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.sum-pz{margin-top:10px;text-align:center;font-size:12.5px;color:var(--muted)}
+.sum-pz b{color:var(--ink);font-weight:600}
+@media (max-width:760px){.sumcard{grid-template-columns:1fr 1fr}.sbox.big{grid-column:1/-1}}
+
 /* ===== pantalla de carga v2: drag & drop animado ===== */
 .empty{max-width:780px}
 .hero h2{font-size:30px;letter-spacing:-.6px;background:linear-gradient(90deg,#0f172a,#334155);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -608,6 +627,21 @@ body.compact #casesCard .tw{max-height:720px}
 
     <div class="legend-sem hidden" id="legSem"></div>
 
+    <section class="sumcard" id="secSum" data-name="resumen-region">
+      <div class="sbox">
+        <div class="sbox-h">Región</div>
+        <div class="sbox-b"><select id="selRegion" aria-label="Región"></select></div>
+      </div>
+      <div class="sbox">
+        <div class="sbox-h">Plazas <button class="ibtn" id="sumReset" title="Mostrar todas las plazas" aria-label="Mostrar todas las plazas"><i data-ic="refresh" data-s="20"></i></button></div>
+        <div class="sbox-b"><select id="selPlaza" aria-label="Plaza"></select></div>
+      </div>
+      <div class="sbox big">
+        <div class="sbox-h"><span><i data-ic="filter"></i> CI Sin Resolver</span></div>
+        <div class="sbox-b"><div class="bignum" id="sumNum">0</div><div class="sum-pz" id="sumPz"></div></div>
+      </div>
+    </section>
+
 
     <div class="grid">
       <section class="card" id="secPlazas" data-name="folios-por-plaza-y-asignado">
@@ -697,6 +731,8 @@ const ICONS = {
   printer: '<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/>',
   ext: '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3"/>',
   check: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>',
+  refresh: '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+  filter: '<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>',
   up: '<path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>',
   bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
   alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
@@ -805,10 +841,11 @@ function mapRows(rows) {
   const data = rows.slice(1).filter(r => r && r[I.folio]);
   const pr = h.map((x, i) => x === 'principal' ? i : -1).filter(i => i >= 0);
   I.plaza = pr.find(i => data.some(r => /^plaza/.test(norm(r[i])))) ?? pr[0] ?? -1;
+  I.region = pr.find(i => data.some(r => /^region/.test(norm(r[i])))) ?? -1;
   const g = (r, k) => I[k] >= 0 ? r[I[k]] ?? '' : '';
   return data.map(r => ({
     folio: String(g(r,'folio')).trim(), abierto: toDate(g(r,'abierto')),
-    tienda: String(g(r,'tienda')).trim() || '(sin tienda)', plaza: String(g(r,'plaza')).trim() || 'Sin plaza',
+    tienda: String(g(r,'tienda')).trim() || '(sin tienda)', plaza: String(g(r,'plaza')).trim() || 'Sin plaza', region: String(g(r,'region')).trim() || 'Sin región',
     prioridad: String(g(r,'prio')).replace(/^\d+\s*-\s*/, '').trim(), prioNum: parseInt(String(g(r,'prio'))) || 9, estado: String(g(r,'estado')).trim(),
     grupo: String(g(r,'grupo')).trim() || '(sin grupo)', asignado: String(g(r,'asig')).trim() || 'Sin asignar',
     desc: String(g(r,'desc')).replace(/^Cajas inteligentes:\s*/i, ''),
@@ -831,12 +868,12 @@ const sem = d => d == null ? '' : d >= cfg.thR ? 'r' : d >= cfg.thY ? 'y' : 'g';
 let all = [], fileName = '';
 let sort = { k: 'exacto', dir: -1 };
 const collapsed = new Set();
-const F = { plat:'', plaza:'', asig:'', falla:'', q:'' };
+const F = { region:'', plat:'', plaza:'', asig:'', falla:'', q:'' };
 
 // Días de rezago = fecha del reporte (00:00) − fecha/hora de apertura, redondeado (5.44 → 5)
 function active() {
   const corte = corteDate();
-  return all.filter(r => !closed.test(r.estado)).map(r => {
+  return all.filter(r => !closed.test(r.estado) && (!F.region || r.region === F.region)).map(r => {
     const exacto = r.abierto ? Math.max(0, (utc(corte) - utc(r.abierto)) / 864e5) : null;
     return { ...r, plat: platOf(r), exacto, rezago: exacto == null ? null : Math.round(exacto) };
   });
@@ -847,14 +884,37 @@ function render() {
   const rows = active();
   if (F.plat && !rows.some(r => r.plat === F.plat)) F.plat = '';
   renderSeg(rows);
+  renderSum(rows);
   $('hdrMeta').innerHTML = `<div>Fecha del reporte<b>${corteDate().toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' })}</b></div><div>Folios activos<b>${rows.length}</b></div>`;
-  const vis = F.plat ? rows.filter(r => r.plat === F.plat) : rows;
+  // la plaza elegida en la tarjeta resumen filtra todo el reporte
+  const vis = rows.filter(r => (!F.plat || r.plat === F.plat) && (!F.plaza || r.plaza === F.plaza));
   renderAlerts(vis); renderPivot(vis); renderDist(vis); renderKpiPlat(rows); renderTop(vis); renderCases(vis);
   $('legSem').innerHTML = `<b style="color:var(--ink)">Semáforo de rezago:</b>
     <span><i class="sq" style="background:var(--red)"></i>${cfg.thR} días o más</span>
     <span><i class="sq" style="background:var(--yel)"></i>${cfg.thY} a ${cfg.thR - 1} días</span>
     <span><i class="sq" style="background:var(--ok)"></i>menos de ${cfg.thY} días</span>`;
 }
+
+/* ===== tarjeta resumen: Región · Plazas · CI sin resolver ===== */
+function renderSum(rows) {
+  const regiones = uniq(all.filter(r => !closed.test(r.estado)).map(r => r.region));
+  const sr = $('selRegion');
+  sr.innerHTML = (regiones.length > 1 ? `<option value="">Todas las regiones</option>` : '') +
+    regiones.map(r => `<option value="${esc(r)}"${F.region === r ? ' selected' : ''}>${esc(r)}</option>`).join('');
+  sr.disabled = regiones.length <= 1;
+  const plazas = uniq(rows.map(r => r.plaza));
+  if (F.plaza && !plazas.includes(F.plaza)) F.plaza = '';
+  $('selPlaza').innerHTML = `<option value="">todos</option>` +
+    plazas.map(p => `<option value="${esc(p)}"${F.plaza === p ? ' selected' : ''}>${esc(p)}</option>`).join('');
+  const sel = F.plaza ? rows.filter(r => r.plaza === F.plaza) : rows;
+  $('sumNum').textContent = sel.length;
+  $('sumPz').innerHTML = F.plaza
+    ? `en <b>${esc(F.plaza)}</b>`
+    : `en <b>${plazas.length} plaza${plazas.length === 1 ? '' : 's'}</b>: ${plazas.map(p => esc(p.replace(/^Plaza\s+/i, ''))).join(' · ')}`;
+}
+$('selRegion').onchange = e => { F.region = e.target.value; F.plaza = ''; render(); };
+$('selPlaza').onchange = e => { F.plaza = e.target.value; F.asig = ''; render(); };
+$('sumReset').onclick = () => { F.plaza = ''; F.asig = ''; render(); };
 
 function renderSeg(rows) {
   const ps = PLATS.filter(p => rows.some(r => r.plat === p));
@@ -1156,7 +1216,7 @@ async function loadBuffer(buf, name) {
   try {
     all = mapRows(/\.csv$/i.test(name) ? readCsv(new TextDecoder().decode(buf)) : await readXlsx(buf));
     if (!all.length) throw new Error('el archivo no tiene folios');
-    fileName = name; Object.assign(F, { plat:'', plaza:'', asig:'', falla:'', q:'' }); $('q').value = '';
+    fileName = name; Object.assign(F, { region:'', plat:'', plaza:'', asig:'', falla:'', q:'' }); $('q').value = '';
     $('corte').value = iso(fechaDelNombre(name) || new Date());
     $('fName').textContent = name;
     $('loader').classList.add('hidden'); $('app').classList.remove('hidden');

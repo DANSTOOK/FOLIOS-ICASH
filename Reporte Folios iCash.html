@@ -403,24 +403,26 @@ table.pt{border-collapse:collapse;width:100%}
 @media print{#casesCard .tw{max-height:none;overflow:visible}}
 
 
-/* ===== tarjeta resumen: Región · Plazas · CI sin resolver ===== */
-.sumcard{display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:16px;margin-bottom:18px}
-.sbox{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
-.sbox-h{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f3f4f6;padding:12px 18px;font-size:15.5px;color:var(--ink)}
-.sbox-h svg.ic{color:#4f46e5;--s:16px;margin-right:4px}
-.sbox-b{padding:18px;flex:1;display:flex;flex-direction:column;justify-content:center}
-.sbox select{width:100%;font:inherit;font-size:15.5px;color:var(--ink);padding:10px 40px 10px 16px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;cursor:pointer;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='%230f172a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
-.sbox select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-50)}
-.sbox select:disabled{cursor:default;opacity:1;background-image:none}
-.ibtn{border:0;background:none;color:#64748b;padding:2px;border-radius:8px;display:grid;place-items:center}
-.ibtn:hover{color:var(--brand);background:#e5e7eb}
-.ibtn:hover svg{transform:rotate(90deg)}
-.ibtn svg{transition:transform .3s}
-.bignum{font-size:58px;font-weight:300;line-height:1;text-align:center;letter-spacing:-1px;font-variant-numeric:tabular-nums}
-.sum-pz{margin-top:10px;text-align:center;font-size:12.5px;color:var(--muted)}
-.sum-pz b{color:var(--ink);font-weight:600}
-@media (max-width:760px){.sumcard{grid-template-columns:1fr 1fr}.sbox.big{grid-column:1/-1}}
+/* ===== tarjeta resumen (una sola tarjeta compacta): Región · Plazas · CI sin resolver ===== */
+.sumcard{padding:14px 20px!important}
+.sum-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.3fr);gap:18px;align-items:center}
+.sum-f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.sum-l{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.sum-l svg.ic{--s:14px;color:#4f46e5}
+.sumcard select{width:100%;font:inherit;font-size:14px;color:var(--ink);padding:7px 34px 7px 12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='%230f172a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.sumcard select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-50)}
+.sumcard select:disabled{cursor:default;opacity:1;background-image:none;background-color:var(--soft)}
+.ibtn{border:0;background:none;color:#64748b;padding:2px;border-radius:6px;display:inline-grid;place-items:center;cursor:pointer}
+.ibtn:hover{color:var(--brand);background:#eef2f7}
+.ibtn svg{transition:transform .3s}.ibtn:hover svg{transform:rotate(90deg)}
+.sum-t{border-left:1px solid var(--line);padding-left:18px;min-width:0}
+.sum-v{display:flex;align-items:baseline;gap:10px;margin-top:2px;min-width:0}
+.sum-v b{font-size:34px;font-weight:300;line-height:1;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.sum-pz{font-size:12.5px;color:var(--muted);line-height:1.35}
+.sum-pz b{font-size:12.5px;font-weight:600;color:var(--ink);letter-spacing:0}
+.sumcard .shot{margin-top:12px;padding-top:10px}
+@media (max-width:700px){.sum-row{grid-template-columns:1fr 1fr}.sum-t{grid-column:1/-1;border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:10px}}
 
 /* ===== pantalla de carga v2: drag & drop animado ===== */
 .empty{max-width:780px}
@@ -627,19 +629,16 @@ body.compact #casesCard .tw{max-height:720px}
 
     <div class="legend-sem hidden" id="legSem"></div>
 
-    <section class="sumcard" id="secSum" data-name="resumen-region">
-      <div class="sbox">
-        <div class="sbox-h">Región</div>
-        <div class="sbox-b"><select id="selRegion" aria-label="Región"></select></div>
+    <section class="card sumcard" id="secSum" data-name="resumen-region">
+      <div class="sum-row">
+        <label class="sum-f"><span class="sum-l">Región</span><select id="selRegion" aria-label="Región"></select></label>
+        <label class="sum-f"><span class="sum-l">Plazas <button type="button" class="ibtn" id="sumReset" title="Mostrar todas las plazas" aria-label="Mostrar todas las plazas"><i data-ic="refresh" data-s="15"></i></button></span><select id="selPlaza" aria-label="Plaza"></select></label>
+        <div class="sum-t">
+          <span class="sum-l"><i data-ic="filter"></i> CI Sin Resolver</span>
+          <div class="sum-v"><b id="sumNum">0</b><span class="sum-pz" id="sumPz"></span></div>
+        </div>
       </div>
-      <div class="sbox">
-        <div class="sbox-h">Plazas <button class="ibtn" id="sumReset" title="Mostrar todas las plazas" aria-label="Mostrar todas las plazas"><i data-ic="refresh" data-s="20"></i></button></div>
-        <div class="sbox-b"><select id="selPlaza" aria-label="Plaza"></select></div>
-      </div>
-      <div class="sbox big">
-        <div class="sbox-h"><span><i data-ic="filter"></i> CI Sin Resolver</span></div>
-        <div class="sbox-b"><div class="bignum" id="sumNum">0</div><div class="sum-pz" id="sumPz"></div></div>
-      </div>
+      <div class="shot noprint"><button class="btn sm" data-act="copy"><i data-ic="copy"></i>Copiar imagen</button><button class="btn sm" data-act="png"><i data-ic="download"></i>Descargar imagen</button></div>
     </section>
 
 

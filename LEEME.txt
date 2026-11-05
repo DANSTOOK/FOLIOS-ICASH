@@ -1,0 +1,61 @@
+REPORTE DE FOLIOS iCASH (ServiceNow)
+====================================
+
+QUÉ ES
+Página que convierte el export de incidentes de ServiceNow en el reporte de
+folios por plaza, asignado y plataforma (Glory / Administrativo / ATIS), con
+días de rezago, top de incidencias y casos activos.
+
+CÓMO USARLO
+1. En ServiceNow, abre la lista de incidentes y exporta a Excel
+   (clic derecho en el encabezado > Exportar > Excel).
+   El archivo se llama algo como: incident - 2026-11-04T171910.174.xlsx
+2. Abre "Reporte Folios iCash.html" con doble clic (Edge o Chrome).
+3. Arrastra el .xlsx al recuadro o usa "Seleccionar archivo".
+
+CÁLCULOS
+- Fecha del reporte: se toma del nombre del archivo (2026-11-04 -> 04/11/2026).
+- Días de rezago = fecha del reporte (00:00) - fecha/hora de apertura del folio,
+  redondeado a días (5.44 -> 5).
+- Semáforo: rojo 7 días o más, amarillo 3 a 6 días.
+- Plataforma: por grupo de asignación. "Proveedor"/"Glory" -> Glory,
+  "ATIS" -> ATIS, cualquier otro -> Administrativo.
+- Solo cuenta folios activos (excluye Resuelto, Cerrado y Cancelado).
+
+SECCIONES
+- Campanita (arriba a la derecha): alertas de folios Alto/Crítico con 2 días o más.
+  El número rojo indica cuántas hay; al hacer clic se despliega la lista.
+- Folios por plaza, asignado y plataforma: una fila por plaza y una columna por
+  plataforma (Glory / Administrativo / ATIS). En cada celda: persona, folios y
+  días de rezago con semáforo. Se mantiene corta aunque haya 50+ folios.
+- Distribución por plaza (gráfica de pastel).
+- Indicadores por plataforma: folios, rezago promedio y máximo, prioridad alta,
+  semáforo (verde/amarillo/rojo) y % en rojo de Glory, Administrativo y ATIS.
+- Top de incidencias y Casos activos.
+
+FUNCIONES
+- Clic en una fila de Indicadores por plataforma: filtra todo el reporte.
+- Clic en plaza, persona, plaza de la gráfica o barra de incidencia: filtra los casos.
+- Clic en el encabezado de Casos activos: cambia el orden.
+- Clic en el folio (INC...): lo abre en ServiceNow. La primera vez pide la
+  dirección de ServiceNow de la empresa (https://xxxx.service-now.com) y la
+  guarda en ese navegador.
+- Cada sección tiene "Copiar imagen" y "Descargar imagen".
+- Al final: Cargar otro archivo, Exportar a Excel (CSV) e Imprimir / PDF.
+
+NAVEGACIÓN Y VISTA
+- Vista Cómoda / Compacta (en Casos activos, junto al buscador). Compacta
+  muestra más filas en todo el reporte; la elección se recuerda en el navegador.
+- Botón redondo abajo a la derecha para regresar arriba.
+- Al pasar el mouse por la gráfica de pastel, su leyenda o las barras de
+  incidencias aparece el detalle: folios, %, rezago promedio, máximo y en rojo.
+- En Casos activos, cada folio tiene una mini barra de rezago con su color.
+
+VOLUMEN
+- Preparado para 40-50+ folios: Casos activos se desplaza dentro de su recuadro con
+  el encabezado fijo; el Top de incidencias muestra las 8 primeras y "Ver todas".
+- Las imágenes descargadas incluyen la tabla completa aunque no quepa en pantalla.
+
+PRIVACIDAD
+El archivo se procesa solo en tu equipo; no se envía a ningún servidor.
+Sin internet funciona igual (solo cambia la fuente a la del sistema).

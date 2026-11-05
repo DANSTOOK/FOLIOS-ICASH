@@ -403,6 +403,11 @@ table.pt{border-collapse:collapse;width:100%}
 @media print{#casesCard .tw{max-height:none;overflow:visible}}
 
 
+/* tabla por plaza: color solo en la columna de días, 50% menos intenso */
+.xl td.dd{font-weight:700}
+.xl td.dd.r{background:rgba(192,0,0,.5)!important;color:#5c0a0a}
+.xl td.dd.y{background:rgba(255,255,0,.5)!important;color:#5c4a00}
+
 /* 1. menú de secciones fijo */
 .card[id]{scroll-margin-top:128px}
 .secnav{border-top:1px solid var(--line)}
@@ -793,9 +798,9 @@ function renderPivot(rows) {
   for (const p of pivotData(rows)) {
     p.people.forEach((x, i) => {
       const s = sem(x.max);
-      h += `<tr class="ps ${s === 'g' ? '' : s}${i === 0 ? ' first' : ''}" data-a="${esc(x.a)}" title="${esc(x.fr.map(f => `${f.folio} · ${f.tienda} · ${f.rezago} días`).join('\n'))}">` +
+      h += `<tr class="ps${i === 0 ? ' first' : ''}" data-a="${esc(x.a)}" title="${esc(x.fr.map(f => `${f.folio} · ${f.tienda} · ${f.rezago} días`).join('\n'))}">` +
         (i === 0 ? `<td class="pzc${F.plaza === p.pz ? ' on' : ''}" rowspan="${p.people.length}" data-pz="${esc(p.pz)}" title="Ver folios de ${esc(p.pz)}"><div class="pzn">${esc(p.pz)}</div><div class="pzs">${p.n} folio${p.n === 1 ? '' : 's'}</div></td>` : '') +
-        `<td class="who">${esc(x.a)}</td><td><span class="pl" style="--c:${plColor(x.p)}">${PL[x.p]}</span></td><td>${x.n}</td><td>${x.max}</td></tr>`;
+        `<td class="who">${esc(x.a)}</td><td><span class="pl" style="--c:${plColor(x.p)}">${PL[x.p]}</span></td><td>${x.n}</td><td class="dd ${s}">${x.max}</td></tr>`;
     });
   }
   h += `<tr class="tot"><td colspan="3">Total general</td><td>${rows.length}</td><td></td></tr></tbody>`;

@@ -556,6 +556,76 @@ body.compact .card{padding:16px 18px}
 body.compact .grid{gap:14px}
 body.compact #casesCard .tw{max-height:720px}
 
+/* ===== 3. transición al filtrar: el contenido nuevo aparece suave ===== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+#piv tbody,#cases tbody,#kpiPlat tbody,#dist .leg,.sum-pz,.sum-total b{animation:fadeUp .32s var(--ease) both}
+#top .brow{animation:fadeUp .32s var(--ease) both}
+#top .brow:nth-child(2){animation-delay:.03s} #top .brow:nth-child(3){animation-delay:.06s} #top .brow:nth-child(4){animation-delay:.09s} #top .brow:nth-child(n+5){animation-delay:.12s}
+
+/* ===== 4. semáforo: el rojo late una vez al cargar ===== */
+@keyframes pulseR{0%{box-shadow:inset 0 0 0 0 rgba(192,0,0,0)}35%{box-shadow:inset 0 0 0 999px rgba(192,0,0,.22)}100%{box-shadow:inset 0 0 0 0 rgba(192,0,0,0)}}
+@keyframes pulseChip{0%,100%{transform:scale(1)}30%{transform:scale(1.18)}60%{transform:scale(.96)}}
+.fresh .xl td.dd.r{animation:pulseR 1.4s ease-out .35s 1}
+.fresh .cases .d.r{animation:pulseChip .7s ease-out .5s 1}
+
+/* ===== 5. campanita: el número rebota y la lista se desliza ===== */
+@keyframes pop{0%{transform:scale(0)}55%{transform:scale(1.3)}75%{transform:scale(.9)}100%{transform:scale(1)}}
+.badge:not(.hidden){animation:pop .5s cubic-bezier(.3,1.6,.5,1) .4s both}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+.bellp{animation:slideDown .22s var(--ease) both!important;transform-origin:top right}
+.bellp .bi{animation:fadeUp .3s var(--ease) both}
+.bellp .bi:nth-child(2){animation-delay:.04s}.bellp .bi:nth-child(3){animation-delay:.08s}.bellp .bi:nth-child(n+4){animation-delay:.12s}
+
+/* ===== 6. fila resaltada al pasar el mouse ===== */
+.cases tbody tr.row{cursor:pointer;transition:background .15s}
+.cases tbody tr.row:hover td{background:#f5f8ff!important}
+.cases tbody tr.row:hover td:first-child{box-shadow:inset 3px 0 0 #3b82f6}
+.cases tbody tr.row.alerta:hover td:first-child{box-shadow:inset 4px 0 0 var(--brand)}
+.cases tbody tr.row:hover a.sn{background:#e8efff;border-radius:6px;padding:1px 6px;margin:-1px -6px}
+.cases tbody tr.row:hover a.sn svg.ic{opacity:1}
+.cases tbody tr.row.open td{background:#f5f8ff!important;border-bottom-color:transparent}
+
+/* ===== 7. fila de detalle desplegable ===== */
+.cases tr.det td{padding:0 12px 12px!important;background:#f5f8ff!important;white-space:normal;text-align:left}
+.det-in{background:#fff;border:1px solid #dbe5f5;border-radius:10px;padding:14px 16px;animation:openDet .22s var(--ease) both;transform-origin:top}
+.det-in.closing{animation:closeDet .18s ease-in both}
+@keyframes openDet{from{opacity:0;transform:scaleY(.85) translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes closeDet{to{opacity:0;transform:scaleY(.9) translateY(-4px)}}
+.det-desc{margin:0 0 12px;font-size:14px;color:var(--ink);line-height:1.5}
+.det-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px 18px;margin-bottom:12px}
+.det-grid span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+.det-grid b{font-size:13.5px;font-weight:600}
+.det-go{text-decoration:none;color:#fff!important;padding:6px 12px!important}
+.det-go svg.ic{--s:14px;opacity:1}
+.cases tr.det .det-in{position:sticky;left:12px;max-width:min(100%,calc(100vw - 96px))}
+
+/* ===== 8. esqueleto de carga ===== */
+.skel{max-width:1200px;margin:0 auto;display:grid;gap:18px}
+.sk-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.sk-sum{flex-direction:row;align-items:center;gap:18px}
+.sk-row{display:flex;gap:24px;align-items:center}
+.sk-lines{flex:1;display:flex;flex-direction:column;gap:10px}
+.sk{height:12px;border-radius:7px;background:linear-gradient(90deg,#eef1f6 25%,#f7f9fc 50%,#eef1f6 75%);background-size:300% 100%;animation:shimmer 1.2s linear infinite}
+@keyframes shimmer{from{background-position:100% 0}to{background-position:0 0}}
+.sk.h18{height:18px}.sk.h28{height:28px}
+.w25{width:25%}.w30{width:30%}.w40{width:40%}.w50{width:50%}.w60{width:60%}.w70{width:70%}.w80{width:80%}.w100{width:100%}
+.sk-total{width:200px;height:84px;border-radius:12px;flex:none}
+.sk-ring{width:140px;height:140px;border-radius:50%;flex:none}
+
+/* ===== 9. avisos ===== */
+.toast{left:auto!important;right:24px;bottom:84px;transform:translateY(16px)!important;display:flex;align-items:center;gap:10px;padding:11px 16px 11px 12px!important;
+  border-radius:12px!important;background:#fff!important;color:var(--ink)!important;border:1px solid var(--line);box-shadow:0 12px 32px rgba(15,23,42,.18)!important;
+  font-size:13.5px!important;max-width:min(420px,calc(100vw - 48px));transition:opacity .2s,transform .25s var(--ease)!important}
+.toast.show{transform:none!important}
+.toast .t-ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:none}
+.toast.t-ok{border-left:4px solid #16a34a}.toast.t-ok .t-ic{background:#dcfce7;color:#15803d}
+.toast.t-err{border-left:4px solid var(--brand)}.toast.t-err .t-ic{background:var(--brand-50);color:var(--brand)}
+.toast.t-info{border-left:4px solid #4f46e5}.toast.t-info .t-ic{background:#eef2ff;color:#4f46e5}
+
+/* ===== 11. dona: centro dinámico ===== */
+@keyframes dnPop{from{opacity:.2;transform:scale(.85)}to{opacity:1;transform:none}}
+#dnNum.dn-pop{animation:dnPop .22s var(--ease);transform-box:fill-box;transform-origin:center}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 @media print{.bar{position:static}}
 </style>
@@ -625,6 +695,13 @@ body.compact #casesCard .tw{max-height:720px}
     <div class="err" id="err"></div>
   </section>
   <input type="file" id="file" accept=".xlsx,.csv" class="hidden">
+
+  <!-- esqueleto mientras se procesa el archivo -->
+  <section id="skel" class="skel hidden" aria-hidden="true">
+    <div class="sk-card sk-sum"><div class="sk sk-total"></div><div class="sk-lines"><div class="sk w60"></div><div class="sk w40"></div></div></div>
+    <div class="sk-card"><div class="sk w30 h18"></div><div class="sk w100 h28"></div><div class="sk w100"></div><div class="sk w100"></div><div class="sk w100"></div><div class="sk w80"></div></div>
+    <div class="sk-card"><div class="sk w25 h18"></div><div class="sk-row"><div class="sk sk-ring"></div><div class="sk-lines"><div class="sk w70"></div><div class="sk w50"></div><div class="sk w60"></div></div></div></div>
+  </section>
 
   <div id="app" class="hidden">
     <div class="info hidden">
@@ -988,9 +1065,18 @@ function renderDist(rows) {
     svg += `<path d="M${P(R, a0)} A${R} ${R} 0 ${lg} 1 ${P(R, a1)} L${P(r0, a1)} A${r0} ${r0} 0 ${lg} 0 ${P(r0, a0)} Z" fill="${col}" stroke="#fff" stroke-width="2" data-p="${esc(x.p)}" data-tip="${tipOf(x)}"></path>`;
     a0 = a1;
   });
-  svg += `<text x="${C}" y="${C + 4}" text-anchor="middle" font-size="30" font-weight="700" fill="#1f2937" pointer-events="none">${rows.length}</text><text x="${C}" y="${C + 22}" text-anchor="middle" font-size="12" fill="#6b7280" pointer-events="none">folios</text>`;
+  svg += `<text id="dnNum" x="${C}" y="${C + 4}" text-anchor="middle" font-size="30" font-weight="700" fill="#1f2937" pointer-events="none">${rows.length}</text><text id="dnLbl" x="${C}" y="${C + 22}" text-anchor="middle" font-size="12" fill="#6b7280" pointer-events="none">folios</text>`;
   $('dist').innerHTML = `<svg width="184" height="184" viewBox="0 0 184 184" role="img" aria-label="Folios por plaza">${svg}</svg>
     <ul class="leg">${c.map((x, i) => `<li data-p="${esc(x.p)}" data-tip="${tipOf(x)}" class="${F.plaza === x.p ? 'on' : ''}"><span class="sw" style="background:${COLORS[i % COLORS.length]}"></span>${esc(x.p.replace(/^Plaza\s+/i, ''))}<span class="num">${x.n}</span><span class="pct">${Math.round(x.n * 100 / tot)}%</span></li>`).join('')}</ul>`;
+  // centro dinámico: al pasar por una plaza, el centro muestra sus folios
+  const setCenter = (n, lbl, col) => { const a = $('dnNum'), b = $('dnLbl'); if (!a) return;
+    a.textContent = n; b.textContent = lbl; a.setAttribute('fill', col || '#1f2937'); a.classList.remove('dn-pop'); void a.getBBox(); a.classList.add('dn-pop'); };
+  $('dist').querySelectorAll('li,path,circle').forEach(el => {
+    const x = c.find(z => z.p === el.dataset.p); if (!x) return;
+    const col = COLORS[c.indexOf(x) % COLORS.length];
+    el.onmouseenter = () => setCenter(x.n, x.p.replace(/^Plaza\s+/i, '').slice(0, 16), col);
+    el.onmouseleave = () => setCenter(rows.length, 'folios');
+  });
   $('dist').querySelectorAll('li,path,circle').forEach(el => el.onclick = () => { F.plaza = F.plaza === el.dataset.p ? '' : el.dataset.p; hideTip(); renderDist(currentVis()); renderCases(currentVis()); });
 }
 
@@ -1110,7 +1196,7 @@ function renderCases(rows) {
   $('chips').querySelectorAll('button').forEach(b => b.onclick = () => { F[b.dataset.k] = ''; render(); });
   const COLS = [['folio','Folio'],['tienda','Tienda'],['plaza','Plaza'],['falla','Incidencia'],['prioridad','Prioridad'],['asignado','Asignado'],['plat','Plataforma'],['abierto','Abierto'],['exacto','Días rezago']];
   $('cases').innerHTML = `<thead><tr>${COLS.map(([k, l]) => `<th data-k="${k}" class="${sort.k === k ? 'sorted' : ''}" title="Ordenar por ${l}">${l}<span class="ar">${sort.k === k ? (sort.dir > 0 ? '▲' : '▼') : '↕'}</span></th>`).join('')}</tr></thead><tbody>` +
-    (list.length ? list.map(r => `<tr title="${esc(r.desc)}" class="${esAlerta(r) ? 'alerta' : ''}">
+    (list.length ? list.map((r, i) => `<tr data-i="${i}" title="Clic para ver el detalle" class="row${esAlerta(r) ? ' alerta' : ''}">
       <td class="folio"><a class="sn" href="${esc(snUrl(r.folio))}" target="_blank" rel="noopener" data-folio="${esc(r.folio)}" title="Abrir ${esc(r.folio)} en ServiceNow">${esc(r.folio)}${ic('ext')}</a></td><td>${esc(r.tienda)}</td><td>${esc(r.plaza)}</td><td>${esc(r.falla)}</td>
       <td class="prio-${esc(r.prioridad)}">${esc(r.prioridad)}</td><td>${esc(r.asignado)}</td>
       <td><span class="pl" style="--c:${plColor(r.plat)}">${PL[r.plat]}</span></td>
@@ -1119,6 +1205,21 @@ function renderCases(rows) {
     : `<tr><td colspan="${COLS.length}" class="empty-row">No hay folios con estos filtros</td></tr>`) + '</tbody>';
   $('cases').querySelectorAll('th').forEach(th => th.onclick = () => {
     const k = th.dataset.k; sort = { k, dir: sort.k === k ? -sort.dir : (k === 'exacto' || k === 'abierto' ? -1 : 1) }; renderCases(rows);
+  });
+  // fila de detalle desplegable (clic en la fila; el folio sigue abriendo ServiceNow)
+  $('cases').querySelectorAll('tr.row').forEach(tr => tr.onclick = e => {
+    if (e.target.closest('a')) return;
+    const nx = tr.nextElementSibling;
+    if (nx && nx.classList.contains('det')) { nx.querySelector('.det-in').classList.add('closing'); tr.classList.remove('open'); setTimeout(() => nx.remove(), 180); return; }
+    const r = list[+tr.dataset.i]; tr.classList.add('open');
+    const f = (k, v) => `<div><span>${k}</span><b>${v}</b></div>`;
+    tr.insertAdjacentHTML('afterend', `<tr class="det"><td colspan="${COLS.length}"><div class="det-in">
+      <p class="det-desc">${esc(r.desc || 'Sin descripción')}</p>
+      <div class="det-grid">${f('Tienda', esc(r.tienda))}${f('Plaza', esc(r.plaza))}${f('Prioridad', esc(r.prioridad))}${f('Estado', esc(r.estado))}
+        ${f('Grupo de asignación', esc(r.grupo))}${f('Asignado', esc(r.asignado))}${f('Abierto', r.abierto ? r.abierto.toLocaleString('es-MX', { dateStyle: 'full', timeStyle: 'short' }) : '—')}
+        ${f('Días de rezago', r.exacto == null ? '—' : `${r.rezago} (${r.exacto.toFixed(2)})`)}</div>
+      <a class="btn sm pri det-go" href="${esc(snUrl(r.folio))}" target="_blank" rel="noopener" data-folio="${esc(r.folio)}">${ic('ext')} Abrir ${esc(r.folio)} en ServiceNow</a>
+    </div></td></tr>`);
   });
 }
 
@@ -1140,15 +1241,20 @@ $('bExp').onclick = () => {
   const csv = '﻿' + out.map(r => r.map(v => { const s = String(v ?? ''); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; }).join(',')).join('\r\n');
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
   a.download = `folios-icash_${iso(corteDate())}.csv`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast(`Excel exportado: ${out.length - 1} folios`);
 };
 
 /* ===== copiar / descargar cada sección como imagen (sin librerías) ===== */
 // los botones van al pie de cada sección
 document.querySelectorAll('.card[data-name]').forEach(c => { const s = c.querySelector('.shot'); if (s) c.appendChild(s); });
-function toast(msg) {
+// avisos: tipo 'ok' (verde), 'err' (rojo) o 'info'
+function toast(msg, type) {
+  type = type || (/no se pudo|error/i.test(msg) ? 'err' : 'ok');
   let t = document.querySelector('.toast');
-  if (!t) { t = document.createElement('div'); t.className = 'toast'; document.body.appendChild(t); }
-  t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2200);
+  if (!t) { t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+  const icon = type === 'err' ? ic('alert', 18) : type === 'info' ? ic('filter', 18) : ic('check', 18);
+  t.className = 'toast t-' + type; t.innerHTML = `<span class="t-ic">${icon}</span><span>${esc(msg)}</span>`;
+  void t.offsetWidth; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), type === 'err' ? 4500 : 2600);
 }
 async function cardToBlob(card) {
   const css = [...document.querySelectorAll('style')].map(s => s.textContent).join('\n');
@@ -1242,15 +1348,34 @@ async function loadBuffer(buf, name) {
     $('hdrMeta').classList.remove('hidden');
     $('toTop').classList.remove('hidden'); requestAnimationFrame(spy);
     render(); renderCfg();
-  } catch (e) { console.error(e); $('err').textContent = 'No se pudo leer el archivo: ' + e.message; }
+    // el semáforo rojo late una vez al cargar
+    $('app').classList.add('fresh'); clearTimeout(loadBuffer._f); loadBuffer._f = setTimeout(() => $('app').classList.remove('fresh'), 2600);
+    toast(`Reporte cargado: ${active().length} folios activos`);
+    return true;
+  } catch (e) {
+    console.error(e); $('err').textContent = 'No se pudo leer el archivo: ' + e.message;
+    toast('No se pudo leer el archivo. Verifica que sea el export de incidentes de ServiceNow.', 'err');
+    return false;
+  }
 }
 window.__loadBuffer = loadBuffer;
 const DROP_TXT = 'Arrastra y suelta tu reporte aquí';
-const pick = f => {
+const wait = ms => new Promise(r => setTimeout(r, ms));
+// carga con "esqueleto" del reporte mientras se procesa el archivo
+const pick = async f => {
   if (!f) return;
   $('drop').classList.add('busy'); $('dropTitle').textContent = 'Procesando ' + f.name + '…';
-  return f.arrayBuffer().then(b => loadBuffer(b, f.name))
-    .finally(() => { $('drop').classList.remove('busy'); $('dropTitle').textContent = DROP_TXT; });
+  const wasApp = !$('app').classList.contains('hidden');
+  $('loader').classList.add('hidden'); $('app').classList.add('hidden'); $('skel').classList.remove('hidden');
+  try {
+    const buf = await f.arrayBuffer();
+    await wait(550);
+    const ok = await loadBuffer(buf, f.name);
+    if (!ok) (wasApp ? $('app') : $('loader')).classList.remove('hidden');
+  } finally {
+    $('skel').classList.add('hidden');
+    $('drop').classList.remove('busy'); $('dropTitle').textContent = DROP_TXT;
+  }
 };
 $('corte').value = iso(new Date());
 $('thY').value = cfg.thY; $('thR').value = cfg.thR;

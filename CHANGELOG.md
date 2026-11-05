@@ -12,3 +12,4 @@
 - Copiar / descargar cada sección como imagen, exportar a Excel (CSV) e imprimir a PDF.
 - Pantalla de carga con animaciones: borde punteado en movimiento, icono flotante con ondas, archivo de ejemplo que cae al recuadro, estado al arrastrar y al procesar, pasos con iconos.
 - Tarjeta resumen: Región, Plazas (filtra todo el reporte) y total de CI sin resolver con las plazas involucradas.
+- Animaciones y UX: transición al filtrar, pulso del semáforo rojo al cargar, campanita animada, fila resaltada y detalle desplegable en Casos activos, esqueleto de carga, avisos con icono y centro dinámico en la gráfica de pastel.

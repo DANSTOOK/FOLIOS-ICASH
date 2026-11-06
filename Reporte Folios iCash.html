@@ -622,6 +622,53 @@ body.compact #casesCard .tw{max-height:720px}
 .toast.t-err{border-left:4px solid var(--brand)}.toast.t-err .t-ic{background:var(--brand-50);color:var(--brand)}
 .toast.t-info{border-left:4px solid #4f46e5}.toast.t-info .t-ic{background:#eef2ff;color:#4f46e5}
 
+/* ===== 2 y 3. total: anillo de % en rojo y brillo periódico ===== */
+.sum-total{flex-direction:row!important;align-items:center;justify-content:space-between;gap:12px}
+.st-txt{display:flex;flex-direction:column;gap:2px;position:relative;z-index:1}
+.st-ring{position:relative;width:64px;height:64px;flex:none;z-index:1}
+.st-ring svg{width:64px;height:64px;transform:rotate(-90deg)}
+.st-ring circle{fill:none;stroke-width:6}
+.rg-bg{stroke:rgba(255,255,255,.22)}
+.rg-fg{stroke:#fff;stroke-linecap:round;transition:stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1) .15s}
+.st-ring span{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.st-ring span b{font-size:14px!important;font-weight:800!important;letter-spacing:0!important}
+.st-ring span small{font-size:9px;opacity:.85;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+.sum-total::before{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;z-index:0;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-18deg);animation:sweep 4.5s ease-in-out 1.2s infinite}
+@keyframes sweep{0%{left:-70%}22%{left:130%}100%{left:130%}}
+.sum-row{grid-template-columns:240px minmax(0,1fr)!important}
+
+/* ===== 4. dona que se dibuja ===== */
+.anim #dist svg{animation:none!important}
+#dist .dseg{animation:drawSeg .75s cubic-bezier(.4,0,.2,1) both}
+@keyframes drawSeg{from{stroke-dasharray:0 var(--L)}}
+#dist svg:hover .dseg:not(:hover){opacity:.5}
+#dist .dseg:hover{transform:scale(1.04)}
+
+/* ===== 5. secciones que aparecen al bajar ===== */
+.card.rv{opacity:0;transform:translateY(22px);animation:none!important;transition:opacity .55s var(--ease),transform .55s var(--ease),box-shadow .2s}
+.card.rv.in{opacity:1;transform:none}
+
+/* ===== 6. ordenar: sin desvanecido, las filas se deslizan ===== */
+#cases.sorting tbody{animation:none!important}
+#cases tr.row{will-change:transform}
+
+/* ===== 8. mini barras de rezago que crecen ===== */
+.mb i{transform-origin:left center;animation:growX .8s cubic-bezier(.2,.8,.2,1) .15s both}
+@keyframes growX{from{transform:scaleX(0)}}
+#cases.sorting .mb i{animation:none}
+
+/* ===== 10. tarjetas que se elevan al pasar el mouse ===== */
+#app .card:not(.rv){transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s}
+#app .card:hover{transform:translateY(-3px);box-shadow:0 4px 8px rgba(15,23,42,.05),0 18px 40px -12px rgba(15,23,42,.18);border-color:#dfe4ec}
+#app .card.rv.in:hover{transform:translateY(-3px)}
+
+/* ===== 11. onda al hacer clic ===== */
+.btn,.seg button,.pzchip,.ibtn,.chip button{position:relative;overflow:hidden}
+.ripple{position:absolute;border-radius:50%;pointer-events:none;background:currentColor;opacity:.22;transform:scale(0);animation:ripple-k .6s ease-out forwards}
+.btn.pri .ripple{background:#fff;opacity:.35}
+@keyframes ripple-k{to{transform:scale(1);opacity:0}}
+
 /* ===== 11. dona: centro dinámico ===== */
 @keyframes dnPop{from{opacity:.2;transform:scale(.85)}to{opacity:1;transform:none}}
 #dnNum.dn-pop{animation:dnPop .22s var(--ease);transform-box:fill-box;transform-origin:center}
@@ -717,9 +764,15 @@ body.compact #casesCard .tw{max-height:720px}
     <section class="card sumcard" id="secSum" data-name="resumen-region">
       <div class="sum-row">
         <div class="sum-total">
-          <span class="st-lbl">CI sin resolver</span>
-          <b id="sumNum">0</b>
-          <span class="st-sub" id="sumSub">folios activos</span>
+          <div class="st-txt">
+            <span class="st-lbl">CI sin resolver</span>
+            <b id="sumNum">0</b>
+            <span class="st-sub" id="sumSub">folios activos</span>
+          </div>
+          <div class="st-ring" title="Porcentaje de folios en rojo (7+ días)">
+            <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="rg-bg" cx="32" cy="32" r="27"/><circle class="rg-fg" id="sumRing" cx="32" cy="32" r="27"/></svg>
+            <span><b id="sumPct">0%</b><small>en rojo</small></span>
+          </div>
         </div>
         <div class="sum-side">
           <div class="sum-filters">
@@ -986,6 +1039,21 @@ function render() {
     <span><i class="sq" style="background:var(--ok)"></i>menos de ${cfg.thY} días</span>`;
 }
 
+/* ===== 1. números que cuentan ===== */
+const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+function countUp(el, to, dur = 700, suffix = '') {
+  if (!el) return;
+  const from = el._cv ?? 0; el._cv = to;
+  cancelAnimationFrame(el._raf);
+  if (reduceMotion() || from === to) { el.textContent = to + suffix; return; }
+  const t0 = performance.now();
+  const step = t => { const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(from + (to - from) * e) + suffix; if (p < 1) el._raf = requestAnimationFrame(step); };
+  el._raf = requestAnimationFrame(step);
+}
+// cuenta todos los números marcados con data-count dentro de un contenedor (se vuelven a crear al filtrar)
+const animateCounts = root => root.querySelectorAll('[data-count]').forEach(el => { el._cv = 0; countUp(el, +el.dataset.count, 650); });
+
 /* ===== tarjeta resumen: Región · Plazas · CI sin resolver ===== */
 function renderSum(rows) {
   const regiones = uniq(all.filter(r => !closed.test(r.estado)).map(r => r.region));
@@ -998,7 +1066,13 @@ function renderSum(rows) {
   $('selPlaza').innerHTML = `<option value="">todos</option>` +
     plazas.map(p => `<option value="${esc(p)}"${F.plaza === p ? ' selected' : ''}>${esc(p)}</option>`).join('');
   const sel = F.plaza ? rows.filter(r => r.plaza === F.plaza) : rows;
-  $('sumNum').textContent = sel.length;
+  countUp($('sumNum'), sel.length, 800);
+  // anillo: % de folios en rojo (7+ días)
+  const pct = sel.length ? Math.round(sel.filter(r => sem(r.rezago) === 'r').length * 100 / sel.length) : 0;
+  const C = 2 * Math.PI * 27, ring = $('sumRing');
+  ring.style.strokeDasharray = `${C}`; ring.style.strokeDashoffset = `${C}`;
+  requestAnimationFrame(() => requestAnimationFrame(() => { ring.style.strokeDashoffset = `${C * (1 - pct / 100)}`; }));
+  countUp($('sumPct'), pct, 900, '%');
   $('sumSub').textContent = F.plaza
     ? F.plaza.replace(/^Plaza\s+/i, '')
     : `en ${plazas.length} plaza${plazas.length === 1 ? '' : 's'}`;
@@ -1034,11 +1108,11 @@ function renderPivot(rows) {
       const s = sem(x.max);
       h += `<tr class="ps${i === 0 ? ' first' : ''}" data-a="${esc(x.a)}" title="${esc(x.fr.map(f => `${f.folio} · ${f.tienda} · ${f.rezago} días`).join('\n'))}">` +
         (i === 0 ? `<td class="pzc${F.plaza === p.pz ? ' on' : ''}" rowspan="${p.people.length}" data-pz="${esc(p.pz)}" title="Ver folios de ${esc(p.pz)}"><div class="pzn">${esc(p.pz)}</div><div class="pzs">${p.n} folio${p.n === 1 ? '' : 's'}</div></td>` : '') +
-        `<td class="who">${esc(x.a)}</td><td><span class="pl" style="--c:${plColor(x.p)}">${PL[x.p]}</span></td><td>${x.n}</td><td class="dd ${s}">${x.max}</td></tr>`;
+        `<td class="who">${esc(x.a)}</td><td><span class="pl" style="--c:${plColor(x.p)}">${PL[x.p]}</span></td><td data-count="${x.n}">${x.n}</td><td class="dd ${s}" data-count="${x.max}">${x.max}</td></tr>`;
     });
   }
-  h += `<tr class="tot"><td colspan="3">Total general</td><td>${rows.length}</td><td></td></tr></tbody>`;
-  $('piv').innerHTML = h;
+  h += `<tr class="tot"><td colspan="3">Total general</td><td data-count="${rows.length}">${rows.length}</td><td></td></tr></tbody>`;
+  $('piv').innerHTML = h; animateCounts($('piv'));
   $('piv').querySelectorAll('td.pzc').forEach(td => td.onclick = e => { e.stopPropagation(); F.plaza = F.plaza === td.dataset.pz ? '' : td.dataset.pz; F.asig = ''; renderPivot(rows); renderDist(rows); renderCases(rows); $('casesCard').scrollIntoView({ behavior: 'smooth' }); });
   $('piv').querySelectorAll('tr.ps').forEach(tr => tr.onclick = () => { F.asig = tr.dataset.a; renderCases(currentVis()); $('casesCard').scrollIntoView({ behavior: 'smooth' }); });
 }
@@ -1058,13 +1132,17 @@ function renderDist(rows) {
   const tot = rows.length || 1, R = 84, r0 = 52, C = 92; let a0 = -Math.PI / 2, svg = '';
   const P = (rad, a) => `${(C + rad * Math.cos(a)).toFixed(2)} ${(C + rad * Math.sin(a)).toFixed(2)}`;
   const tipOf = x => tipFor(x.p, rows.filter(r => r.plaza === x.p), rows.length);
+  // 4. dona "dibujada": cada plaza es un trazo de círculo que se dibuja en orden
+  const rm = (R + r0) / 2, L = 2 * Math.PI * rm, gap = c.length > 1 ? 3 : 0; let acc = 0;
+  svg += `<g transform="rotate(-90 ${C} ${C})">`;
   c.forEach((x, i) => {
-    const col = COLORS[i % COLORS.length];
-    if (x.n === tot) { svg += `<circle cx="${C}" cy="${C}" r="${(R + r0) / 2}" fill="none" stroke="${col}" stroke-width="${R - r0}" data-p="${esc(x.p)}" data-tip="${tipOf(x)}"/>`; return; }
-    const a1 = a0 + 2 * Math.PI * x.n / tot, lg = a1 - a0 > Math.PI ? 1 : 0;
-    svg += `<path d="M${P(R, a0)} A${R} ${R} 0 ${lg} 1 ${P(R, a1)} L${P(r0, a1)} A${r0} ${r0} 0 ${lg} 0 ${P(r0, a0)} Z" fill="${col}" stroke="#fff" stroke-width="2" data-p="${esc(x.p)}" data-tip="${tipOf(x)}"></path>`;
-    a0 = a1;
+    const col = COLORS[i % COLORS.length], len = Math.max(1, L * x.n / tot - gap);
+    svg += `<circle class="dseg" cx="${C}" cy="${C}" r="${rm}" fill="none" stroke="${col}" stroke-width="${R - r0}"
+      stroke-dasharray="${len} ${L}" stroke-dashoffset="${-acc}" style="--L:${L.toFixed(1)};animation-delay:${(i * 0.16).toFixed(2)}s"
+      data-p="${esc(x.p)}" data-tip="${tipOf(x)}"/>`;
+    acc += L * x.n / tot;
   });
+  svg += `</g>`;
   svg += `<text id="dnNum" x="${C}" y="${C + 4}" text-anchor="middle" font-size="30" font-weight="700" fill="#1f2937" pointer-events="none">${rows.length}</text><text id="dnLbl" x="${C}" y="${C + 22}" text-anchor="middle" font-size="12" fill="#6b7280" pointer-events="none">folios</text>`;
   $('dist').innerHTML = `<svg width="184" height="184" viewBox="0 0 184 184" role="img" aria-label="Folios por plaza">${svg}</svg>
     <ul class="leg">${c.map((x, i) => `<li data-p="${esc(x.p)}" data-tip="${tipOf(x)}" class="${F.plaza === x.p ? 'on' : ''}"><span class="sw" style="background:${COLORS[i % COLORS.length]}"></span>${esc(x.p.replace(/^Plaza\s+/i, ''))}<span class="num">${x.n}</span><span class="pct">${Math.round(x.n * 100 / tot)}%</span></li>`).join('')}</ul>`;
@@ -1126,9 +1204,10 @@ function renderKpiPlat(rows) {
       <th class="wide">Semáforo de folios</th><th>% en rojo</th></tr></thead><tbody>` +
     stats.map(s => `<tr data-p="${s.p}" class="${F.plat === s.p ? 'on' : ''}">
       <td><span class="pl" style="--c:${plColor(s.p)}">${PL[s.p]}</span></td>
-      <td><b>${s.n}</b></td><td>${s.avg.toFixed(1)} d</td><td><span class="d ${sem(s.max)}">${s.max}</span></td><td>${s.alta}</td>
+      <td><b data-count="${s.n}">${s.n}</b></td><td>${s.avg.toFixed(1)} d</td><td><span class="d ${sem(s.max)}">${s.max}</span></td><td>${s.alta}</td>
       <td class="wide"><div class="stack">${seg(s.c.g, s.n, 'g')}${seg(s.c.y, s.n, 'y')}${seg(s.c.r, s.n, 'r')}</div></td>
       <td><b class="${s.c.r ? 'txt-r' : ''}">${Math.round(s.c.r * 100 / (s.n || 1))}%</b></td></tr>`).join('') + '</tbody>';
+  animateCounts($('kpiPlat'));
   $('kpiPlat').querySelectorAll('tbody tr').forEach(tr => tr.onclick = () => { F.plat = F.plat === tr.dataset.p ? '' : tr.dataset.p; render(); });
 }
 
@@ -1175,7 +1254,8 @@ document.addEventListener('click', e => {
   window.open(snUrl(a.dataset.folio), '_blank', 'noopener');
 });
 
-function renderCases(rows) {
+function renderCases(rows, sorting) {
+  $('cases').classList.toggle('sorting', !!sorting);   // al ordenar, sin desvanecido (las filas se deslizan)
   const q = norm(F.q);
   const list = rows.filter(r => (!F.plaza || r.plaza === F.plaza) && (!F.asig || r.asignado === F.asig) && (!F.falla || r.falla === F.falla) &&
       (!q || norm([r.folio, r.tienda, r.plaza, r.asignado, r.desc, r.falla].join(' ')).includes(q)))
@@ -1196,7 +1276,7 @@ function renderCases(rows) {
   $('chips').querySelectorAll('button').forEach(b => b.onclick = () => { F[b.dataset.k] = ''; render(); });
   const COLS = [['folio','Folio'],['tienda','Tienda'],['plaza','Plaza'],['falla','Incidencia'],['prioridad','Prioridad'],['asignado','Asignado'],['plat','Plataforma'],['abierto','Abierto'],['exacto','Días rezago']];
   $('cases').innerHTML = `<thead><tr>${COLS.map(([k, l]) => `<th data-k="${k}" class="${sort.k === k ? 'sorted' : ''}" title="Ordenar por ${l}">${l}<span class="ar">${sort.k === k ? (sort.dir > 0 ? '▲' : '▼') : '↕'}</span></th>`).join('')}</tr></thead><tbody>` +
-    (list.length ? list.map((r, i) => `<tr data-i="${i}" title="Clic para ver el detalle" class="row${esAlerta(r) ? ' alerta' : ''}">
+    (list.length ? list.map((r, i) => `<tr data-i="${i}" data-f="${esc(r.folio)}" title="Clic para ver el detalle" class="row${esAlerta(r) ? ' alerta' : ''}">
       <td class="folio"><a class="sn" href="${esc(snUrl(r.folio))}" target="_blank" rel="noopener" data-folio="${esc(r.folio)}" title="Abrir ${esc(r.folio)} en ServiceNow">${esc(r.folio)}${ic('ext')}</a></td><td>${esc(r.tienda)}</td><td>${esc(r.plaza)}</td><td>${esc(r.falla)}</td>
       <td class="prio-${esc(r.prioridad)}">${esc(r.prioridad)}</td><td>${esc(r.asignado)}</td>
       <td><span class="pl" style="--c:${plColor(r.plat)}">${PL[r.plat]}</span></td>
@@ -1204,7 +1284,15 @@ function renderCases(rows) {
       <td class="c" title="${r.exacto == null ? '' : 'Exacto: ' + r.exacto.toFixed(4)}"><span class="dz"><span class="d ${sem(r.rezago)}">${r.rezago ?? '—'}</span><span class="mb"><i class="${sem(r.rezago)}" style="width:${r.rezago == null ? 0 : Math.max(4, r.rezago * 100 / maxRz)}%"></i></span></span></td></tr>`).join('')
     : `<tr><td colspan="${COLS.length}" class="empty-row">No hay folios con estos filtros</td></tr>`) + '</tbody>';
   $('cases').querySelectorAll('th').forEach(th => th.onclick = () => {
-    const k = th.dataset.k; sort = { k, dir: sort.k === k ? -sort.dir : (k === 'exacto' || k === 'abierto' ? -1 : 1) }; renderCases(rows);
+    // 6. ordenar con movimiento: cada fila se desliza de su posición anterior a la nueva
+    const before = new Map([...$('cases').querySelectorAll('tr.row')].map(tr => [tr.dataset.f, tr.getBoundingClientRect().top]));
+    const k = th.dataset.k; sort = { k, dir: sort.k === k ? -sort.dir : (k === 'exacto' || k === 'abierto' ? -1 : 1) }; renderCases(rows, true);
+    if (reduceMotion()) return;
+    $('cases').querySelectorAll('tr.row').forEach(tr => {
+      const y0 = before.get(tr.dataset.f); if (y0 == null) return;
+      const dy = y0 - tr.getBoundingClientRect().top;
+      if (Math.abs(dy) > 1) tr.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    });
   });
   // fila de detalle desplegable (clic en la fila; el folio sigue abriendo ServiceNow)
   $('cases').querySelectorAll('tr.row').forEach(tr => tr.onclick = e => {
@@ -1257,7 +1345,9 @@ function toast(msg, type) {
   void t.offsetWidth; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), type === 'err' ? 4500 : 2600);
 }
 async function cardToBlob(card) {
-  const css = [...document.querySelectorAll('style')].map(s => s.textContent).join('\n');
+  // en la imagen todo va estático y en su estado final (sin animaciones)
+  const css = [...document.querySelectorAll('style')].map(s => s.textContent).join('\n') +
+    '\n*,*::before,*::after{animation:none!important;transition:none!important}.card{opacity:1!important;transform:none!important}';
   const clone = card.cloneNode(true);
   clone.querySelectorAll('.noprint,.shot').forEach(n => n.remove());
   clone.querySelectorAll('.tw').forEach(n => { n.style.overflow = 'visible'; n.style.maxHeight = 'none'; });
@@ -1334,6 +1424,28 @@ $('density').querySelectorAll('button').forEach(b => b.onclick = () => setDensit
 let d0 = 'comoda'; try { d0 = localStorage.getItem(DKEY) || 'comoda'; } catch (e) {}
 setDensity(d0);
 
+/* ===== 5. secciones que aparecen al bajar ===== */
+const revealIO = 'IntersectionObserver' in window
+  ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealIO.unobserve(e.target); } }), { threshold: 0.08 })
+  : null;
+function setupReveal() {
+  if (!revealIO || reduceMotion()) return;
+  document.querySelectorAll('#app .card').forEach(c => {
+    c.classList.remove('rv', 'in');
+    if (c.getBoundingClientRect().top > innerHeight - 40) { c.classList.add('rv'); revealIO.observe(c); }   // solo las que están abajo
+  });
+}
+
+/* ===== 11. onda al hacer clic en botones, plazas y plataformas ===== */
+document.addEventListener('pointerdown', e => {
+  const b = e.target.closest('.btn, .seg button, .pzchip, .ibtn, .chip button');
+  if (!b || reduceMotion()) return;
+  const r = b.getBoundingClientRect(), s = Math.max(r.width, r.height) * 2;
+  const w = document.createElement('span'); w.className = 'ripple';
+  w.style.cssText = `width:${s}px;height:${s}px;left:${e.clientX - r.left - s / 2}px;top:${e.clientY - r.top - s / 2}px`;
+  b.appendChild(w); setTimeout(() => w.remove(), 600);
+});
+
 /* ===== carga ===== */
 async function loadBuffer(buf, name) {
   $('err').textContent = '';
@@ -1351,6 +1463,7 @@ async function loadBuffer(buf, name) {
     // el semáforo rojo late una vez al cargar
     $('app').classList.add('fresh'); clearTimeout(loadBuffer._f); loadBuffer._f = setTimeout(() => $('app').classList.remove('fresh'), 2600);
     toast(`Reporte cargado: ${active().length} folios activos`);
+    requestAnimationFrame(setupReveal);
     return true;
   } catch (e) {
     console.error(e); $('err').textContent = 'No se pudo leer el archivo: ' + e.message;

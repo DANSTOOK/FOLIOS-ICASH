@@ -15,3 +15,4 @@
 - Animaciones y UX: transición al filtrar, pulso del semáforo rojo al cargar, campanita animada, fila resaltada y detalle desplegable en Casos activos, esqueleto de carga, avisos con icono y centro dinámico en la gráfica de pastel.
 - Efectos visuales: números que cuentan, anillo de % en rojo y brillo en el total, dona que se dibuja, secciones que aparecen al bajar, filas que se deslizan al ordenar, mini barras que crecen, tarjetas que se elevan y onda al hacer clic.
 - Plataforma: los folios del grupo OPV-Cajas Inteligentes (sin Proveedor) ahora cuentan como L2 Soporte, no como Administrativo.
+- Total con fecha del reporte, más grande. Pie de página (pantalla, imágenes y PDF), PDF con portada, modo presentación, selector de plataforma deslizante, encabezado que se compacta, modo oscuro y optimización (código sin uso eliminado, cálculo en caché, búsqueda con pausa).

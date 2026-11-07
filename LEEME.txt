@@ -19,15 +19,16 @@ CÁLCULOS
   redondeado a días (5.44 -> 5).
 - Semáforo: rojo 7 días o más, amarillo 3 a 6 días.
 - Plataforma: por grupo de asignación. "Proveedor"/"Glory" -> Glory,
-  "ATIS" -> ATIS, cualquier otro -> Administrativo.
+  "ATIS" -> ATIS, "OPV-Cajas Inteligentes" (sin "Proveedor"), "L2"/"N2" o
+  "Soporte" -> L2 Soporte, cualquier otro -> Administrativo.
 - Solo cuenta folios activos (excluye Resuelto, Cerrado y Cancelado).
 
 SECCIONES
 - Campanita (arriba a la derecha): alertas de folios Alto/Crítico con 2 días o más.
   El número rojo indica cuántas hay; al hacer clic se despliega la lista.
-- Folios por plaza, asignado y plataforma: una fila por plaza y una columna por
-  plataforma (Glory / Administrativo / ATIS). En cada celda: persona, folios y
-  días de rezago con semáforo. Se mantiene corta aunque haya 50+ folios.
+- Folios por plaza, asignado y plataforma: cada plaza con sus personas,
+  plataforma (Glory / Administrativo / ATIS / L2 Soporte), folios y días de
+  rezago con semáforo en la columna de días.
 - Distribución por plaza (gráfica de pastel).
 - Indicadores por plataforma: folios, rezago promedio y máximo, prioridad alta,
   semáforo (verde/amarillo/rojo) y % en rojo de Glory, Administrativo y ATIS.

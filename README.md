@@ -25,7 +25,8 @@ No requiere instalación ni internet (sin internet usa la fuente del sistema).
 - **Días de rezago** = fecha del reporte (00:00) − fecha/hora de apertura, redondeado.
 - **Semáforo:** rojo 7+ días, amarillo 3 a 6, verde menos de 3.
 - **Plataforma** por grupo de asignación: "Proveedor"/"Glory" → Glory,
-  "ATIS" → ATIS, cualquier otro → Administrativo.
+  "ATIS" → ATIS, "OPV-Cajas Inteligentes" (sin "Proveedor"), "L2"/"N2" o
+  "Soporte" → L2 Soporte, cualquier otro → Administrativo.
 - Solo folios activos (excluye Resuelto, Cerrado y Cancelado).
 
 ## Secciones

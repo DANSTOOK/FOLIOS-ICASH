@@ -853,7 +853,7 @@ body.compact #casesCard .tw{max-height:720px}
         <div><b>Plataforma por grupo de asignación</b><table id="cfgG"></table></div>
         <div><b>Plataforma por persona</b> <span class="muted small">(tiene prioridad sobre el grupo)</span><table id="cfgP"></table></div>
       </div>
-      <p class="small muted">Automático: grupo con "ATIS" → ATIS · "Proveedor" o "Glory" → Glory · "L2"/"N2" → L2 · cualquier otro → Administrativo. Los cambios se guardan en este navegador.
+      <p class="small muted">Automático: grupo con "ATIS" → ATIS · "Proveedor" o "Glory" → Glory · "OPV-Cajas Inteligentes", "L2"/"N2" o "Soporte" → L2 Soporte · cualquier otro → Administrativo. Los cambios se guardan en este navegador.
       <button class="btn" id="bReset" style="margin-left:8px">Restablecer</button></p>
     </details>
   </div>
@@ -889,7 +889,7 @@ const ic = (n, s) => `<svg class="ic" viewBox="0 0 24 24"${s ? ` style="--s:${s}
 const paintIcons =(root = document) => root.querySelectorAll('i[data-ic]').forEach(el => { el.outerHTML = ic(el.dataset.ic, el.dataset.s); });
 paintIcons();
 const PLATS = ['GLORY','ADMVO','ATIS','L2','OTRO'];
-const PL = { GLORY:'Glory', ADMVO:'Administrativo', ATIS:'ATIS', L2:'L2', OTRO:'Otro' };
+const PL = { GLORY:'Glory', ADMVO:'Administrativo', ATIS:'ATIS', L2:'L2 Soporte', OTRO:'Otro' };
 const PL_SHORT = { GLORY:'Glory', ADMVO:'Admvo', ATIS:'ATIS', L2:'L2', OTRO:'Otro' };
 const COLORS = ['#3b7ddd','#d6336c','#f5a524','#2fb36d','#7b5cd6','#14a3b8','#e8590c','#868e96'];
 const LS = 'icash-folios-cfg-v1';
@@ -1004,7 +1004,14 @@ function tipoIncidencia(desc, cat) {
   t = (t || d.slice(0, 50) || 'Sin clasificar').trim().replace(/\s+/g, ' ');
   return t.charAt(0).toUpperCase() + t.slice(1);
 }
-const autoPlat = g => { const s = norm(g); return /\batis\b/.test(s) ? 'ATIS' : /glory|proveedor/.test(s) ? 'GLORY' : /\b(l2|n2)\b|nivel 2/.test(s) ? 'L2' : 'ADMVO'; };
+// Plataforma por grupo de asignación:
+//   ATIS → ATIS · Proveedor/Glory → Glory
+//   OPV-Cajas Inteligentes (sin "Proveedor") → L2 Soporte · L2/N2/Soporte → L2 Soporte · resto → Administrativo
+const autoPlat = g => { const s = norm(g);
+  if (/\batis\b/.test(s)) return 'ATIS';
+  if (/glory|proveedor/.test(s)) return 'GLORY';
+  if (/cajas inteligentes|\b(l2|n2)\b|nivel 2|soporte/.test(s)) return 'L2';
+  return 'ADMVO'; };
 const platOf = r => cfg.people[r.asignado] || cfg.groups[r.grupo] || autoPlat(r.grupo);
 const closed = /resuelt|cerrad|cancelad|resolved|closed|cancel/i;
 const sem = d => d == null ? '' : d >= cfg.thR ? 'r' : d >= cfg.thY ? 'y' : 'g';

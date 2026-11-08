@@ -16,3 +16,4 @@
 - Efectos visuales: números que cuentan, anillo de % en rojo y brillo en el total, dona que se dibuja, secciones que aparecen al bajar, filas que se deslizan al ordenar, mini barras que crecen, tarjetas que se elevan y onda al hacer clic.
 - Plataforma: los folios del grupo OPV-Cajas Inteligentes (sin Proveedor) ahora cuentan como L2 Soporte, no como Administrativo.
 - Total con fecha del reporte, más grande. Pie de página (pantalla, imágenes y PDF), PDF con portada, modo presentación, selector de plataforma deslizante, encabezado que se compacta, modo oscuro y optimización (código sin uso eliminado, cálculo en caché, búsqueda con pausa).
+- Etiquetas nuevas: ATI (Asesor TI) para los asesores de TI y PFS TI para el prestador de servicio de TI. El grupo OPV-Cajas Inteligentes Admin cuenta como Administrativo.

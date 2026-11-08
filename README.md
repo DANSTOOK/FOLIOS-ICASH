@@ -26,7 +26,11 @@ No requiere instalación ni internet (sin internet usa la fuente del sistema).
 - **Semáforo:** rojo 7+ días, amarillo 3 a 6, verde menos de 3.
 - **Plataforma** por grupo de asignación: "Proveedor"/"Glory" → Glory,
   "ATIS" → ATIS, "OPV-Cajas Inteligentes" (sin "Proveedor"), "L2"/"N2" o
-  "Soporte" → L2 Soporte, cualquier otro → Administrativo.
+  "Soporte" → L2 Soporte, "OPV-Cajas Inteligentes Admin" → Administrativo,
+  cualquier otro → Administrativo.
+- **Personas con etiqueta fija:** los asesores de TI van como **ATI (Asesor TI)** y el
+  prestador de servicio de TI (Jaime Daniel Bustos Mendez) como **PFS TI**, sin importar
+  el grupo. La lista está en `PERSONAS` dentro del HTML.
 - Solo folios activos (excluye Resuelto, Cerrado y Cancelado).
 
 ## Secciones

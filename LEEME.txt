@@ -20,7 +20,13 @@ CÁLCULOS
 - Semáforo: rojo 7 días o más, amarillo 3 a 6 días.
 - Plataforma: por grupo de asignación. "Proveedor"/"Glory" -> Glory,
   "ATIS" -> ATIS, "OPV-Cajas Inteligentes" (sin "Proveedor"), "L2"/"N2" o
-  "Soporte" -> L2 Soporte, cualquier otro -> Administrativo.
+  "Soporte" -> L2 Soporte, "OPV-Cajas Inteligentes Admin" -> Administrativo,
+  cualquier otro -> Administrativo.
+- Personas con etiqueta fija (sin importar el grupo):
+  ATI (Asesor TI): David Luciano Ruvalcaba Bautista, Carlos Hector Villalobos
+  Pacheco, Luis Daniel Fonseca Velazquez, Francisco Teran Pérez, Christian
+  Garcia Silva, Fernando Barraza Lopez, Octavio Montes Zamudio, Benjamin Ruiz Tadeo.
+  PFS TI (prestador de servicio de TI): Jaime Daniel Bustos Mendez.
 - Solo cuenta folios activos (excluye Resuelto, Cerrado y Cancelado).
 
 SECCIONES

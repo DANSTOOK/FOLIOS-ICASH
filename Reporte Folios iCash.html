@@ -13,7 +13,7 @@
   --brand:#b91c1c; --brand-dark:#7f1d1d;
   --xl-head:#ddebf7; --xl-border:#9bc2e6;
   --red:#c00000; --yel:#ffff00; --ok:#e7f6ec; --ok-ink:#166534;
-  --GLORY:#2563eb; --ADMVO:#ea580c; --ATIS:#7c3aed; --L2:#0d9488; --OTRO:#6b7280;
+  --GLORY:#2563eb; --ADMVO:#ea580c; --ATIS:#7c3aed; --L2:#0d9488; --ATI:#0891b2; --PFS:#be185d; --OTRO:#6b7280;
   --radius:12px; --shadow:0 1px 2px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.04);
 }
 *{box-sizing:border-box}
@@ -134,7 +134,7 @@ table.xl{border-collapse:collapse;width:100%;font-family:Calibri,"Segoe UI",Aria
 .xl tr.y td:not(.pzc){background:var(--yel);font-weight:700}
 .xl tr.tot td{background:var(--xl-head);font-weight:700;border-top:2px solid var(--xl-border)}
 .xl tr.tot td:first-child{text-align:left}
-.pl{display:inline-block;min-width:96px;padding:2px 10px;border-radius:4px;font-size:12.5px;font-weight:700;color:#fff;background:var(--c);text-align:center}
+.pl{display:inline-block;white-space:nowrap;min-width:96px;padding:2px 10px;border-radius:4px;font-size:12.5px;font-weight:700;color:#fff;background:var(--c);text-align:center}
 tr.r .pl,tr.y .pl{box-shadow:0 0 0 1px rgba(255,255,255,.8)}
 
 /* ---------- dona ---------- */
@@ -960,9 +960,9 @@ const ic = (n, s) => `<svg class="ic" viewBox="0 0 24 24"${s ? ` style="--s:${s}
 { const v = document.getElementById('appVer'); if (v && v.textContent.includes('APP_VERSION')) v.textContent = 'versión local'; }
 const paintIcons =(root = document) => root.querySelectorAll('i[data-ic]').forEach(el => { el.outerHTML = ic(el.dataset.ic, el.dataset.s); });
 paintIcons();
-const PLATS = ['GLORY','ADMVO','ATIS','L2','OTRO'];
-const PL = { GLORY:'Glory', ADMVO:'Administrativo', ATIS:'ATIS', L2:'L2 Soporte', OTRO:'Otro' };
-const PL_SHORT = { GLORY:'Glory', ADMVO:'Admvo', ATIS:'ATIS', L2:'L2', OTRO:'Otro' };
+const PLATS = ['GLORY','ADMVO','ATIS','L2','ATI','PFS','OTRO'];
+const PL = { GLORY:'Glory', ADMVO:'Administrativo', ATIS:'ATIS', L2:'L2 Soporte', ATI:'ATI (Asesor TI)', PFS:'PFS TI', OTRO:'Otro' };
+const PL_SHORT = { GLORY:'Glory', ADMVO:'Admvo', ATIS:'ATIS', L2:'L2', ATI:'ATI', PFS:'PFS TI', OTRO:'Otro' };
 const COLORS = ['#3b7ddd','#d6336c','#f5a524','#2fb36d','#7b5cd6','#14a3b8','#e8590c','#868e96'];
 const LS = 'icash-folios-cfg-v1';
 const $ = id => document.getElementById(id);
@@ -1082,9 +1082,18 @@ function tipoIncidencia(desc, cat) {
 const autoPlat = g => { const s = norm(g);
   if (/\batis\b/.test(s)) return 'ATIS';
   if (/glory|proveedor/.test(s)) return 'GLORY';
+  if (/\badmin/.test(s)) return 'ADMVO';                 // OPV-Cajas Inteligentes Admin → Administrativo
   if (/cajas inteligentes|\b(l2|n2)\b|nivel 2|soporte/.test(s)) return 'L2';
   return 'ADMVO'; };
-const platOf = r => cfg.people[r.asignado] || cfg.groups[r.grupo] || autoPlat(r.grupo);
+// Personas con etiqueta fija (sin importar el grupo): ATI = Asesor TI, PFS TI = prestador de servicio de TI
+const PERSONAS = {
+  ATI: ['David Luciano Ruvalcaba Bautista', 'Carlos Hector Villalobos Pacheco', 'Luis Daniel Fonseca Velazquez', 'Francisco Teran Pérez',
+        'Christian Garcia Silva', 'Fernando Barraza Lopez', 'Octavio Montes Zamudio', 'Benjamin Ruiz Tadeo'],
+  PFS: ['Jaime Daniel Bustos Mendez'],
+};
+const nombreClave = n => norm(n).replace(/\s+/g, ' ');   // sin acentos, mayúsculas ni espacios dobles
+const personaPlat = new Map(Object.entries(PERSONAS).flatMap(([p, ns]) => ns.map(n => [nombreClave(n), p])));
+const platOf = r => cfg.people[r.asignado] || personaPlat.get(nombreClave(r.asignado)) || cfg.groups[r.grupo] || autoPlat(r.grupo);
 const closed = /resuelt|cerrad|cancelad|resolved|closed|cancel/i;
 const sem = d => d == null ? '' : d >= cfg.thR ? 'r' : d >= cfg.thY ? 'y' : 'g';
 

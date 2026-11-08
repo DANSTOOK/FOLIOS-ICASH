@@ -23,3 +23,4 @@
 - Tarjeta resumen a menos de la mitad de alto: total, fecha y anillo en una franja, y copiar/descargar como iconos junto a los filtros.
 - Pestañas de plataforma con más espacio: más altas, más separadas y con la línea verde despegada del texto.
 - Pestañas de plataforma en una sola fila: la tarjeta de plazas es más ancha y la pestaña de asesores se muestra como ATI (nombre completo al pasar el mouse y en la tabla).
+- Tarjeta resumen: las plazas se reparten en filas parejas según cuántas haya (4 plazas = 2 y 2), en cualquier ancho de pantalla.

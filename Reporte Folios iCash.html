@@ -646,7 +646,9 @@ body.scrolled .hbtn,body.scrolled .bell{width:36px;height:36px}
 .sum-filters{display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:nowrap!important}
 .sumcard select{width:auto!important;min-width:0;max-width:190px;height:30px;padding:4px 28px 4px 10px!important;font-size:12.5px!important;border-radius:8px!important;background-position:right 9px center!important}
 .sumcard .ibtn{width:30px;height:30px;border-radius:8px}
-.sum-pz{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 16px}
+.sum-pz{display:grid!important;grid-template-columns:repeat(var(--pzc,2),minmax(0,1fr));gap:4px 24px}
+@media (max-width:1100px){.sum-pz{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:641px) and (max-width:800px),(max-width:420px){.sum-pz{grid-template-columns:minmax(0,1fr)}}
 .pzrow{display:grid;grid-template-columns:var(--pzw,110px) 1fr 28px;align-items:center;gap:10px;padding:5px 8px;border:0;border-radius:8px;background:none;cursor:pointer;text-align:left;font:inherit;color:var(--ink)}
 .pzrow:hover{background:var(--soft)}
 .pzrow.on{background:var(--brand-50)}
@@ -1249,6 +1251,8 @@ function renderSum(rows) {
       <span class="pzn">${esc(x.p.replace(/^Plaza\s+/i, ''))}</span>
       <span class="pzb"><i style="width:${x.n * 100 / mx}%"><em style="width:${x.n ? x.r * 100 / x.n : 0}%"></em></i></span>
       <b>${x.n}</b></button>`).join('');
+  // columnas según cuántas plazas haya, para que las filas queden parejas (4 plazas = 2 y 2)
+  $('sumPz').style.setProperty('--pzc', Math.max(1, Math.min(3, pzs.length <= 3 ? pzs.length : Math.ceil(pzs.length / 2))));
   $('sumPz').querySelectorAll('.pzrow').forEach(b => b.onclick = () => { F.plaza = F.plaza === b.dataset.pz ? '' : b.dataset.pz; F.asig = ''; render(); });
 }
 $('selRegion').onchange = e => { F.region = e.target.value; F.plaza = ''; render(); };

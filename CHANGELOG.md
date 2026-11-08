@@ -21,3 +21,4 @@
 - Tarjeta resumen más compacta: filtros de Región y Plaza en una sola línea y plazas involucradas con barra proporcional (parte en rojo) alineada.
 - Pestañas de plataforma: ya no se encogen ni cortan el número; si no caben pasan a una segunda fila.
 - Tarjeta resumen a menos de la mitad de alto: total, fecha y anillo en una franja, y copiar/descargar como iconos junto a los filtros.
+- Pestañas de plataforma con más espacio: más altas, más separadas y con la línea verde despegada del texto.

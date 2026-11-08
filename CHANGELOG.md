@@ -17,3 +17,5 @@
 - Plataforma: los folios del grupo OPV-Cajas Inteligentes (sin Proveedor) ahora cuentan como L2 Soporte, no como Administrativo.
 - Total con fecha del reporte, más grande. Pie de página (pantalla, imágenes y PDF), PDF con portada, modo presentación, selector de plataforma deslizante, encabezado que se compacta, modo oscuro y optimización (código sin uso eliminado, cálculo en caché, búsqueda con pausa).
 - Etiquetas nuevas: ATI (Asesor TI) para los asesores de TI y PFS TI para el prestador de servicio de TI. El grupo OPV-Cajas Inteligentes Admin cuenta como Administrativo.
+- Pestañas de plataforma: la activa se resalta con una línea verde líquida (efecto mercurio) que se estira al cambiar de pestaña, y cada pestaña muestra su conteo en una pastilla.
+- Tarjeta resumen más compacta: filtros de Región y Plaza en una sola línea y plazas involucradas con barra proporcional (parte en rojo) alineada.

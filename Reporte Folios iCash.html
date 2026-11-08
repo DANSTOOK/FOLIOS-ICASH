@@ -640,6 +640,52 @@ body.scrolled .hbtn,body.scrolled .bell{width:36px;height:36px}
 .seg-ind{position:absolute;left:0;top:3px;bottom:3px;border-radius:7px;background:#fff;box-shadow:0 1px 3px rgba(15,23,42,.14);
   transition:transform .35s cubic-bezier(.3,1.3,.5,1),width .35s cubic-bezier(.3,1.3,.5,1);z-index:0}
 .seg.dens .seg-ind{display:none}
+/* ===== tarjeta resumen: lado derecho compacto y coherente ===== */
+.sum-side{gap:10px!important;justify-content:flex-start!important;padding:4px 2px}
+.sum-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sum-filters{display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:nowrap!important}
+.sumcard select{width:auto!important;min-width:0;max-width:190px;height:30px;padding:4px 28px 4px 10px!important;font-size:12.5px!important;border-radius:8px!important;background-position:right 9px center!important}
+.sumcard .ibtn{width:30px;height:30px;border-radius:8px}
+.sum-pz{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 16px}
+.pzrow{display:grid;grid-template-columns:var(--pzw,110px) 1fr 28px;align-items:center;gap:10px;padding:5px 8px;border:0;border-radius:8px;background:none;cursor:pointer;text-align:left;font:inherit;color:var(--ink)}
+.pzrow:hover{background:var(--soft)}
+.pzrow.on{background:var(--brand-50)}
+.pzrow .pzn{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pzrow .pzb{height:8px;border-radius:5px;background:#eef1f5;overflow:hidden}
+.pzrow .pzb i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#6c9cf2,#3b7ddd);position:relative;transform-origin:left;animation:growX .8s cubic-bezier(.2,.8,.2,1) both}
+.pzrow .pzb em{position:absolute;right:0;top:0;bottom:0;background:var(--brand);border-radius:0 5px 5px 0}
+.pzrow b{text-align:right;font-size:14px;font-variant-numeric:tabular-nums}
+.pzrow.on .pzn,.pzrow.on b{color:var(--brand-dark)}
+body.dark .pzrow .pzb{background:#1a2740}
+body.dark .pzrow.on{background:#3a0e18}
+
+/* pestañas de plataforma: pastilla + línea verde líquida (mercurio) que se estira al cambiar */
+#seg{padding:4px;gap:4px;border-radius:12px;background:linear-gradient(180deg,#f1f4f8,#e9eef4);border-color:#dfe5ee;box-shadow:inset 0 1px 2px rgba(15,23,42,.06)}
+#seg button{display:inline-flex;align-items:center;gap:7px;padding:7px 12px 10px!important;border-radius:9px;color:#52617a;transition:color .25s}
+#seg button:hover{color:var(--ink)}
+#seg button .cnt{min-width:20px;height:19px;padding:0 6px;border-radius:10px;display:inline-grid;place-items:center;font-size:11.5px;font-weight:700;
+  background:#dde3ec;color:#52617a;font-variant-numeric:tabular-nums;transition:background .3s,color .3s,transform .3s}
+#seg button.on{color:#14532d!important;font-weight:700}
+#seg button.on .cnt{background:linear-gradient(180deg,#34d399,#16a34a);color:#fff;box-shadow:0 2px 6px rgba(22,163,74,.35)}
+#seg .seg-ind{top:4px;bottom:4px;border-radius:9px;background:linear-gradient(180deg,#fff,#f6fdf8);
+  box-shadow:0 1px 2px rgba(15,23,42,.08),0 4px 12px rgba(22,163,74,.14),inset 0 0 0 1px rgba(34,197,94,.22)}
+.seg-liquid{position:absolute;bottom:7px;left:0;right:100%;height:4px;border-radius:4px;z-index:2;pointer-events:none;
+  background:linear-gradient(90deg,#4ade80,#16a34a 50%,#4ade80);background-size:200% 100%;
+  box-shadow:0 0 8px rgba(34,197,94,.65),0 1px 2px rgba(21,128,61,.4);animation:liqFlow 2.4s linear infinite}
+.seg-liquid::after{content:"";position:absolute;left:10%;right:10%;top:.5px;height:1.2px;border-radius:2px;background:rgba(255,255,255,.75)}
+.seg-liquid.go-r{transition:right .32s cubic-bezier(.3,.9,.4,1),left .42s cubic-bezier(.6,0,.3,1.25) .1s}
+.seg-liquid.go-l{transition:left .32s cubic-bezier(.3,.9,.4,1),right .42s cubic-bezier(.6,0,.3,1.25) .1s}
+.seg-liquid.land{animation:liqFlow 2.4s linear infinite,liqLand .5s cubic-bezier(.3,.7,.4,1) .38s}
+@keyframes liqFlow{to{background-position:-200% 0}}
+@keyframes liqLand{0%{transform:scaleY(1)}35%{transform:scale(1.06,1.9)}65%{transform:scale(.97,.8)}100%{transform:none}}
+#seg button.pop .cnt{animation:cntPop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes cntPop{0%{transform:scale(.6)}100%{transform:scale(1)}}
+body.dark #seg{background:#0f182b;border-color:#2a3a58;box-shadow:none}
+body.dark #seg button{color:#9fb0c9}
+body.dark #seg button .cnt{background:#22314c;color:#b6c2d6}
+body.dark #seg button.on{color:#86efac!important}
+body.dark #seg button.on .cnt{background:linear-gradient(180deg,#34d399,#16a34a);color:#fff}
+body.dark #seg .seg-ind{background:#1b2a44;box-shadow:inset 0 0 0 1px rgba(74,222,128,.25),0 4px 14px rgba(0,0,0,.3)}
 
 /* ===== pie de página ===== */
 .rfoot{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 22px;padding:16px 0 4px;margin-top:6px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
@@ -853,10 +899,13 @@ body.dark .totop{background:#e6ebf4;color:#0b1220}body.dark .totop:hover{backgro
           </div>
         </div>
         <div class="sum-side">
-          <div class="sum-filters">
-            <label class="sum-f"><span class="sum-l">Región</span><select id="selRegion" aria-label="Región"></select></label>
-            <label class="sum-f"><span class="sum-l">Plaza</span><select id="selPlaza" aria-label="Plaza"></select></label>
-            <button type="button" class="ibtn" id="sumReset" title="Mostrar todas las plazas" aria-label="Mostrar todas las plazas"><i data-ic="refresh" data-s="16"></i></button>
+          <div class="sum-head">
+            <span class="sum-l">Plazas involucradas</span>
+            <div class="sum-filters">
+              <select id="selRegion" aria-label="Región" title="Región"></select>
+              <select id="selPlaza" aria-label="Plaza" title="Plaza"></select>
+              <button type="button" class="ibtn" id="sumReset" title="Mostrar todas las plazas" aria-label="Mostrar todas las plazas"><i data-ic="refresh" data-s="15"></i></button>
+            </div>
           </div>
           <div class="sum-pz" id="sumPz"></div>
         </div>
@@ -1154,7 +1203,7 @@ function renderSum(rows) {
   sr.disabled = regiones.length <= 1;
   const plazas = uniq(rows.map(r => r.plaza));
   if (F.plaza && !plazas.includes(F.plaza)) F.plaza = '';
-  $('selPlaza').innerHTML = `<option value="">todos</option>` +
+  $('selPlaza').innerHTML = `<option value="">Todas las plazas</option>` +
     plazas.map(p => `<option value="${esc(p)}"${F.plaza === p ? ' selected' : ''}>${esc(p)}</option>`).join('');
   const sel = F.plaza ? rows.filter(r => r.plaza === F.plaza) : rows;
   $('sumDate').lastElementChild.textContent = 'al ' + corteDate().toLocaleDateString('es-MX', { day:'numeric', month:'short', year:'numeric' });
@@ -1168,10 +1217,14 @@ function renderSum(rows) {
   $('sumSub').textContent = F.plaza
     ? F.plaza.replace(/^Plaza\s+/i, '')
     : `en ${plazas.length} plaza${plazas.length === 1 ? '' : 's'}`;
-  // plazas involucradas con su conteo; clic para filtrar
-  $('sumPz').innerHTML = plazas.map(p => ({ p, n: rows.filter(r => r.plaza === p).length })).sort((a, b) => b.n - a.n)
-    .map(x => `<button type="button" class="pzchip${F.plaza === x.p ? ' on' : ''}" data-pz="${esc(x.p)}">${esc(x.p.replace(/^Plaza\s+/i, ''))}<b>${x.n}</b></button>`).join('');
-  $('sumPz').querySelectorAll('.pzchip').forEach(b => b.onclick = () => { F.plaza = F.plaza === b.dataset.pz ? '' : b.dataset.pz; F.asig = ''; render(); });
+  // plazas involucradas: barra proporcional (mismo estilo que el Top de incidencias) con la parte en rojo; clic para filtrar
+  const pzs = plazas.map(p => { const fr = rows.filter(r => r.plaza === p); return { p, n: fr.length, r: fr.filter(r => sem(r.rezago) === 'r').length }; }).sort((a, b) => b.n - a.n);
+  const mx = Math.max(1, ...pzs.map(x => x.n));
+  $('sumPz').innerHTML = pzs.map(x => `<button type="button" class="pzrow${F.plaza === x.p ? ' on' : ''}" data-pz="${esc(x.p)}" title="${esc(x.p)}: ${x.n} folios, ${x.r} en rojo">
+      <span class="pzn">${esc(x.p.replace(/^Plaza\s+/i, ''))}</span>
+      <span class="pzb"><i style="width:${x.n * 100 / mx}%"><em style="width:${x.n ? x.r * 100 / x.n : 0}%"></em></i></span>
+      <b>${x.n}</b></button>`).join('');
+  $('sumPz').querySelectorAll('.pzrow').forEach(b => b.onclick = () => { F.plaza = F.plaza === b.dataset.pz ? '' : b.dataset.pz; F.asig = ''; render(); });
 }
 $('selRegion').onchange = e => { F.region = e.target.value; F.plaza = ''; render(); };
 $('selPlaza').onchange = e => { F.plaza = e.target.value; F.asig = ''; render(); };
@@ -1180,7 +1233,7 @@ $('sumReset').onclick = () => { F.plaza = ''; F.asig = ''; render(); };
 function renderSeg(rows) {
   const ps = PLATS.filter(p => rows.some(r => r.plat === p));
   $('seg').innerHTML = [['', 'Todas', rows.length], ...ps.map(p => [p, PL[p], rows.filter(r => r.plat === p).length])]
-    .map(([v, l, n]) => `<button class="${F.plat === v ? 'on' : ''}" data-p="${v}">${l} (${n})</button>`).join('');
+    .map(([v, l, n]) => `<button class="${F.plat === v ? 'on' : ''}" data-p="${v}" title="${l}: ${n} folio${n === 1 ? '' : 's'}">${l}<span class="cnt">${n}</span></button>`).join('');
   $('seg').querySelectorAll('button').forEach(b => b.onclick = () => { F.plat = b.dataset.p; render(); });
   moveSegInd();
 }
@@ -1193,6 +1246,16 @@ function moveSegInd() {
   if (prev) { ind.style.transition = 'none'; ind.style.transform = 'translateX(' + prev.x + 'px)'; ind.style.width = prev.w + 'px'; void ind.offsetWidth; ind.style.transition = ''; }
   const x = on.offsetLeft, w = on.offsetWidth;
   requestAnimationFrame(() => { ind.style.transform = 'translateX(' + x + 'px)'; ind.style.width = w + 'px'; });
+  // línea verde líquida: el borde de adelante sale primero y el de atrás lo alcanza (se estira como mercurio)
+  let liq = seg.querySelector('.seg-liquid');
+  if (!liq) { liq = document.createElement('span'); liq.className = 'seg-liquid'; liq.setAttribute('aria-hidden', 'true'); seg.appendChild(liq); }
+  const pad = 12, place = (px, pw) => { liq.style.left = (px + pad) + 'px'; liq.style.right = (seg.clientWidth - px - pw + pad) + 'px'; };
+  if (prev && prev.x !== x) {
+    liq.className = 'seg-liquid'; place(prev.x, prev.w); void liq.offsetWidth;
+    liq.classList.add(x > prev.x ? 'go-r' : 'go-l', 'land');
+    requestAnimationFrame(() => place(x, w));
+    on.classList.add('pop'); setTimeout(() => on.classList.remove('pop'), 500);
+  } else { liq.className = 'seg-liquid'; place(x, w); }
   seg._ind = { x, w };
 }
 

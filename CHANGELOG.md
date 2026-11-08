@@ -19,3 +19,5 @@
 - Etiquetas nuevas: ATI (Asesor TI) para los asesores de TI y PFS TI para el prestador de servicio de TI. El grupo OPV-Cajas Inteligentes Admin cuenta como Administrativo.
 - Pestañas de plataforma: la activa se resalta con una línea verde líquida (efecto mercurio) que se estira al cambiar de pestaña, y cada pestaña muestra su conteo en una pastilla.
 - Tarjeta resumen más compacta: filtros de Región y Plaza en una sola línea y plazas involucradas con barra proporcional (parte en rojo) alineada.
+- Pestañas de plataforma: ya no se encogen ni cortan el número; si no caben pasan a una segunda fila.
+- Tarjeta resumen a menos de la mitad de alto: total, fecha y anillo en una franja, y copiar/descargar como iconos junto a los filtros.

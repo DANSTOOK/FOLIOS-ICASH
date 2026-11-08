@@ -114,7 +114,7 @@ a.sn:hover{color:#1e3a8a;border-bottom-style:solid}
 /* ---------- semáforo ---------- */
 
 .grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
-@media (max-width:900px){.grid{grid-template-columns:1fr}}
+@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
 
 /* ---------- tabla dinámica estilo Excel ---------- */
 table.xl{border-collapse:collapse;width:100%;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:15px}
@@ -659,22 +659,41 @@ body.scrolled .hbtn,body.scrolled .bell{width:36px;height:36px}
 body.dark .pzrow .pzb{background:#1a2740}
 body.dark .pzrow.on{background:#3a0e18}
 
+/* tarjeta resumen a la mitad de alto: total, fecha y anillo en una franja */
+.sumcard{padding:10px!important}
+.sum-row{grid-template-columns:minmax(300px,340px) minmax(0,1fr)!important;gap:16px!important;align-items:center!important}
+.sum-total{padding:10px 16px!important;min-height:0!important;align-self:stretch}
+.st-txt{display:grid!important;grid-template-columns:auto 1fr;column-gap:14px;row-gap:3px;align-items:center}
+.sum-total b#sumNum{grid-column:1;grid-row:1/4;font-size:54px!important}
+.st-lbl{grid-column:2;font-size:11.5px!important;white-space:nowrap}
+.st-date{grid-column:2;justify-self:start;margin:0!important}
+.st-sub{grid-column:2;white-space:nowrap}
+.st-ring,.st-ring svg{width:62px!important;height:62px!important}
+.st-ring span b{font-size:13px!important}
+.st-ring span small{font-size:8px}
+.sum-side{gap:6px!important;padding:0 4px 0 0!important}
+.sum-pz{gap:2px 16px!important}
+.pzrow{padding:3px 8px}
+.sumcard .shot{display:inline-flex;gap:6px;margin:0;padding:0;border:0}
+.sumcard .shot .btn{display:inline-grid;place-items:center;width:30px;height:30px;padding:0;gap:0;font-size:0;border-radius:8px}
+@media (max-width:640px){.sum-row{grid-template-columns:minmax(0,1fr)!important}}
+
 /* pestañas de plataforma: pastilla + línea verde líquida (mercurio) que se estira al cambiar */
-#seg{padding:4px;gap:4px;border-radius:12px;background:linear-gradient(180deg,#f1f4f8,#e9eef4);border-color:#dfe5ee;box-shadow:inset 0 1px 2px rgba(15,23,42,.06)}
-#seg button{display:inline-flex;align-items:center;gap:7px;padding:7px 12px 10px!important;border-radius:9px;color:#52617a;transition:color .25s}
+#seg{flex-wrap:wrap;max-width:100%;padding:4px;gap:4px;border-radius:12px;background:linear-gradient(180deg,#f1f4f8,#e9eef4);border-color:#dfe5ee;box-shadow:inset 0 1px 2px rgba(15,23,42,.06)}
+#seg button{display:inline-flex;flex:none;align-items:center;gap:7px;padding:7px 12px 10px!important;border-radius:9px;color:#52617a;font-weight:600;white-space:nowrap;transition:color .25s}
 #seg button:hover{color:var(--ink)}
-#seg button .cnt{min-width:20px;height:19px;padding:0 6px;border-radius:10px;display:inline-grid;place-items:center;font-size:11.5px;font-weight:700;
+#seg button .cnt{flex:none;min-width:20px;height:19px;padding:0 6px;border-radius:10px;display:inline-grid;place-items:center;font-size:11.5px;font-weight:700;
   background:#dde3ec;color:#52617a;font-variant-numeric:tabular-nums;transition:background .3s,color .3s,transform .3s}
-#seg button.on{color:#14532d!important;font-weight:700}
+#seg button.on{color:#14532d!important;font-weight:600}
 #seg button.on .cnt{background:linear-gradient(180deg,#34d399,#16a34a);color:#fff;box-shadow:0 2px 6px rgba(22,163,74,.35)}
-#seg .seg-ind{top:4px;bottom:4px;border-radius:9px;background:linear-gradient(180deg,#fff,#f6fdf8);
+#seg .seg-ind{top:0;bottom:auto;border-radius:9px;transition:transform .35s cubic-bezier(.3,1.3,.5,1),width .35s cubic-bezier(.3,1.3,.5,1),height .35s;background:linear-gradient(180deg,#fff,#f6fdf8);
   box-shadow:0 1px 2px rgba(15,23,42,.08),0 4px 12px rgba(22,163,74,.14),inset 0 0 0 1px rgba(34,197,94,.22)}
-.seg-liquid{position:absolute;bottom:7px;left:0;right:100%;height:4px;border-radius:4px;z-index:2;pointer-events:none;
+.seg-liquid{position:absolute;top:0;left:0;right:100%;height:4px;border-radius:4px;z-index:2;pointer-events:none;
   background:linear-gradient(90deg,#4ade80,#16a34a 50%,#4ade80);background-size:200% 100%;
   box-shadow:0 0 8px rgba(34,197,94,.65),0 1px 2px rgba(21,128,61,.4);animation:liqFlow 2.4s linear infinite}
 .seg-liquid::after{content:"";position:absolute;left:10%;right:10%;top:.5px;height:1.2px;border-radius:2px;background:rgba(255,255,255,.75)}
-.seg-liquid.go-r{transition:right .32s cubic-bezier(.3,.9,.4,1),left .42s cubic-bezier(.6,0,.3,1.25) .1s}
-.seg-liquid.go-l{transition:left .32s cubic-bezier(.3,.9,.4,1),right .42s cubic-bezier(.6,0,.3,1.25) .1s}
+.seg-liquid.go-r{transition:top .3s,right .32s cubic-bezier(.3,.9,.4,1),left .42s cubic-bezier(.6,0,.3,1.25) .1s}
+.seg-liquid.go-l{transition:top .3s,left .32s cubic-bezier(.3,.9,.4,1),right .42s cubic-bezier(.6,0,.3,1.25) .1s}
 .seg-liquid.land{animation:liqFlow 2.4s linear infinite,liqLand .5s cubic-bezier(.3,.7,.4,1) .38s}
 @keyframes liqFlow{to{background-position:-200% 0}}
 @keyframes liqLand{0%{transform:scaleY(1)}35%{transform:scale(1.06,1.9)}65%{transform:scale(.97,.8)}100%{transform:none}}
@@ -905,12 +924,12 @@ body.dark .totop{background:#e6ebf4;color:#0b1220}body.dark .totop:hover{backgro
               <select id="selRegion" aria-label="Región" title="Región"></select>
               <select id="selPlaza" aria-label="Plaza" title="Plaza"></select>
               <button type="button" class="ibtn" id="sumReset" title="Mostrar todas las plazas" aria-label="Mostrar todas las plazas"><i data-ic="refresh" data-s="15"></i></button>
+              <div class="shot noprint"><button class="btn sm" data-act="copy" title="Copiar imagen" aria-label="Copiar imagen"><i data-ic="copy"></i></button><button class="btn sm" data-act="png" title="Descargar imagen" aria-label="Descargar imagen"><i data-ic="download"></i></button></div>
             </div>
           </div>
           <div class="sum-pz" id="sumPz"></div>
         </div>
       </div>
-      <div class="shot noprint"><button class="btn sm" data-act="copy"><i data-ic="copy"></i>Copiar imagen</button><button class="btn sm" data-act="png"><i data-ic="download"></i>Descargar imagen</button></div>
     </section>
 
 
@@ -1242,22 +1261,26 @@ function moveSegInd() {
   const seg = $('seg'), on = seg.querySelector('button.on'); if (!on) return;
   let ind = seg.querySelector('.seg-ind');
   if (!ind) { ind = document.createElement('span'); ind.className = 'seg-ind'; seg.prepend(ind); }
-  const prev = seg._ind;
-  if (prev) { ind.style.transition = 'none'; ind.style.transform = 'translateX(' + prev.x + 'px)'; ind.style.width = prev.w + 'px'; void ind.offsetWidth; ind.style.transition = ''; }
-  const x = on.offsetLeft, w = on.offsetWidth;
-  requestAnimationFrame(() => { ind.style.transform = 'translateX(' + x + 'px)'; ind.style.width = w + 'px'; });
+  const prev = seg._ind, x = on.offsetLeft, y = on.offsetTop, w = on.offsetWidth, h = on.offsetHeight;
+  const pill = p => { ind.style.transform = `translate(${p.x}px,${p.y}px)`; ind.style.width = p.w + 'px'; ind.style.height = p.h + 'px'; };
+  if (prev) { ind.style.transition = 'none'; pill(prev); void ind.offsetWidth; ind.style.transition = ''; }
+  requestAnimationFrame(() => pill({ x, y, w, h }));
   // línea verde líquida: el borde de adelante sale primero y el de atrás lo alcanza (se estira como mercurio)
   let liq = seg.querySelector('.seg-liquid');
   if (!liq) { liq = document.createElement('span'); liq.className = 'seg-liquid'; liq.setAttribute('aria-hidden', 'true'); seg.appendChild(liq); }
-  const pad = 12, place = (px, pw) => { liq.style.left = (px + pad) + 'px'; liq.style.right = (seg.clientWidth - px - pw + pad) + 'px'; };
-  if (prev && prev.x !== x) {
-    liq.className = 'seg-liquid'; place(prev.x, prev.w); void liq.offsetWidth;
+  const pad = 12, place = p => { liq.style.top = (p.y + p.h - 11) + 'px'; liq.style.left = (p.x + pad) + 'px'; liq.style.right = (seg.clientWidth - p.x - p.w + pad) + 'px'; };
+  if (prev && (prev.x !== x || prev.y !== y)) {
+    liq.className = 'seg-liquid'; place(prev); void liq.offsetWidth;
     liq.classList.add(x > prev.x ? 'go-r' : 'go-l', 'land');
-    requestAnimationFrame(() => place(x, w));
+    requestAnimationFrame(() => place({ x, y, w, h }));
     on.classList.add('pop'); setTimeout(() => on.classList.remove('pop'), 500);
-  } else { liq.className = 'seg-liquid'; place(x, w); }
-  seg._ind = { x, w };
+  } else { liq.className = 'seg-liquid'; place({ x, y, w, h }); }
+  seg._ind = { x, y, w, h };
 }
+// al cambiar el ancho o terminar de cargar la fuente, las pestañas se reacomodan: recolocar sin animar
+const recolocarSeg = () => { $('seg')._ind = null; moveSegInd(); };
+let segT; window.addEventListener('resize', () => { clearTimeout(segT); segT = setTimeout(recolocarSeg, 120); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(recolocarSeg);
 
 function pivotData(rows) {
   return uniq(rows.map(r => r.plaza)).map(pz => {
@@ -1490,7 +1513,7 @@ $('bExp').onclick = () => {
 
 /* ===== copiar / descargar cada sección como imagen (sin librerías) ===== */
 // los botones van al pie de cada sección
-document.querySelectorAll('.card[data-name]').forEach(c => { const s = c.querySelector('.shot'); if (s) c.appendChild(s); });
+document.querySelectorAll('.card[data-name]').forEach(c => { const s = c.querySelector('.shot'); if (s && c.id !== 'secSum') c.appendChild(s); });
 // avisos: tipo 'ok' (verde), 'err' (rojo) o 'info'
 function toast(msg, type) {
   type = type || (/no se pudo|error/i.test(msg) ? 'err' : 'ok');

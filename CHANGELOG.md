@@ -24,5 +24,4 @@
 - Pestañas de plataforma con más espacio: más altas, más separadas y con la línea verde despegada del texto.
 - Pestañas de plataforma en una sola fila: la tarjeta de plazas es más ancha y la pestaña de asesores se muestra como ATI (nombre completo al pasar el mouse y en la tabla).
 - Tarjeta resumen: las plazas se reparten en filas parejas según cuántas haya (4 plazas = 2 y 2), en cualquier ancho de pantalla.
-- Filtros corregidos en Casos activos: al cambiar plaza, plataforma o región ya no se queda pegada la persona o incidencia anterior; el clic en una persona muestra solo los folios de esa fila (persona, plaza y plataforma); las pestañas e Indicadores por plataforma cuentan la plaza elegida.
 - Responsive: encabezado, tarjeta resumen, pestañas, tablas y botones se acomodan en ventanas de 320 a 1920 px sin desbordar la página; Casos activos fija la columna Folio al desplazarse.

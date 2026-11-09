@@ -687,7 +687,6 @@ body.dark .pzrow.on{background:#3a0e18}
 #seg{display:flex;flex:1 1 100%;flex-wrap:nowrap;width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:6px;gap:6px;border-radius:14px;background:linear-gradient(180deg,#f1f4f8,#e9eef4);border-color:#dfe5ee;box-shadow:inset 0 1px 2px rgba(15,23,42,.06)}
 #seg button{display:inline-flex;flex:1 0 auto;justify-content:center;align-items:center;gap:8px;padding:10px 12px 16px!important;border-radius:10px;color:#52617a;font-size:14px;font-weight:600;white-space:nowrap;transition:color .25s}
 #seg::-webkit-scrollbar{display:none}
-#seg button.zero:not(.on){opacity:.5}
 #seg.tight{gap:4px}
 #seg.wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));overflow:hidden}
 #seg.tight button{gap:6px;padding:10px 9px 16px!important;font-size:13.5px}
@@ -1240,17 +1239,15 @@ function active() {
 }
 
 /* ===== vistas ===== */
-const limpiarDetalle = () => { F.asig = ''; F.falla = ''; };
 function render() {
   const rows = active();
   if (F.plat && !rows.some(r => r.plat === F.plat)) F.plat = '';
-  renderSum(rows);   // primero: valida la plaza elegida
-  const enPlaza = F.plaza ? rows.filter(r => r.plaza === F.plaza) : rows;
-  renderSeg(rows, enPlaza);
+  renderSeg(rows);
+  renderSum(rows);
   $('hdrMeta').innerHTML = `<div>Fecha del reporte<b>${corteDate().toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' })}</b></div><div>Folios activos<b>${rows.length}</b></div>`;
   // la plaza elegida en la tarjeta resumen filtra todo el reporte
   const vis = rows.filter(r => (!F.plat || r.plat === F.plat) && (!F.plaza || r.plaza === F.plaza));
-  renderAlerts(vis); renderPivot(vis); renderDist(vis); renderKpiPlat(enPlaza); renderTop(vis); renderCases(vis);
+  renderAlerts(vis); renderPivot(vis); renderDist(vis); renderKpiPlat(rows); renderTop(vis); renderCases(vis);
   renderFoot(); renderCover(vis);
 }
 
@@ -1301,17 +1298,17 @@ function renderSum(rows) {
       <b>${x.n}</b></button>`).join('');
   // columnas según cuántas plazas haya, para que las filas queden parejas (4 plazas = 2 y 2)
   $('sumPz').style.setProperty('--pzc', Math.max(1, Math.min(3, pzs.length <= 3 ? pzs.length : Math.ceil(pzs.length / 2))));
-  $('sumPz').querySelectorAll('.pzrow').forEach(b => b.onclick = () => { F.plaza = F.plaza === b.dataset.pz ? '' : b.dataset.pz; limpiarDetalle(); render(); });
+  $('sumPz').querySelectorAll('.pzrow').forEach(b => b.onclick = () => { F.plaza = F.plaza === b.dataset.pz ? '' : b.dataset.pz; F.asig = ''; render(); });
 }
-$('selRegion').onchange = e => { F.region = e.target.value; F.plaza = ''; limpiarDetalle(); render(); };
-$('selPlaza').onchange = e => { F.plaza = e.target.value; limpiarDetalle(); render(); };
-$('sumReset').onclick = () => { F.plaza = ''; limpiarDetalle(); render(); };
+$('selRegion').onchange = e => { F.region = e.target.value; F.plaza = ''; render(); };
+$('selPlaza').onchange = e => { F.plaza = e.target.value; F.asig = ''; render(); };
+$('sumReset').onclick = () => { F.plaza = ''; F.asig = ''; render(); };
 
-function renderSeg(rows, enPlaza = rows) {
+function renderSeg(rows) {
   const ps = PLATS.filter(p => rows.some(r => r.plat === p));
-  $('seg').innerHTML = [['', 'Todas', enPlaza.length], ...ps.map(p => [p, PL[p], enPlaza.filter(r => r.plat === p).length])]
-    .map(([v, l, n]) => `<button class="${F.plat === v ? 'on' : ''}${n ? '' : ' zero'}" data-p="${v}" title="${l}: ${n} folio${n === 1 ? '' : 's'}">${v === 'ATI' ? 'ATI' : l}<span class="cnt">${n}</span></button>`).join('');
-  $('seg').querySelectorAll('button').forEach(b => b.onclick = () => { F.plat = b.dataset.p; limpiarDetalle(); render(); });
+  $('seg').innerHTML = [['', 'Todas', rows.length], ...ps.map(p => [p, PL[p], rows.filter(r => r.plat === p).length])]
+    .map(([v, l, n]) => `<button class="${F.plat === v ? 'on' : ''}" data-p="${v}" title="${l}: ${n} folio${n === 1 ? '' : 's'}">${v === 'ATI' ? 'ATI' : l}<span class="cnt">${n}</span></button>`).join('');
+  $('seg').querySelectorAll('button').forEach(b => b.onclick = () => { F.plat = b.dataset.p; render(); });
   moveSegInd();
 }
 // 8. pastilla que se desliza a la opción elegida
@@ -1357,17 +1354,17 @@ function renderPivot(rows) {
   for (const p of pivotData(rows)) {
     p.people.forEach((x, i) => {
       const s = sem(x.max);
-      h += `<tr class="ps${i === 0 ? ' first' : ''}" data-a="${esc(x.a)}" data-pz="${esc(p.pz)}" data-p="${x.p}" title="${esc(x.fr.map(f => `${f.folio} · ${f.tienda} · ${f.rezago} días`).join('\n'))}">` +
+      h += `<tr class="ps${i === 0 ? ' first' : ''}" data-a="${esc(x.a)}" title="${esc(x.fr.map(f => `${f.folio} · ${f.tienda} · ${f.rezago} días`).join('\n'))}">` +
         (i === 0 ? `<td class="pzc${F.plaza === p.pz ? ' on' : ''}" rowspan="${p.people.length}" data-pz="${esc(p.pz)}" title="Ver folios de ${esc(p.pz)}"><div class="pzn">${esc(p.pz)}</div><div class="pzs">${p.n} folio${p.n === 1 ? '' : 's'}</div></td>` : '') +
         `<td class="who">${esc(x.a)}</td><td><span class="pl" style="--c:${plColor(x.p)}">${PL[x.p]}</span></td><td data-count="${x.n}">${x.n}</td><td class="dd ${s}" data-count="${x.max}">${x.max}</td></tr>`;
     });
   }
   h += `<tr class="tot"><td colspan="3">Total general</td><td data-count="${rows.length}">${rows.length}</td><td></td></tr></tbody>`;
   $('piv').innerHTML = h; animateCounts($('piv'));
-  $('piv').querySelectorAll('td.pzc').forEach(td => td.onclick = e => { e.stopPropagation(); F.plaza = F.plaza === td.dataset.pz ? '' : td.dataset.pz; limpiarDetalle(); render(); $('casesCard').scrollIntoView({ behavior: 'smooth' }); });
-  $('piv').querySelectorAll('tr.ps').forEach(tr => tr.onclick = () => { F.asig = { a: tr.dataset.a, pz: tr.dataset.pz, p: tr.dataset.p }; renderCases(currentVis()); $('casesCard').scrollIntoView({ behavior: 'smooth' }); });
+  $('piv').querySelectorAll('td.pzc').forEach(td => td.onclick = e => { e.stopPropagation(); F.plaza = F.plaza === td.dataset.pz ? '' : td.dataset.pz; F.asig = ''; renderPivot(rows); renderDist(rows); renderCases(rows); $('casesCard').scrollIntoView({ behavior: 'smooth' }); });
+  $('piv').querySelectorAll('tr.ps').forEach(tr => tr.onclick = () => { F.asig = tr.dataset.a; renderCases(currentVis()); $('casesCard').scrollIntoView({ behavior: 'smooth' }); });
 }
-const currentVis = () => active().filter(r => (!F.plat || r.plat === F.plat) && (!F.plaza || r.plaza === F.plaza));
+const currentVis = () => { const rows = active(); return F.plat ? rows.filter(r => r.plat === F.plat) : rows; };
 
 /* contenido del recuadro que aparece al pasar el mouse */
 function tipFor(title, fr, tot) {
@@ -1406,7 +1403,7 @@ function renderDist(rows) {
     el.onmouseenter = () => setCenter(x.n, x.p.replace(/^Plaza\s+/i, '').slice(0, 16), col);
     el.onmouseleave = () => setCenter(rows.length, 'folios');
   });
-  $('dist').querySelectorAll('li,path,circle').forEach(el => el.onclick = () => { F.plaza = F.plaza === el.dataset.p ? '' : el.dataset.p; limpiarDetalle(); hideTip(); render(); });
+  $('dist').querySelectorAll('li,path,circle').forEach(el => el.onclick = () => { F.plaza = F.plaza === el.dataset.p ? '' : el.dataset.p; hideTip(); renderDist(currentVis()); renderCases(currentVis()); });
 }
 
 /* ===== 5. Alertas de prioridad alta ===== */
@@ -1459,7 +1456,7 @@ function renderKpiPlat(rows) {
       <td class="wide"><div class="stack">${seg(s.c.g, s.n, 'g')}${seg(s.c.y, s.n, 'y')}${seg(s.c.r, s.n, 'r')}</div></td>
       <td><b class="${s.c.r ? 'txt-r' : ''}">${Math.round(s.c.r * 100 / (s.n || 1))}%</b></td></tr>`).join('') + '</tbody>';
   animateCounts($('kpiPlat'));
-  $('kpiPlat').querySelectorAll('tbody tr').forEach(tr => tr.onclick = () => { F.plat = F.plat === tr.dataset.p ? '' : tr.dataset.p; limpiarDetalle(); render(); });
+  $('kpiPlat').querySelectorAll('tbody tr').forEach(tr => tr.onclick = () => { F.plat = F.plat === tr.dataset.p ? '' : tr.dataset.p; render(); });
 }
 
 function renderTop(rows) {
@@ -1508,7 +1505,7 @@ document.addEventListener('click', e => {
 function renderCases(rows, sorting) {
   $('cases').classList.toggle('sorting', !!sorting);   // al ordenar, sin desvanecido (las filas se deslizan)
   const q = norm(F.q);
-  const list = rows.filter(r => (!F.plaza || r.plaza === F.plaza) && (!F.asig || (r.asignado === F.asig.a && r.plaza === F.asig.pz && r.plat === F.asig.p)) && (!F.falla || r.falla === F.falla) &&
+  const list = rows.filter(r => (!F.plaza || r.plaza === F.plaza) && (!F.asig || r.asignado === F.asig) && (!F.falla || r.falla === F.falla) &&
       (!q || norm([r.folio, r.tienda, r.plaza, r.asignado, r.desc, r.falla].join(' ')).includes(q)))
     .sort((a, b) => {
       let x = a[sort.k], y = b[sort.k];
@@ -1521,7 +1518,7 @@ function renderCases(rows, sorting) {
   const chips = [];
   if (F.plat) chips.push(['plat', PL[F.plat]]);
   if (F.plaza) chips.push(['plaza', F.plaza]);
-  if (F.asig) chips.push(['asig', `${F.asig.a} · ${F.asig.pz.replace(/^Plaza /i, '')} · ${PL[F.asig.p]}`]);
+  if (F.asig) chips.push(['asig', F.asig]);
   if (F.falla) chips.push(['falla', F.falla]);
   $('chips').innerHTML = chips.map(([k, v]) => `<span class="chip">${esc(v)}<button data-k="${k}" title="Quitar filtro">×</button></span>`).join(' ');
   $('chips').querySelectorAll('button').forEach(b => b.onclick = () => { F[b.dataset.k] = ''; render(); });

@@ -114,7 +114,7 @@ a.sn:hover{color:#1e3a8a;border-bottom-style:solid}
 /* ---------- semáforo ---------- */
 
 .grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
-@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1100px){.grid{grid-template-columns:minmax(0,1fr)}}
 
 /* ---------- tabla dinámica estilo Excel ---------- */
 table.xl{border-collapse:collapse;width:100%;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:15px}
@@ -643,12 +643,12 @@ body.scrolled .hbtn,body.scrolled .bell{width:36px;height:36px}
 /* ===== tarjeta resumen: lado derecho compacto y coherente ===== */
 .sum-side{gap:10px!important;justify-content:flex-start!important;padding:4px 2px}
 .sum-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.sum-filters{display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:nowrap!important}
+.sum-filters{display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:wrap!important;min-width:0}
 .sumcard select{width:auto!important;min-width:0;max-width:190px;height:30px;padding:4px 28px 4px 10px!important;font-size:12.5px!important;border-radius:8px!important;background-position:right 9px center!important}
 .sumcard .ibtn{width:30px;height:30px;border-radius:8px}
 .sum-pz{display:grid!important;grid-template-columns:repeat(var(--pzc,2),minmax(0,1fr));gap:4px 24px}
 @media (max-width:1100px){.sum-pz{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (min-width:641px) and (max-width:800px),(max-width:420px){.sum-pz{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:420px){.sum-pz{grid-template-columns:minmax(0,1fr)}}
 .pzrow{display:grid;grid-template-columns:var(--pzw,110px) 1fr 28px;align-items:center;gap:10px;padding:5px 8px;border:0;border-radius:8px;background:none;cursor:pointer;text-align:left;font:inherit;color:var(--ink)}
 .pzrow:hover{background:var(--soft)}
 .pzrow.on{background:var(--brand-50)}
@@ -678,8 +678,8 @@ body.dark .pzrow.on{background:#3a0e18}
 .pzrow{padding:3px 8px}
 .sumcard .shot{display:inline-flex;gap:6px;margin:0;padding:0;border:0}
 .sumcard .shot .btn{display:inline-grid;place-items:center;width:30px;height:30px;padding:0;gap:0;font-size:0;border-radius:8px}
-@media (max-width:640px){.sum-row{grid-template-columns:minmax(0,1fr)!important}}
-@media (min-width:901px){.grid:has(#secPlazas){grid-template-columns:minmax(0,2.4fr) minmax(0,1fr)}}
+@media (max-width:900px){.sum-row{grid-template-columns:minmax(0,1fr)!important}}
+@media (min-width:1101px){.grid:has(#secPlazas){grid-template-columns:minmax(0,2.4fr) minmax(0,1fr)}}
 .shot .btn{white-space:nowrap}
 .grid:has(#secPlazas)>:not(#secPlazas) .shot .btn{padding:5px 8px;gap:4px;font-size:12px}
 
@@ -689,6 +689,7 @@ body.dark .pzrow.on{background:#3a0e18}
 #seg::-webkit-scrollbar{display:none}
 #seg button.zero:not(.on){opacity:.5}
 #seg.tight{gap:4px}
+#seg.wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));overflow:hidden}
 #seg.tight button{gap:6px;padding:10px 9px 16px!important;font-size:13.5px}
 #seg button:hover{color:var(--ink)}
 #seg button .cnt{flex:none;min-width:22px;height:21px;padding:0 7px;border-radius:10px;display:inline-grid;place-items:center;font-size:11.5px;font-weight:700;
@@ -813,7 +814,51 @@ body.dark .shot{border-color:var(--line)}
 body.dark .totop{background:#e6ebf4;color:#0b1220}body.dark .totop:hover{background:var(--brand);color:#fff}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
-@media print{.bar{position:static}}
+@media print{.bar{position:static}.piv-w{overflow:visible}}
+
+/* ===== responsive: ventanas medianas y chicas ===== */
+.piv-w{border:0;border-radius:0}
+.ttl{min-width:0}
+.shot{flex-wrap:wrap}
+.shot .btn{flex:none}
+#chips{display:inline-flex;flex-wrap:wrap;gap:6px;min-width:0;max-width:100%}
+.chip{max-width:100%}
+#cases td:nth-child(2),#cases td:nth-child(3),#cases td:nth-child(4),#cases td:nth-child(6){white-space:normal;min-width:96px}
+@media (max-width:1100px){
+  #cases td.folio{position:sticky;left:0;z-index:1;background:var(--card)}
+  #cases th:first-child{left:0;z-index:3}
+  #cases tr:not(.alerta) td.folio{box-shadow:inset -1px 0 0 var(--line)}
+  #cases tr.alerta td.folio{box-shadow:inset 4px 0 0 var(--brand),inset -1px 0 0 var(--line)}
+}
+@media (max-width:640px){
+  main{padding:12px!important}
+  .card{padding:14px!important}
+  .sumcard{padding:10px!important}
+  #bPresent{display:none!important}
+  .tools{width:100%}
+  .tools input[type=search]{flex:1 1 100%;min-width:0;width:100%}
+  .xl th{padding:6px 5px;font-size:11px;white-space:normal}
+  .xl td{padding:5px;font-size:12.5px}
+  .xl td.pzc{min-width:92px}
+  .xl .pl{min-width:0;padding:2px 6px;font-size:11px}
+  .card-h h2{font-size:15.5px}
+  .toast{left:12px!important;right:12px!important;max-width:calc(100vw - 24px)}
+}
+@media (max-width:480px){
+  .bar-in{padding:10px 12px!important;gap:8px!important}
+  .bar .sp{display:none}
+  .ttl{flex:1 1 auto}
+  .ttl small{display:none}
+  .bar h1{font-size:16px!important;white-space:normal}
+  .mark{width:36px;height:36px}
+  .hbtn,.bell{width:38px;height:38px}
+  .sum-head,.sum-filters{width:100%}
+  .sumcard select{max-width:none!important}
+  #selRegion{flex:0 1 84px}
+  #selRegion:disabled{padding-right:10px!important}
+  #selPlaza{flex:1 1 110px}
+  .actions .btn{flex:1 1 100%;justify-content:center}
+}
 </style>
 </head>
 <body>
@@ -950,7 +995,7 @@ body.dark .totop{background:#e6ebf4;color:#0b1220}body.dark .totop:hover{backgro
           <div class="shot noprint"><button class="btn sm" data-act="copy"><i data-ic="copy"></i>Copiar imagen</button><button class="btn sm" data-act="png"><i data-ic="download"></i>Descargar imagen</button></div></div>
           <div class="seg noprint" id="seg"></div>
         </div>
-        <table class="xl" id="piv"></table>
+        <div class="tw piv-w"><table class="xl" id="piv"></table></div>
       </section>
 
       <section class="card" data-name="distribucion-por-plaza">
@@ -1274,9 +1319,9 @@ function moveSegInd() {
   const seg = $('seg'), on = seg.querySelector('button.on'); if (!on) return;
   let ind = seg.querySelector('.seg-ind');
   if (!ind) { ind = document.createElement('span'); ind.className = 'seg-ind'; seg.prepend(ind); }
-  seg.classList.remove('tight');
+  seg.classList.remove('tight', 'wrap');
   if (seg.scrollWidth > seg.clientWidth) seg.classList.add('tight');
-  if (seg.scrollWidth > seg.clientWidth) seg.scrollLeft = on.offsetLeft - (seg.clientWidth - on.offsetWidth) / 2;
+  if (seg.scrollWidth > seg.clientWidth) seg.classList.add('wrap');
   const prev = seg._ind, x = on.offsetLeft, y = on.offsetTop, w = on.offsetWidth, h = on.offsetHeight;
   const pill = p => { ind.style.transform = `translate(${p.x}px,${p.y}px)`; ind.style.width = p.w + 'px'; ind.style.height = p.h + 'px'; };
   if (prev) { ind.style.transition = 'none'; pill(prev); void ind.offsetWidth; ind.style.transition = ''; }

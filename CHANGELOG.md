@@ -26,3 +26,4 @@
 - Tarjeta resumen: las plazas se reparten en filas parejas según cuántas haya (4 plazas = 2 y 2), en cualquier ancho de pantalla.
 - Responsive: encabezado, tarjeta resumen, pestañas, tablas y botones se acomodan en ventanas de 320 a 1920 px sin desbordar la página; Casos activos fija la columna Folio al desplazarse.
 - Casos activos: un solo detalle abierto a la vez (se cierra al abrir otro o con clic afuera) y unido visualmente a su folio; botón discreto para copiar el número de folio; la barra roja de alerta se reemplaza por una campanita junto al folio.
+- Etiquetas de plataforma con tono suave e icono (Glory billetes, Administrativo maletín, ATIS edificio, L2 Soporte audífonos, ATI laptop, PFS TI llave) en la tabla por plaza, Casos activos e Indicadores.

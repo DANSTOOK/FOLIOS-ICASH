@@ -27,3 +27,4 @@
 - Responsive: encabezado, tarjeta resumen, pestañas, tablas y botones se acomodan en ventanas de 320 a 1920 px sin desbordar la página; Casos activos fija la columna Folio al desplazarse.
 - Casos activos: un solo detalle abierto a la vez (se cierra al abrir otro o con clic afuera) y unido visualmente a su folio; botón discreto para copiar el número de folio; la barra roja de alerta se reemplaza por una campanita junto al folio.
 - Etiquetas de plataforma con tono suave e icono (Glory billetes, Administrativo maletín, ATIS edificio, L2 Soporte audífonos, ATI laptop, PFS TI llave) en la tabla por plaza, Casos activos e Indicadores.
+- Se mantiene la corrección de filtros de Casos activos (sin filtros pegados al cambiar plaza o plataforma; clic en una persona muestra solo los folios de su fila; pestañas e Indicadores cuentan la plaza elegida).

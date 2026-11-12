@@ -160,7 +160,7 @@ table.cases{border-collapse:collapse;width:100%}
 .cases th:hover{background:#eef0f3}
 .cases th .ar{opacity:.35;margin-left:4px}
 .cases th.sorted .ar{opacity:1;color:var(--brand)}
-.cases tbody tr:nth-child(even) td{background:#fcfcfd}
+.cases tbody tr.alt td{background:#fcfcfd}
 .cases tr:last-child td{border-bottom:0}
 .cases tbody tr:hover td{background:#fafafa}
 .cases .c{text-align:center}
@@ -487,10 +487,13 @@ body.compact .grid{gap:14px}
 body.compact #casesCard .tw{max-height:720px}
 
 /* ===== 3. transición al filtrar: el contenido nuevo aparece suave ===== */
-@keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-#piv tbody,#cases tbody,#kpiPlat tbody,#dist .leg,.sum-pz,.sum-total b{animation:fadeUp .32s var(--ease) both}
-#top .brow{animation:fadeUp .32s var(--ease) both}
-#top .brow:nth-child(2){animation-delay:.03s} #top .brow:nth-child(3){animation-delay:.06s} #top .brow:nth-child(4){animation-delay:.09s} #top .brow:nth-child(n+5){animation-delay:.12s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(var(--fy,4px))}to{opacity:1;transform:none}}
+/* al filtrar: solo un desvanecido corto; la entrada completa (subir, crecer, dibujar) es únicamente al cargar el archivo (#app.intro) */
+/* misma animación en los dos casos (solo cambia el desplazamiento) para que al terminar la entrada no se vuelva a reproducir */
+#piv tbody,#cases tbody,#kpiPlat tbody,#dist .leg,#top .brow{animation:fadeUp .2s ease-out both;--fy:0px}
+#app.intro #piv tbody,#app.intro #cases tbody,#app.intro #kpiPlat tbody,#app.intro #dist .leg,#app.intro .sum-pz{animation:fadeUp .32s var(--ease) both;--fy:4px}
+#app.intro #top .brow{animation:fadeUp .32s var(--ease) both;--fy:4px}
+#app.intro #top .brow:nth-child(2){animation-delay:.03s} #app.intro #top .brow:nth-child(3){animation-delay:.06s} #app.intro #top .brow:nth-child(4){animation-delay:.09s} #app.intro #top .brow:nth-child(n+5){animation-delay:.12s}
 
 /* ===== 4. semáforo: el rojo late una vez al cargar ===== */
 @keyframes pulseR{0%{box-shadow:inset 0 0 0 0 rgba(192,0,0,0)}35%{box-shadow:inset 0 0 0 999px rgba(192,0,0,.22)}100%{box-shadow:inset 0 0 0 0 rgba(192,0,0,0)}}
@@ -562,13 +565,13 @@ body.compact #casesCard .tw{max-height:720px}
 .st-ring span b{font-size:14px!important;font-weight:800!important;letter-spacing:0!important}
 .st-ring span small{font-size:9px;opacity:.85;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
 .sum-total::before{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;z-index:0;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-18deg);animation:sweep 4.5s ease-in-out 1.2s infinite}
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-18deg);animation:sweep 4.5s ease-in-out 1.2s 1}
 @keyframes sweep{0%{left:-70%}22%{left:130%}100%{left:130%}}
 .sum-row{grid-template-columns:240px minmax(0,1fr)!important}
 
 /* ===== 4. dona que se dibuja ===== */
 .anim #dist svg{animation:none!important}
-#dist .dseg{animation:drawSeg .75s cubic-bezier(.4,0,.2,1) both}
+#app.intro #dist .dseg{animation:drawSeg .75s cubic-bezier(.4,0,.2,1) both}
 @keyframes drawSeg{from{stroke-dasharray:0 var(--L)}}
 #dist svg:hover .dseg:not(:hover){opacity:.5}
 #dist .dseg:hover{transform:scale(1.04)}
@@ -582,7 +585,8 @@ body.compact #casesCard .tw{max-height:720px}
 #cases tr.row{will-change:transform}
 
 /* ===== 8. mini barras de rezago que crecen ===== */
-.mb i{transform-origin:left center;animation:growX .8s cubic-bezier(.2,.8,.2,1) .15s both}
+.mb i{transform-origin:left center}
+#app.intro .mb i{animation:growX .8s cubic-bezier(.2,.8,.2,1) .15s both}
 @keyframes growX{from{transform:scaleX(0)}}
 #cases.sorting .mb i{animation:none}
 
@@ -590,9 +594,11 @@ body.compact #casesCard .tw{max-height:720px}
 #app .card:not(.rv){transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s}
 #app .card:hover{transform:translateY(-3px);box-shadow:0 4px 8px rgba(15,23,42,.05),0 18px 40px -12px rgba(15,23,42,.18);border-color:#dfe4ec}
 #app .card.rv.in:hover{transform:translateY(-3px)}
+/* las tarjetas con tablas grandes no se mueven al pasar el mouse (se leen sin que brinque el contenido) */
+#app #casesCard:hover,#app #secPlazas:hover,#app #secPlat:hover{transform:none!important}
 
 /* ===== 11. onda al hacer clic ===== */
-.btn,.seg button,.pzchip,.ibtn,.chip button{position:relative;overflow:hidden}
+.btn,.seg button,.pzchip,.ibtn,.chip button,.pzrow,.hbtn,.more,.pbtn{position:relative;overflow:hidden}
 .ripple{position:absolute;border-radius:50%;pointer-events:none;background:currentColor;opacity:.22;transform:scale(0);animation:ripple-k .6s ease-out forwards}
 .btn.pri .ripple{background:#fff;opacity:.35}
 @keyframes ripple-k{to{transform:scale(1);opacity:0}}
@@ -651,7 +657,8 @@ body.scrolled .hbtn,body.scrolled .bell{width:36px;height:36px}
 .pzrow.on{background:var(--brand-50)}
 .pzrow .pzn{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pzrow .pzb{height:8px;border-radius:5px;background:#eef1f5;overflow:hidden}
-.pzrow .pzb i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#6c9cf2,#3b7ddd);position:relative;transform-origin:left;animation:growX .8s cubic-bezier(.2,.8,.2,1) both}
+.pzrow .pzb i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#6c9cf2,#3b7ddd);position:relative;transform-origin:left}
+#app.intro .pzrow .pzb i{animation:growX .8s cubic-bezier(.2,.8,.2,1) both}
 .pzrow .pzb em{position:absolute;right:0;top:0;bottom:0;background:var(--brand);border-radius:0 5px 5px 0}
 .pzrow b{text-align:right;font-size:14px;font-variant-numeric:tabular-nums}
 .pzrow.on .pzn,.pzrow.on b{color:var(--brand-dark)}
@@ -697,11 +704,11 @@ body.dark .pzrow.on{background:#3a0e18}
   box-shadow:0 1px 2px rgba(15,23,42,.08),0 4px 12px rgba(22,163,74,.14),inset 0 0 0 1px rgba(34,197,94,.22)}
 .seg-liquid{position:absolute;top:0;left:0;right:100%;height:4px;border-radius:4px;z-index:2;pointer-events:none;
   background:linear-gradient(90deg,#4ade80,#16a34a 50%,#4ade80);background-size:200% 100%;
-  box-shadow:0 0 8px rgba(34,197,94,.65),0 1px 2px rgba(21,128,61,.4);animation:liqFlow 2.4s linear infinite}
+  box-shadow:0 0 8px rgba(34,197,94,.65),0 1px 2px rgba(21,128,61,.4)}
 .seg-liquid::after{content:"";position:absolute;left:10%;right:10%;top:.5px;height:1.2px;border-radius:2px;background:rgba(255,255,255,.75)}
 .seg-liquid.go-r{transition:top .3s,right .32s cubic-bezier(.3,.9,.4,1),left .42s cubic-bezier(.6,0,.3,1.25) .1s}
 .seg-liquid.go-l{transition:top .3s,left .32s cubic-bezier(.3,.9,.4,1),right .42s cubic-bezier(.6,0,.3,1.25) .1s}
-.seg-liquid.land{animation:liqFlow 2.4s linear infinite,liqLand .5s cubic-bezier(.3,.7,.4,1) .38s}
+.seg-liquid.land{animation:liqFlow .9s linear 1,liqLand .5s cubic-bezier(.3,.7,.4,1) .38s}
 @keyframes liqFlow{to{background-position:-200% 0}}
 @keyframes liqLand{0%{transform:scaleY(1)}35%{transform:scale(1.06,1.9)}65%{transform:scale(.97,.8)}100%{transform:none}}
 #seg button.pop .cnt{animation:cntPop .45s cubic-bezier(.3,1.6,.5,1)}
@@ -781,7 +788,7 @@ body.dark .xl td.pzc{background:#131f35!important}
 body.dark .xl tr.tot td{background:#1a2740!important;color:var(--ink)}
 body.dark .xl td.dd.r{background:rgba(239,68,68,.32)!important;color:#fecaca}
 body.dark .xl td.dd.y{background:rgba(234,179,8,.3)!important;color:#fde68a}
-body.dark .cases tbody tr:nth-child(even) td{background:#0f182b}
+body.dark .cases tbody tr.alt td{background:#0f182b}
 body.dark .cases tbody tr.row:hover td,body.dark .cases tbody tr.row.open td,body.dark .cases tr.det td{background:#16264a!important}
 body.dark .cases tr.alerta td.prio-Alto,body.dark .cases tr.alerta td.prio-Crítico{background:#3a0e18}
 body.dark a.sn{color:#93b4f5}
@@ -890,6 +897,24 @@ body.dark .pl svg.ic{color:color-mix(in srgb,var(--c) 65%,#fff)}
   #selPlaza{flex:1 1 110px}
   .actions .btn{flex:1 1 100%;justify-content:center}
 }
+
+/* ===== correcciones de la auditoría ===== */
+/* días en amarillo: texto oscuro siempre (en modo oscuro salía blanco sobre amarillo) */
+.d.y{color:#3d3400}
+/* prioridad en modo oscuro: rojos claros que se leen sobre fondo oscuro y sobre la banda del folio abierto */
+body.dark .prio-Alto{color:#fca5a5}
+body.dark .prio-Crítico{color:#ff9b9b}
+/* Casos activos cabe completa en pantalla amplia: etiqueta de plataforma al ancho de su texto y celdas un poco más angostas */
+#cases .pl{min-width:0}
+#cases th,#cases td{padding-left:9px;padding-right:9px}
+#cases .mb{width:46px}
+/* recuadro de detalle: listas de folios un poco más anchas */
+.tip{max-width:320px}
+.tip .tr span:last-child{white-space:nowrap}
+/* botón de imagen mientras se genera */
+@keyframes spin{to{transform:rotate(360deg)}}
+svg.ic.spin{animation:spin .8s linear infinite}
+.btn.busy{pointer-events:none;opacity:.75}
 </style>
 </head>
 <body>
@@ -1114,6 +1139,7 @@ const ICONS = {
   wrench: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
   tag: '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1"/>',
   user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  loader: '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>',
 };
 const ic = (n, s) => `<svg class="ic" viewBox="0 0 24 24"${s ? ` style="--s:${s}px"` : ''} aria-hidden="true">${ICONS[n] || ''}</svg>`;
 // La versión la escribe GitHub al publicar (release); abierto desde el equipo dice "versión local"
@@ -1123,7 +1149,9 @@ paintIcons();
 const PLATS = ['GLORY','ADMVO','ATIS','L2','ATI','PFS','OTRO'];
 const PL = { GLORY:'Glory', ADMVO:'Administrativo', ATIS:'ATIS', L2:'L2 Soporte', ATI:'ATI (Asesor TI)', PFS:'PFS TI', OTRO:'Otro' };
 const PL_SHORT = { GLORY:'Glory', ADMVO:'Admvo', ATIS:'ATIS', L2:'L2', ATI:'ATI', PFS:'PFS TI', OTRO:'Otro' };
-const COLORS = ['#3b7ddd','#d6336c','#f5a524','#2fb36d','#7b5cd6','#14a3b8','#e8590c','#868e96'];
+// colores de la dona: 12 distintos; si hubiera más plazas se generan tonos nuevos (nunca se repiten)
+const COLORS = ['#3b7ddd','#d6336c','#f5a524','#2fb36d','#7b5cd6','#14a3b8','#e8590c','#868e96','#1e3a8a','#94b81c','#b5179e','#8d6e63'];
+const colorAt = i => i < COLORS.length ? COLORS[i] : `hsl(${Math.round((i * 137.5) % 360)} 55% 48%)`;
 const LS = 'icash-folios-cfg-v1';
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1307,8 +1335,11 @@ function countUp(el, to, dur = 700, suffix = '') {
     el.textContent = Math.round(from + (to - from) * e) + suffix; if (p < 1) el._raf = requestAnimationFrame(step); };
   el._raf = requestAnimationFrame(step);
 }
-// cuenta todos los números marcados con data-count dentro de un contenedor (se vuelven a crear al filtrar)
-const animateCounts = root => root.querySelectorAll('[data-count]').forEach(el => { el._cv = 0; countUp(el, +el.dataset.count, 650); });
+// entrada animada (contar desde 0, barras que crecen, dona que se dibuja) solo al cargar el archivo;
+// al filtrar los valores cambian sin volver a empezar
+const intro = () => $('app').classList.contains('intro');
+// cuenta todos los números marcados con data-count dentro de un contenedor (solo en la entrada)
+const animateCounts = root => { if (!intro()) return; root.querySelectorAll('[data-count]').forEach(el => { el._cv = 0; countUp(el, +el.dataset.count, 650); }); };
 
 /* ===== tarjeta resumen: Región · Plazas · CI sin resolver ===== */
 function renderSum(rows) {
@@ -1327,8 +1358,12 @@ function renderSum(rows) {
   // anillo: % de folios en rojo (7+ días)
   const pct = sel.length ? Math.round(sel.filter(r => sem(r.rezago) === 'r').length * 100 / sel.length) : 0;
   const C = 2 * Math.PI * 27, ring = $('sumRing');
-  ring.style.strokeDasharray = `${C}`; ring.style.strokeDashoffset = `${C}`;
-  requestAnimationFrame(() => requestAnimationFrame(() => { ring.style.strokeDashoffset = `${C * (1 - pct / 100)}`; }));
+  // al cargar se llena desde vacío; al filtrar pasa del valor anterior al nuevo (sin vaciarse)
+  ring.style.strokeDasharray = `${C}`;
+  if (intro() || !ring.style.strokeDashoffset) {
+    ring.style.strokeDashoffset = `${C}`;
+    requestAnimationFrame(() => requestAnimationFrame(() => { ring.style.strokeDashoffset = `${C * (1 - pct / 100)}`; }));
+  } else ring.style.strokeDashoffset = `${C * (1 - pct / 100)}`;
   countUp($('sumPct'), pct, 900, '%');
   $('sumSub').textContent = F.plaza
     ? F.plaza.replace(/^Plaza\s+/i, '')
@@ -1336,7 +1371,7 @@ function renderSum(rows) {
   // plazas involucradas: barra proporcional (mismo estilo que el Top de incidencias) con la parte en rojo; clic para filtrar
   const pzs = plazas.map(p => { const fr = rows.filter(r => r.plaza === p); return { p, n: fr.length, r: fr.filter(r => sem(r.rezago) === 'r').length }; }).sort((a, b) => b.n - a.n);
   const mx = Math.max(1, ...pzs.map(x => x.n));
-  $('sumPz').innerHTML = pzs.map(x => `<button type="button" class="pzrow${F.plaza === x.p ? ' on' : ''}" data-pz="${esc(x.p)}" title="${esc(x.p)}: ${x.n} folios, ${x.r} en rojo">
+  $('sumPz').innerHTML = pzs.map(x => `<button type="button" class="pzrow${F.plaza === x.p ? ' on' : ''}" data-pz="${esc(x.p)}" aria-label="${esc(x.p)}: ${x.n} folios, ${x.r} en rojo" data-tip="${tipFor(x.p, rows.filter(r => r.plaza === x.p), rows.length)}">
       <span class="pzn">${esc(x.p.replace(/^Plaza\s+/i, ''))}</span>
       <span class="pzb"><i style="width:${x.n * 100 / mx}%"><em style="width:${x.n ? x.r * 100 / x.n : 0}%"></em></i></span>
       <b>${x.n}</b></button>`).join('');
@@ -1398,8 +1433,8 @@ function renderPivot(rows) {
   for (const p of pivotData(rows)) {
     p.people.forEach((x, i) => {
       const s = sem(x.max);
-      h += `<tr class="ps${i === 0 ? ' first' : ''}" data-a="${esc(x.a)}" data-pz="${esc(p.pz)}" data-p="${x.p}" title="${esc(x.fr.map(f => `${f.folio} · ${f.tienda} · ${f.rezago} días`).join('\n'))}">` +
-        (i === 0 ? `<td class="pzc${F.plaza === p.pz ? ' on' : ''}" rowspan="${p.people.length}" data-pz="${esc(p.pz)}" title="Ver folios de ${esc(p.pz)}"><div class="pzn">${esc(p.pz)}</div><div class="pzs">${p.n} folio${p.n === 1 ? '' : 's'}</div></td>` : '') +
+      h += `<tr class="ps${i === 0 ? ' first' : ''}" data-a="${esc(x.a)}" data-pz="${esc(p.pz)}" data-p="${x.p}" data-tip="${tipLista(x.a, x.fr)}">` +
+        (i === 0 ? `<td class="pzc${F.plaza === p.pz ? ' on' : ''}" rowspan="${p.people.length}" data-pz="${esc(p.pz)}" data-tip="${tipFor(p.pz, rows.filter(r => r.plaza === p.pz), rows.length)}"><div class="pzn">${esc(p.pz)}</div><div class="pzs">${p.n} folio${p.n === 1 ? '' : 's'}</div></td>` : '') +
         `<td class="who">${esc(x.a)}</td><td>${plTag(x.p)}</td><td data-count="${x.n}">${x.n}</td><td class="dd ${s}" data-count="${x.max}">${x.max}</td></tr>`;
     });
   }
@@ -1418,6 +1453,13 @@ function tipFor(title, fr, tot) {
   return esc(`<b>${esc(title)}</b>` + row('Folios', `${fr.length} (${Math.round(fr.length * 100 / (tot || 1))}%)`) +
     row('Rezago promedio', `${avg.toFixed(1)} días`) + row('Rezago máximo', `${ds.length ? Math.max(...ds) : 0} días`) + row('En rojo', rojo));
 }
+// recuadro con la lista de folios de una persona (tabla por plaza)
+function tipLista(title, fr) {
+  const MAX = 10, row = (k, v) => `<div class="tr"><span>${k}</span><span>${v}</span></div>`;
+  const ls = [...fr].sort((a, b) => (b.exacto ?? -1) - (a.exacto ?? -1));
+  return esc(`<b>${esc(title)}</b>` + ls.slice(0, MAX).map(f => row(`${esc(f.folio)} · ${esc(f.tienda)}`, f.rezago == null ? '—' : `${f.rezago} días`)).join('') +
+    (ls.length > MAX ? row(`y ${ls.length - MAX} más`, '') : ''));
+}
 
 function renderDist(rows) {
   const c = uniq(rows.map(r => r.plaza)).map(p => ({ p, n: rows.filter(r => r.plaza === p).length })).sort((a, b) => b.n - a.n);
@@ -1428,7 +1470,7 @@ function renderDist(rows) {
   const rm = (R + r0) / 2, L = 2 * Math.PI * rm, gap = c.length > 1 ? 3 : 0; let acc = 0;
   svg += `<g transform="rotate(-90 ${C} ${C})">`;
   c.forEach((x, i) => {
-    const col = COLORS[i % COLORS.length], len = Math.max(1, L * x.n / tot - gap);
+    const col = colorAt(i), len = Math.max(1, L * x.n / tot - gap);
     svg += `<circle class="dseg" cx="${C}" cy="${C}" r="${rm}" fill="none" stroke="${col}" stroke-width="${R - r0}"
       stroke-dasharray="${len} ${L}" stroke-dashoffset="${-acc}" style="--L:${L.toFixed(1)};animation-delay:${(i * 0.16).toFixed(2)}s"
       data-p="${esc(x.p)}" data-tip="${tipOf(x)}"/>`;
@@ -1437,13 +1479,13 @@ function renderDist(rows) {
   svg += `</g>`;
   svg += `<text id="dnNum" x="${C}" y="${C + 4}" text-anchor="middle" font-size="30" font-weight="700" fill="#1f2937" pointer-events="none">${rows.length}</text><text id="dnLbl" x="${C}" y="${C + 22}" text-anchor="middle" font-size="12" fill="#6b7280" pointer-events="none">folios</text>`;
   $('dist').innerHTML = `<svg width="184" height="184" viewBox="0 0 184 184" role="img" aria-label="Folios por plaza">${svg}</svg>
-    <ul class="leg">${c.map((x, i) => `<li data-p="${esc(x.p)}" data-tip="${tipOf(x)}" class="${F.plaza === x.p ? 'on' : ''}"><span class="sw" style="background:${COLORS[i % COLORS.length]}"></span>${esc(x.p.replace(/^Plaza\s+/i, ''))}<span class="num">${x.n}</span><span class="pct">${Math.round(x.n * 100 / tot)}%</span></li>`).join('')}</ul>`;
+    <ul class="leg">${c.map((x, i) => `<li data-p="${esc(x.p)}" data-tip="${tipOf(x)}" class="${F.plaza === x.p ? 'on' : ''}"><span class="sw" style="background:${colorAt(i)}"></span>${esc(x.p.replace(/^Plaza\s+/i, ''))}<span class="num">${x.n}</span><span class="pct">${Math.round(x.n * 100 / tot)}%</span></li>`).join('')}</ul>`;
   // centro dinámico: al pasar por una plaza, el centro muestra sus folios
   const setCenter = (n, lbl, col) => { const a = $('dnNum'), b = $('dnLbl'); if (!a) return;
     a.textContent = n; b.textContent = lbl; a.style.fill = col || ''; a.classList.remove('dn-pop'); void a.getBBox(); a.classList.add('dn-pop'); };
   $('dist').querySelectorAll('li,path,circle').forEach(el => {
     const x = c.find(z => z.p === el.dataset.p); if (!x) return;
-    const col = COLORS[c.indexOf(x) % COLORS.length];
+    const col = colorAt(c.indexOf(x));
     el.onmouseenter = () => setCenter(x.n, x.p.replace(/^Plaza\s+/i, '').slice(0, 16), col);
     el.onmouseleave = () => setCenter(rows.length, 'folios');
   });
@@ -1473,7 +1515,12 @@ function renderAlerts(rows) {
 const setBell = open => { $('bellPanel').classList.toggle('hidden', !open); $('bell').setAttribute('aria-expanded', open); };
 $('bell').onclick = e => { e.stopPropagation(); setBell($('bellPanel').classList.contains('hidden')); };
 document.addEventListener('click', e => { if (!e.target.closest('#bellWrap')) setBell(false); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') setBell(false); });
+// Esc cierra la campanita y también el detalle abierto de Casos activos
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  setBell(false);
+  if ($('cases').querySelector('tr.det:not(.cerrando)')) cerrarDetalles();
+});
 
 /* ===== listas largas: mostrar los primeros y "Ver todas" ===== */
 const MAX_ALERTAS = 6, MAX_TOP = 8;
@@ -1503,23 +1550,32 @@ function renderKpiPlat(rows) {
   $('kpiPlat').querySelectorAll('tbody tr').forEach(tr => tr.onclick = () => { F.plat = F.plat === tr.dataset.p ? '' : tr.dataset.p; limpiarDetalle(); render(); });
 }
 
-function renderTop(rows) {
+// barras del Top; completo = todas las incidencias (para la imagen), crecer = barras desde 0 (solo al cargar)
+function topHtml(rows, completo, crecer) {
   const c = uniq(rows.map(r => r.falla)).map(f => ({ f, n: rows.filter(r => r.falla === f).length }))
     .sort((a, b) => b.n - a.n || a.f.localeCompare(b.f, 'es'));
   const tot = rows.length || 1, max = c.length ? c[0].n : 1;
   const lideres = c.filter(x => x.n === max);
+  const html = (completo || SHOW.top ? c : c.slice(0, MAX_TOP)).map((x, i) => { const w = Math.max(3, x.n * 100 / max);
+    return `<div class="brow${x.n === max && lideres.length < c.length ? ' lead' : ''}${F.falla === x.f ? ' on' : ''}" data-f="${esc(x.f)}" data-tip="${tipFor(x.f, rows.filter(r => r.falla === x.f), rows.length)}">
+      <span class="rk">${i + 1}</span><span class="bl">${esc(x.f)}</span>
+      <span class="bt"><span class="bf" data-w="${w}" style="width:${crecer ? 0 : w}%;display:block"></span></span>
+      <span class="bn">${x.n}<em>${Math.round(x.n * 100 / tot)}%</em></span></div>`; }).join('') +
+    (completo ? '' : moreBtn('top', c.length, MAX_TOP, 'incidencias'));
+  return { c, max, lideres, html };
+}
+let topRows = [];
+function renderTop(rows) {
+  topRows = rows;
+  const crecer = intro(), { c, max, lideres, html } = topHtml(rows, false, crecer);
   $('topSub').textContent = !c.length ? 'Sin folios.'
     : (lideres.length === 1
         ? `La incidencia más frecuente es ${c[0].f} (${c[0].n} de ${rows.length} folios).`
         : `Empate: ${lideres.length} tipos de incidencia con ${max} folio${max === 1 ? '' : 's'} cada uno.`) + ' Seleccione una barra para ver esos folios.';
-  $('top').innerHTML = (SHOW.top ? c : c.slice(0, MAX_TOP)).map((x, i) => `<div class="brow${x.n === max && lideres.length < c.length ? ' lead' : ''}${F.falla === x.f ? ' on' : ''}" data-f="${esc(x.f)}" data-tip="${tipFor(x.f, rows.filter(r => r.falla === x.f), rows.length)}">
-      <span class="rk">${i + 1}</span><span class="bl">${esc(x.f)}</span>
-      <span class="bt"><span class="bf" data-w="${Math.max(3, x.n * 100 / max)}" style="width:0;display:block"></span></span>
-      <span class="bn">${x.n}<em>${Math.round(x.n * 100 / tot)}%</em></span></div>`).join('') +
-    moreBtn('top', c.length, MAX_TOP, 'incidencias');
+  $('top').innerHTML = html;
   bindMore($('top'), () => renderTop(rows));
-  // animación de las barras: arrancan en 0 y crecen a su valor
-  requestAnimationFrame(() => requestAnimationFrame(() =>
+  // al cargar, las barras arrancan en 0 y crecen a su valor; al filtrar ya salen en su tamaño
+  if (crecer) requestAnimationFrame(() => requestAnimationFrame(() =>
     $('top').querySelectorAll('.bf[data-w]').forEach(b => { b.style.width = b.dataset.w + '%'; })));
   $('top').querySelectorAll('.brow').forEach(b => b.onclick = () => {
     F.falla = F.falla === b.dataset.f ? '' : b.dataset.f; renderTop(rows); renderCases(rows);
@@ -1600,7 +1656,7 @@ function renderCases(rows, sorting) {
   $('chips').querySelectorAll('button').forEach(b => b.onclick = () => { F[b.dataset.k] = ''; render(); });
   const COLS = [['folio','Folio'],['tienda','Tienda'],['plaza','Plaza'],['falla','Incidencia'],['prioridad','Prioridad'],['asignado','Asignado'],['plat','Plataforma'],['abierto','Abierto'],['exacto','Días rezago']];
   $('cases').innerHTML = `<thead><tr>${COLS.map(([k, l]) => `<th data-k="${k}" class="${sort.k === k ? 'sorted' : ''}" title="Ordenar por ${l}">${l}<span class="ar">${sort.k === k ? (sort.dir > 0 ? '▲' : '▼') : '↕'}</span></th>`).join('')}</tr></thead><tbody>` +
-    (list.length ? list.map((r, i) => `<tr data-i="${i}" data-f="${esc(r.folio)}" title="Clic para ver el detalle" class="row${esAlerta(r) ? ' alerta' : ''}">
+    (list.length ? list.map((r, i) => `<tr data-i="${i}" data-f="${esc(r.folio)}" title="Clic para ver el detalle" class="row${i % 2 ? ' alt' : ''}${esAlerta(r) ? ' alerta' : ''}">
       <td class="folio"><a class="sn" href="${esc(snUrl(r.folio))}" target="_blank" rel="noopener" data-folio="${esc(r.folio)}" title="Abrir ${esc(r.folio)} en ServiceNow">${esc(r.folio)}${ic('ext')}</a>${btnCopiar(r.folio)}${esAlerta(r) ? `<span class="al" title="Alerta: prioridad ${esc(r.prioridad)} con ${r.rezago} días de rezago">${ic('bell', 12)}</span>` : ''}</td><td>${esc(r.tienda)}</td><td>${esc(r.plaza)}</td><td>${esc(r.falla)}</td>
       <td class="prio-${esc(r.prioridad)}">${esc(r.prioridad)}</td><td>${esc(r.asignado)}</td>
       <td>${plTag(r.plat)}</td>
@@ -1667,32 +1723,76 @@ async function cardToBlob(card) {
   const css = [...document.querySelectorAll('style')].map(s => s.textContent).join('\n') +
     '\n*,*::before,*::after{animation:none!important;transition:none!important}.card{opacity:1!important;transform:none!important}';
   const clone = card.cloneNode(true);
-  const ft = document.createElement('div'); ft.className = 'img-foot'; ft.textContent = footText(); clone.appendChild(ft);
+  // valores finales aunque los números o las barras sigan animándose
+  const fin = (sel, f) => { const o = card.querySelectorAll(sel), c = clone.querySelectorAll(sel); o.forEach((el, i) => c[i] && f(el, c[i])); };
+  fin('[data-count]', (o, c) => { c.textContent = o.dataset.count; });
+  fin('#sumNum', (o, c) => { if (o._cv != null) c.textContent = o._cv; });
+  fin('#sumPct', (o, c) => { if (o._cv != null) c.textContent = o._cv + '%'; });
+  fin('.bf[data-w]', (o, c) => { c.style.width = o.dataset.w + '%'; });
+  // el Top va completo en la imagen (no solo las primeras 8)
+  if (card.id === 'secTop' && topRows.length) clone.querySelector('#top').innerHTML = topHtml(topRows, true, false).html;
+  // pie: filtros aplicados + archivo y fecha
+  const ft = document.createElement('div'); ft.className = 'img-foot';
+  ft.innerHTML = `<div>${esc(filtrosTxt(card))}</div><div>${esc(footText())}</div>`; clone.appendChild(ft);
   clone.querySelectorAll('.noprint,.shot').forEach(n => n.remove());
   clone.querySelectorAll('.tw').forEach(n => { n.style.overflow = 'visible'; n.style.maxHeight = 'none'; });
   clone.querySelectorAll('.more').forEach(n => n.remove());
   const tbl = card.querySelector('.tw table');
-  const w = Math.ceil(Math.max(card.offsetWidth, tbl ? tbl.scrollWidth + 42 : 0));
+  // Casos activos se dibuja más ancho para que las celdas no se partan en muchas líneas
+  const w = Math.ceil(Math.max(card.offsetWidth, tbl ? tbl.scrollWidth + 50 : 0, card.id === 'casesCard' ? 1320 : 0));
   Object.assign(clone.style, { width: w + 'px', margin: '0', boxShadow: 'none' });
-  const host = document.createElement('div'); host.style.cssText = 'position:fixed;left:-100000px;top:0';
+  // La imagen no puede usar la letra descargada de internet (Inter): se mide y se dibuja con la misma letra del sistema
+  // y el mismo tamaño base, para que lo medido coincida con lo dibujado (si no, la imagen sale cortada o con espacio de más).
+  const FONT = `*{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif!important}`;
+  const BASE = 'font-size:14.5px;line-height:1.45;color:#0f172a';
+  const compact = document.body.classList.contains('compact') ? ' compact' : '';
+  const host = document.createElement('div'); host.className = 'shot-root' + compact;
+  host.style.cssText = `position:fixed;left:-100000px;top:0;width:${w}px;${BASE}`;
+  const hs = document.createElement('style'); hs.textContent = '.shot-root ' + FONT; host.appendChild(hs);
   host.appendChild(clone); document.body.appendChild(host);
   const h = Math.ceil(clone.offsetHeight);
   const html = new XMLSerializer().serializeToString(clone);
   host.remove();
-  const pad = 16, W = w + pad * 2, H = h + pad * 2;
+  // la vista compacta se respeta en la imagen
+  const cssImg = css.replace(/body\.compact/g, '.shot-root.compact') + '\n' + FONT;
+  // se deja un margen de alto por si algo mide distinto; lo que sobre se recorta abajo
+  const pad = 16, W = w + pad * 2, H = Math.ceil((h + pad * 2) * 1.1 + 40);
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><foreignObject x="0" y="0" width="${W}" height="${H}">` +
-    `<div xmlns="http://www.w3.org/1999/xhtml" style="padding:${pad}px;background:#f3f5f8;font:15px/1.45 'Segoe UI',Calibri,Arial,sans-serif;color:#1f2937"><style><![CDATA[${css}]]></style>${html}</div></foreignObject></svg>`;
+    `<div xmlns="http://www.w3.org/1999/xhtml" class="shot-root${compact}" style="padding:${pad}px;background:#f3f5f8;${BASE}"><style><![CDATA[${cssImg}]]></style>${html}</div></foreignObject></svg>`;
   const img = new Image();
   img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   await img.decode();
-  const scale = 2, cv = document.createElement('canvas');
-  cv.width = W * scale; cv.height = H * scale;
+  // nitidez doble, pero sin pasar el límite de tamaño del navegador (si no, la imagen sale cortada)
+  const MAXL = 16000, scale = Math.min(2, MAXL / W, MAXL / H), cv = document.createElement('canvas');
+  cv.width = Math.round(W * scale); cv.height = Math.round(H * scale);
   const ctx = cv.getContext('2d'); ctx.scale(scale, scale); ctx.drawImage(img, 0, 0);
-  return new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error('no se pudo generar la imagen')), 'image/png'));
+  // recorta el espacio vacío de abajo: el fondo gris solo llega hasta donde termina el contenido
+  const col = ctx.getImageData(1, 0, 1, cv.height).data; let last = cv.height - 1;
+  while (last > 0 && col[last * 4 + 3] === 0) last--;
+  const out = document.createElement('canvas'); out.width = cv.width; out.height = last + 1;
+  out.getContext('2d').drawImage(cv, 0, 0);
+  return new Promise((res, rej) => out.toBlob(b => b ? res(b) : rej(new Error('no se pudo generar la imagen')), 'image/png'));
+}
+// filtros que afectan a cada sección (para el pie de la imagen)
+function filtrosTxt(card) {
+  const f = [];
+  if (F.region) f.push(F.region);
+  if (F.plaza) f.push(F.plaza);
+  if (F.plat && card.id !== 'secSum' && card.id !== 'secPlat') f.push(PL[F.plat]);
+  if (card.id === 'casesCard') {
+    if (F.asig) f.push(`${F.asig.a} (${PL[F.asig.p]})`);
+    if (F.falla) f.push(F.falla);
+    if (F.q) f.push(`búsqueda "${F.q}"`);
+  }
+  return f.length ? 'Filtros: ' + f.join(' · ') : 'Sin filtros';
 }
 document.addEventListener('click', async e => {
-  const b = e.target.closest('[data-act]'); if (!b) return;
+  const b = e.target.closest('[data-act]'); if (!b || b.classList.contains('busy')) return;
   const card = b.closest('.card'), name = `${card.dataset.name || 'reporte'}_${iso(corteDate())}.png`;
+  // mientras se genera: el botón gira y no acepta otro clic
+  const svg0 = b.querySelector('svg'), icon0 = svg0 ? svg0.outerHTML : '';
+  b.classList.add('busy'); if (svg0) svg0.outerHTML = ic('loader').replace('class="ic"', 'class="ic spin"');
+  const listo = () => { b.classList.remove('busy'); const s = b.querySelector('svg'); if (s && icon0) s.outerHTML = icon0; };
   try {
     if (b.dataset.act === 'copy') {
       if (!navigator.clipboard || !window.ClipboardItem) throw new Error('copiar no disponible');
@@ -1708,7 +1808,7 @@ document.addEventListener('click', async e => {
     console.error(err);
     if (b.dataset.act === 'copy') toast('No se pudo copiar en este navegador. Usa "Descargar imagen".');
     else toast('No se pudo generar la imagen.');
-  }
+  } finally { listo(); }
 });
 
 /* ===== 4. recuadro de detalle al pasar el mouse ===== */
@@ -1757,7 +1857,7 @@ function setupReveal() {
 
 /* ===== 11. onda al hacer clic en botones, plazas y plataformas ===== */
 document.addEventListener('pointerdown', e => {
-  const b = e.target.closest('.btn, .seg button, .pzchip, .ibtn, .chip button');
+  const b = e.target.closest('.btn, .seg button, .pzchip, .ibtn, .chip button, .pzrow, .hbtn, .more, .pbtn');
   if (!b || reduceMotion()) return;
   const r = b.getBoundingClientRect(), s = Math.max(r.width, r.height) * 2;
   const w = document.createElement('span'); w.className = 'ripple';
@@ -1833,6 +1933,8 @@ $('pNext').onclick = () => showSlide(pIdx + 1);
 $('pExit').onclick = stopPresent;
 document.addEventListener('keydown', e => {
   if (!document.body.classList.contains('present')) return;
+  // escribiendo en el buscador o eligiendo en una lista: las teclas son para ese campo (Esc sí sale)
+  if (e.key !== 'Escape' && e.target.closest && e.target.closest('input,select,textarea,[contenteditable]')) return;
   if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); showSlide(pIdx + 1); }
   else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); showSlide(pIdx - 1); }
   else if (e.key === 'Escape') stopPresent();
@@ -1850,6 +1952,8 @@ async function loadBuffer(buf, name) {
     $('fName').textContent = name;
     $('loader').classList.add('hidden'); $('app').classList.remove('hidden');
     $('app').classList.remove('anim'); void $('app').offsetWidth; $('app').classList.add('anim');
+    // entrada animada solo en esta primera vista; después los filtros cambian sin redibujar todo
+    $('app').classList.add('intro'); clearTimeout(loadBuffer._i); loadBuffer._i = setTimeout(() => $('app').classList.remove('intro'), 2600);
     $('hdrMeta').classList.remove('hidden'); $('bPresent').classList.remove('hidden');
     generatedAt = new Date();
     $('toTop').classList.remove('hidden'); requestAnimationFrame(spy);

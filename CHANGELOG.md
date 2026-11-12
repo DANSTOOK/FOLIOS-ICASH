@@ -1,5 +1,16 @@
 # Historial de versiones
 
+## Sin publicar
+
+- Imágenes (copiar / descargar) completas: ya no se cortan abajo ni a la derecha (se miden y dibujan con la misma letra), Casos activos con muchos folios sale entera, el Top incluye todas las incidencias, los números y barras salen en su valor final aunque se acabe de filtrar, y el pie indica los filtros aplicados. El botón gira mientras se genera la imagen.
+- Modo oscuro: los días en amarillo y la prioridad Alto/Crítico ya se leen bien.
+- Casos activos cabe completa en pantalla amplia (la columna Días rezago ya no queda cortada).
+- Rayado de Casos activos estable al abrir un detalle; Esc cierra el detalle abierto.
+- Modo presentación: escribir en el buscador ya no cambia de diapositiva.
+- Distribución por plaza: 12 colores distintos (ya no se repiten con 9 plazas o más).
+- Animaciones más tranquilas: la entrada completa (contar desde 0, barras que crecen, dona que se dibuja, anillo que se llena) solo al cargar el archivo; al filtrar los valores cambian sin volver a empezar. El brillo del total pasa una sola vez, la línea verde ya no se mueve sin parar y las tarjetas con tablas grandes no se elevan al pasar el mouse.
+- Detalle al pasar el mouse con el mismo estilo en todo el reporte (tabla por plaza y plazas involucradas incluidas) y onda al hacer clic también en plazas, botones del encabezado y "Ver todas".
+
 ## v0.1.0 — primera versión publicada
 
 - Carga del export de incidentes de ServiceNow (.xlsx / .csv) en el navegador, sin servidor.

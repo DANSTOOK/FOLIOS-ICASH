@@ -47,9 +47,10 @@ FUNCIONES
 - Clic en el folio (INC...): lo abre en ServiceNow. La primera vez pide la
   dirección de ServiceNow de la empresa (https://xxxx.service-now.com) y la
   guarda en ese navegador.
-- Casos activos: clic en una fila abre su detalle (uno a la vez; clic afuera lo cierra).
+- Casos activos: clic en una fila abre su detalle (uno a la vez; clic afuera o Esc lo cierra).
   El icono junto al folio copia el número; la campanita marca los folios en alerta.
-- Cada sección tiene "Copiar imagen" y "Descargar imagen".
+- Cada sección tiene "Copiar imagen" y "Descargar imagen". La imagen sale completa
+  (todas las filas y todas las incidencias del Top) y su pie indica los filtros aplicados.
 - Al final: Cargar otro archivo, Exportar a Excel (CSV) e Imprimir / PDF.
 
 NAVEGACIÓN Y VISTA

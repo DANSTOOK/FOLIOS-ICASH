@@ -2,6 +2,7 @@
 
 ## Sin publicar
 
+- Panel del total (CI sin resolver) más grande y en azul marino: número, fecha y anillo de % más grandes; el arco del anillo va en rojo para marcar lo que está en rojo. La portada del PDF usa el mismo color.
 - Imágenes (copiar / descargar) completas: ya no se cortan abajo ni a la derecha (se miden y dibujan con la misma letra), Casos activos con muchos folios sale entera, el Top incluye todas las incidencias, los números y barras salen en su valor final aunque se acabe de filtrar, y el pie indica los filtros aplicados. El botón gira mientras se genera la imagen.
 - Modo oscuro: los días en amarillo y la prioridad Alto/Crítico ya se leen bien.
 - Casos activos cabe completa en pantalla amplia (la columna Días rezago ya no queda cortada).

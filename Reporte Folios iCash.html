@@ -915,6 +915,33 @@ body.dark .prio-Crítico{color:#ff9b9b}
 @keyframes spin{to{transform:rotate(360deg)}}
 svg.ic.spin{animation:spin .8s linear infinite}
 .btn.busy{pointer-events:none;opacity:.75}
+
+/* ===== panel del total: más grande y en azul marino (el rojo queda solo para lo que está en rojo) ===== */
+@media (min-width:901px){.sum-row{grid-template-columns:minmax(380px,440px) minmax(0,1fr)!important;gap:20px!important}}
+.sum-total{padding:18px 24px!important;min-height:150px!important;border-radius:16px!important;gap:18px!important;
+  background:radial-gradient(120% 140% at 0% 0%,#2f5bd3 0%,#1e3a8a 45%,#0f1f4d 100%)!important;
+  box-shadow:0 14px 32px -14px rgba(15,31,77,.65),inset 0 0 0 1px rgba(255,255,255,.06)!important}
+.sum-total::after{width:140px;height:140px;right:-40px;top:-50px;background:rgba(255,255,255,.07)}
+.st-txt{column-gap:18px!important;row-gap:6px!important}
+.sum-total b#sumNum{font-size:76px!important;letter-spacing:-3px;line-height:.9}
+.st-lbl{font-size:13px!important;letter-spacing:1.2px!important;opacity:.9}
+.st-date{font-size:13px!important;padding:3px 11px 3px 9px!important;background:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.24)!important}
+.st-date svg.ic{--s:14px}
+.st-sub{font-size:14px!important;opacity:.85}
+.st-ring,.st-ring svg{width:92px!important;height:92px!important}
+.rg-bg{stroke:rgba(255,255,255,.16)}
+.rg-fg{stroke:#ff6b81}
+.st-ring span b{font-size:20px!important}
+.st-ring span small{font-size:9.5px!important;margin-top:3px}
+body.dark .sum-total{background:radial-gradient(120% 140% at 0% 0%,#3461d6 0%,#1e40af 45%,#13245a 100%)!important;box-shadow:0 14px 32px -14px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.1)!important}
+@media (max-width:480px){
+  .sum-total{padding:14px 16px!important;min-height:0!important}
+  .sum-total b#sumNum{font-size:58px!important}
+  .st-ring,.st-ring svg{width:74px!important;height:74px!important}
+  .st-ring span b{font-size:16px!important}
+}
+/* portada del PDF con el mismo color */
+.pc-total{background:linear-gradient(135deg,#2f5bd3,#1e3a8a 50%,#0f1f4d)}
 </style>
 </head>
 <body>

@@ -2,6 +2,10 @@
 
 ## Sin publicar
 
+- Tema azul en todo lo que no es alerta: botón Imprimir / PDF, Abrir en ServiceNow, filtros activos, buscador, flecha de orden, folio abierto en Casos activos, barras del Top, botón de regresar arriba. El rojo queda solo para folios en rojo, alertas y prioridad Crítico/Alto.
+- Semáforo único en todo el reporte (verde, amarillo y rojo con los mismos tonos en tabla por plaza, Indicadores, tarjetas de plaza y Casos activos), un poco más suave que el amarillo puro.
+- Casos activos: la prioridad se muestra como etiqueta de color (Crítico rojo, Alto rojo claro, Moderado ámbar, Bajo gris).
+- Distribución por plaza en tonos de azul (la plaza con más folios en el más oscuro) y leyenda en tarjetas; la plaza elegida se pinta en azul marino.
 - Fotos de las cajas inteligentes Glory (incrustadas, funcionan sin internet): vista de tres cuartos en la pantalla de carga junto a los pasos, y las dos cajas de frente en la portada del PDF. En modo oscuro la foto va en un marco blanco.
 - Pantalla de carga rediseñada en tema azul: en pantalla amplia, texto y pasos a la izquierda y recuadro grande para soltar el archivo a la derecha; título con "folios iCash" resaltado, etiqueta superior, pasos en vertical unidos por una línea y aviso de privacidad en una pastilla. En celular se apila.
 - Tarjetas de plaza más compactas; la plaza elegida se pinta en azul marino con texto blanco y las demás se atenúan.

@@ -1151,6 +1151,76 @@ body.dark .pzr{background:#3a0e18;color:#ff8fa3}
 @media (max-width:480px){.sum-side{padding:12px 12px 10px!important}.sum-head{gap:8px}}
 /* portada del PDF con el mismo color */
 .pc-total{background:linear-gradient(135deg,#2f5bd3,#1e3a8a 50%,#0f1f4d)}
+
+/* =====================================================================
+   1. TEMA AZUL en todo lo que no es alerta (el rojo queda solo para "en rojo", alertas y Crítico/Alto)
+   ===================================================================== */
+:root{--acc:#2f5bd3;--acc-dark:#1e3a8a;--acc-50:#eef3ff;--acc-100:#dfe8ff}
+.btn.pri,body.dark .btn.pri{background:linear-gradient(135deg,var(--acc),var(--acc-dark))!important;border-color:var(--acc-dark)!important;color:#fff!important;box-shadow:0 4px 12px -4px rgba(30,58,138,.45)!important}
+.btn.pri:hover,body.dark .btn.pri:hover{background:linear-gradient(135deg,#3a67e0,var(--acc-dark))!important}
+.chip{background:var(--acc-50)!important;color:var(--acc-dark)!important;border:1px solid #d4e0fb}
+.chip button{background:rgba(47,91,211,.14)!important;color:var(--acc-dark)!important}
+body.dark .chip{background:#16264a!important;color:#c7d6ff!important;border-color:#26407a!important}
+.tools input[type=search]:focus,.sumcard select:focus{border-color:var(--acc)!important;box-shadow:0 0 0 3px var(--acc-50)!important}
+.cases th.sorted .ar{color:var(--acc)!important}
+.cp:hover{color:var(--acc)!important}
+.more:hover{border-color:var(--acc)!important;color:var(--acc)!important;background:var(--acc-50)!important}
+.totop:hover,body.dark .totop:hover{background:var(--acc)!important;color:#fff!important}
+.ibtn:hover{color:var(--acc)!important;border-color:var(--acc)!important}
+.brow.lead .bf{background:linear-gradient(90deg,#3a67e0,var(--acc-dark))!important}
+.brow .bf{background:linear-gradient(90deg,#9ab8ff,#5b8cff)}
+/* folio abierto en Casos activos: banda azul y flecha azul */
+.cases tbody tr.row.open td,.cases tr.det td{background:var(--acc-50)!important}
+#cases tr.row.open a.sn,.det-fol b{color:var(--acc-dark)!important}
+#cases tr.det td{border-bottom:1px solid rgba(47,91,211,.3)!important}
+#cases .det-in{border-color:rgba(47,91,211,.28)!important;box-shadow:0 3px 10px rgba(47,91,211,.1)!important}
+#cases .det-in::before{border-left-color:rgba(47,91,211,.28)!important;border-top-color:rgba(47,91,211,.28)!important}
+body.dark .cases tbody tr.row.open td,body.dark .cases tr.det td{background:#16264a!important}
+body.dark #cases tr.row.open a.sn,body.dark .det-fol b{color:#a9c1ff!important}
+.brow.on,.leg li.on,.pt tbody tr.on{background:var(--acc-50)}
+.cases tbody tr.row:hover a.sn{background:var(--acc-50)}
+
+/* =====================================================================
+   2. SEMÁFORO ÚNICO en todo el reporte (mismos tres tonos, un poco más suaves que el amarillo puro de Excel)
+   ===================================================================== */
+:root{--sem-g:#4ade80;--sem-y:#facc15;--sem-r:#dc2626}
+.d.r{background:var(--sem-r)!important;color:#fff!important}
+.d.y{background:#fde047!important;color:#713f12!important}
+.mb i.g,.sb.g,.pzt-bar i.g,.pzt-lg .g i,.lg i.lg-g{background:var(--sem-g)!important}
+.mb i.y,.sb.y,.pzt-bar i.y,.pzt-lg .y i,.lg i.lg-y{background:var(--sem-y)!important}
+.mb i.r,.sb.r,.pzt-bar i.r,.pzt-lg .r i,.lg i.lg-r{background:var(--sem-r)!important}
+.sb.g{color:#14532d!important}.sb.y{color:#713f12!important}.sb.r{color:#fff!important}
+.txt-r,.pzt-lg .r{color:var(--sem-r)}
+
+/* =====================================================================
+   3. PRIORIDAD COMO ETIQUETA en Casos activos
+   ===================================================================== */
+.prio-p{display:inline-flex;align-items:center;gap:5px;padding:2px 9px 2px 7px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;line-height:1.5}
+.prio-p::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.prio-p.p1{background:var(--sem-r);color:#fff}
+.prio-p.p2{background:#fee2e2;color:#b91c1c}
+.prio-p.p3{background:#fef3c7;color:#92400e}
+.prio-p.p4,.prio-p.p5,.prio-p.p9{background:#f1f5f9;color:#475569}
+.prio-p.p1::before{background:#fff}
+.cases tr.alerta td.prio-Alto,.cases tr.alerta td.prio-Crítico,body.dark .cases tr.alerta td.prio-Alto,body.dark .cases tr.alerta td.prio-Crítico{background:transparent}
+body.dark .prio-p.p2{background:#3a0e18;color:#fca5a5}
+body.dark .prio-p.p3{background:#3a2a0a;color:#fcd34d}
+body.dark .prio-p.p4,body.dark .prio-p.p5,body.dark .prio-p.p9{background:#22314c;color:#b6c2d6}
+body.compact .prio-p{padding:0 8px 0 6px;font-size:11px}
+
+/* =====================================================================
+   4. DISTRIBUCIÓN POR PLAZA: leyenda como tarjetas (mismo estilo que las tarjetas de plaza)
+   ===================================================================== */
+.leg{display:grid;gap:6px}
+.leg li{border:1px solid var(--line);background:var(--soft);border-radius:10px!important;padding:8px 12px!important;font-size:14px!important;transition:border-color .15s,background .15s,transform .15s}
+.leg li:hover{border-color:#b9cdf6;background:#fff;transform:translateX(2px)}
+.leg li .sw{width:14px;height:14px;border-radius:5px}
+.leg li .num{font-weight:800}
+.leg li.on{background:linear-gradient(135deg,var(--acc),var(--acc-dark))!important;border-color:var(--acc-dark);color:#fff}
+.leg li.on .pct{color:#c7d6ff}
+.leg li.on .sw{box-shadow:0 0 0 2px #fff}
+body.dark .leg li{background:#16223a;border-color:#2a3a58}
+body.dark .leg li:hover{background:#1c2b48;border-color:#3d5a94}
 </style>
 </head>
 <body>
@@ -1393,7 +1463,8 @@ const PL = { GLORY:'Glory', ADMVO:'Administrativo', ATIS:'ATIS', L2:'L2 Soporte'
 const PL_SHORT = { GLORY:'Glory', ADMVO:'Admvo', ATIS:'ATIS', L2:'L2', ATI:'ATI', PFS:'PFS TI', OTRO:'Otro' };
 // colores de la dona: 12 distintos; si hubiera más plazas se generan tonos nuevos (nunca se repiten)
 const COLORS = ['#3b7ddd','#d6336c','#f5a524','#2fb36d','#7b5cd6','#14a3b8','#e8590c','#868e96','#1e3a8a','#94b81c','#b5179e','#8d6e63'];
-const colorAt = i => i < COLORS.length ? COLORS[i] : `hsl(${Math.round((i * 137.5) % 360)} 55% 48%)`;
+// dona en tonos de azul del tema: la plaza con más folios en el azul más oscuro y la de menos en el más claro (nunca se repiten)
+const colorAt = (i, n) => { const k = n > 1 ? i / (n - 1) : 0; return `hsl(${Math.round(226 - k * 8)} ${Math.round(68 - k * 6)}% ${Math.round(27 + k * 48)}%)`; };
 const LS = 'icash-folios-cfg-v1';
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1741,7 +1812,7 @@ function renderDist(rows) {
   const rm = (R + r0) / 2, L = 2 * Math.PI * rm, gap = c.length > 1 ? 3 : 0; let acc = 0;
   svg += `<g transform="rotate(-90 ${C} ${C})">`;
   c.forEach((x, i) => {
-    const col = colorAt(i), len = Math.max(1, L * x.n / tot - gap);
+    const col = colorAt(i, c.length), len = Math.max(1, L * x.n / tot - gap);
     svg += `<circle class="dseg" cx="${C}" cy="${C}" r="${rm}" fill="none" stroke="${col}" stroke-width="${R - r0}"
       stroke-dasharray="${len} ${L}" stroke-dashoffset="${-acc}" style="--L:${L.toFixed(1)};animation-delay:${(i * 0.16).toFixed(2)}s"
       data-p="${esc(x.p)}" data-tip="${tipOf(x)}"/>`;
@@ -1750,13 +1821,13 @@ function renderDist(rows) {
   svg += `</g>`;
   svg += `<text id="dnNum" x="${C}" y="${C + 4}" text-anchor="middle" font-size="30" font-weight="700" fill="#1f2937" pointer-events="none">${rows.length}</text><text id="dnLbl" x="${C}" y="${C + 22}" text-anchor="middle" font-size="12" fill="#6b7280" pointer-events="none">folios</text>`;
   $('dist').innerHTML = `<svg width="184" height="184" viewBox="0 0 184 184" role="img" aria-label="Folios por plaza">${svg}</svg>
-    <ul class="leg">${c.map((x, i) => `<li data-p="${esc(x.p)}" data-tip="${tipOf(x)}" class="${F.plaza === x.p ? 'on' : ''}"><span class="sw" style="background:${colorAt(i)}"></span>${esc(x.p.replace(/^Plaza\s+/i, ''))}<span class="num">${x.n}</span><span class="pct">${Math.round(x.n * 100 / tot)}%</span></li>`).join('')}</ul>`;
+    <ul class="leg">${c.map((x, i) => `<li data-p="${esc(x.p)}" data-tip="${tipOf(x)}" class="${F.plaza === x.p ? 'on' : ''}"><span class="sw" style="background:${colorAt(i, c.length)}"></span>${esc(x.p.replace(/^Plaza\s+/i, ''))}<span class="num">${x.n}</span><span class="pct">${Math.round(x.n * 100 / tot)}%</span></li>`).join('')}</ul>`;
   // centro dinámico: al pasar por una plaza, el centro muestra sus folios
   const setCenter = (n, lbl, col) => { const a = $('dnNum'), b = $('dnLbl'); if (!a) return;
     a.textContent = n; b.textContent = lbl; a.style.fill = col || ''; a.classList.remove('dn-pop'); void a.getBBox(); a.classList.add('dn-pop'); };
   $('dist').querySelectorAll('li,path,circle').forEach(el => {
     const x = c.find(z => z.p === el.dataset.p); if (!x) return;
-    const col = colorAt(c.indexOf(x));
+    const col = colorAt(c.indexOf(x), c.length);
     el.onmouseenter = () => setCenter(x.n, x.p.replace(/^Plaza\s+/i, '').slice(0, 16), col);
     el.onmouseleave = () => setCenter(rows.length, 'folios');
   });
@@ -1929,7 +2000,7 @@ function renderCases(rows, sorting) {
   $('cases').innerHTML = `<thead><tr>${COLS.map(([k, l]) => `<th data-k="${k}" class="${sort.k === k ? 'sorted' : ''}" title="Ordenar por ${l}">${l}<span class="ar">${sort.k === k ? (sort.dir > 0 ? '▲' : '▼') : '↕'}</span></th>`).join('')}</tr></thead><tbody>` +
     (list.length ? list.map((r, i) => `<tr data-i="${i}" data-f="${esc(r.folio)}" title="Clic para ver el detalle" class="row${i % 2 ? ' alt' : ''}${esAlerta(r) ? ' alerta' : ''}">
       <td class="folio"><a class="sn" href="${esc(snUrl(r.folio))}" target="_blank" rel="noopener" data-folio="${esc(r.folio)}" title="Abrir ${esc(r.folio)} en ServiceNow">${esc(r.folio)}${ic('ext')}</a>${btnCopiar(r.folio)}${esAlerta(r) ? `<span class="al" title="Alerta: prioridad ${esc(r.prioridad)} con ${r.rezago} días de rezago">${ic('bell', 12)}</span>` : ''}</td><td>${esc(r.tienda)}</td><td>${esc(r.plaza)}</td><td>${esc(r.falla)}</td>
-      <td class="prio-${esc(r.prioridad)}">${esc(r.prioridad)}</td><td>${esc(r.asignado)}</td>
+      <td class="prio-${esc(r.prioridad)}"><span class="prio-p p${r.prioNum}">${esc(r.prioridad)}</span></td><td>${esc(r.asignado)}</td>
       <td>${plTag(r.plat)}</td>
       <td>${fDT(r.abierto)}</td>
       <td class="c" title="${r.exacto == null ? '' : 'Exacto: ' + r.exacto.toFixed(4)}"><span class="dz"><span class="d ${sem(r.rezago)}">${r.rezago ?? '—'}</span><span class="mb"><i class="${sem(r.rezago)}" style="width:${r.rezago == null ? 0 : Math.max(4, r.rezago * 100 / maxRz)}%"></i></span></span></td></tr>`).join('')

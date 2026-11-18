@@ -953,24 +953,17 @@ body.dark .meta b{color:#e6edff!important}
 body.dark .hbtn:hover,body.dark .bell:hover{background:#1d3160!important}
 .pc-mark{background:linear-gradient(135deg,#2f5bd3,#1e3a8a 60%,#0f1f4d)}
 
-/* ===== fondo animado y reactivo del panel del total =====
-   dos luces que se mueven despacio, un brillo que sigue al mouse y una luz que se vuelve roja según el % en rojo */
-@property --heat{syntax:'<number>';inherits:true;initial-value:0}
-.sum-total{transition:--heat 1.2s ease}
+/* ===== fondo reactivo del panel del total: una sola esfera blanca que sigue al mouse =====
+   la mueve el JS con un seguimiento suave; en reposo descansa detrás del número */
 .st-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;border-radius:inherit}
-.st-bg::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.10) 1px,transparent 1.2px);background-size:14px 14px;
+.st-bg::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1.2px);background-size:14px 14px;
   -webkit-mask-image:linear-gradient(115deg,transparent 35%,#000 100%);mask-image:linear-gradient(115deg,transparent 35%,#000 100%)}
-.st-bg i{position:absolute;border-radius:50%;filter:blur(30px);will-change:transform}
-.st-bg i:nth-child(1){width:190px;height:190px;left:-50px;top:-80px;background:#4f7dff;opacity:.55;animation:stDrift1 14s ease-in-out infinite alternate}
-.st-bg i:nth-child(2){width:170px;height:170px;right:-40px;bottom:-90px;opacity:.5;
-  background:color-mix(in srgb,#ff4d6d calc(var(--heat) * 100%),#38bdf8);animation:stDrift2 17s ease-in-out infinite alternate}
-.st-bg i:nth-child(3){width:200px;height:200px;left:var(--mx,50%);top:var(--my,50%);transform:translate(-50%,-50%);background:rgba(255,255,255,.22);
-  filter:blur(36px);opacity:0;transition:opacity .35s ease}
-.sum-total:hover .st-bg i:nth-child(3){opacity:1}
-@keyframes stDrift1{0%{transform:translate(0,0) scale(1)}50%{transform:translate(90px,50px) scale(1.15)}100%{transform:translate(170px,10px) scale(.95)}}
-@keyframes stDrift2{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-110px,-40px) scale(1.2)}100%{transform:translate(-200px,-10px) scale(1)}}
+.st-bg .orb{position:absolute;left:0;top:0;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;will-change:transform;
+  background:radial-gradient(circle at 38% 34%,rgba(255,255,255,.62) 0%,rgba(255,255,255,.26) 22%,rgba(255,255,255,.08) 48%,rgba(255,255,255,0) 70%);
+  opacity:.45;transition:opacity .4s ease}
+.sum-total.orb-on .st-bg .orb{opacity:1}
+.sum-total::before{animation:none!important;display:none}
 .sum-total::after{z-index:0}
-.sum-total::before{z-index:0}
 
 /* ===== resumen en dos paneles separados: total (azul) + plazas involucradas (tarjeta blanca) ===== */
 #secSum.sumcard{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
@@ -1109,7 +1102,7 @@ body.dark .pzr{background:#3a0e18;color:#ff8fa3}
     <section class="card sumcard" id="secSum" data-name="resumen-region">
       <div class="sum-row">
         <div class="sum-total">
-          <span class="st-bg" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="st-bg" aria-hidden="true"><i class="orb"></i></span>
           <div class="st-txt">
             <span class="st-lbl">CI sin resolver</span>
             <span class="st-date" id="sumDate"><i data-ic="calendar" data-s="13"></i><span>al —</span></span>
@@ -1461,10 +1454,7 @@ function renderSum(rows) {
     ring.style.strokeDashoffset = `${C}`;
     requestAnimationFrame(() => requestAnimationFrame(() => { ring.style.strokeDashoffset = `${C * (1 - pct / 100)}`; }));
   } else ring.style.strokeDashoffset = `${C * (1 - pct / 100)}`;
-  countUp($('sumPct'), pct, 900, '%');
-  // fondo del panel: la luz de abajo se vuelve roja según el % en rojo (40% o más = roja por completo)
-  document.querySelector('.sum-total').style.setProperty('--heat', Math.min(1, pct / 40).toFixed(2));
-  $('sumSub').textContent = F.plaza
+  countUp($('sumPct'), pct, 900, '%');  $('sumSub').textContent = F.plaza
     ? F.plaza.replace(/^Plaza\s+/i, '')
     : `en ${plazas.length} plaza${plazas.length === 1 ? '' : 's'}`;
   // plazas involucradas: barra proporcional (mismo estilo que el Top de incidencias) con la parte en rojo; clic para filtrar
@@ -1478,10 +1468,22 @@ function renderSum(rows) {
   $('sumPz').style.setProperty('--pzc', Math.max(1, Math.min(3, pzs.length <= 3 ? pzs.length : Math.ceil(pzs.length / 2))));
   $('sumPz').querySelectorAll('.pzrow').forEach(b => b.onclick = () => { F.plaza = F.plaza === b.dataset.pz ? '' : b.dataset.pz; limpiarDetalle(); render(); });
 }
-// brillo del panel del total que sigue al mouse
-{ const st = document.querySelector('.sum-total');
-  st.addEventListener('pointermove', e => { const r = st.getBoundingClientRect();
-    st.style.setProperty('--mx', (e.clientX - r.left) + 'px'); st.style.setProperty('--my', (e.clientY - r.top) + 'px'); }); }
+// esfera blanca del panel del total: sigue al mouse con un movimiento suave (se va quedando atrás y alcanza);
+// al salir regresa a descansar detrás del número. Solo se anima mientras se mueve.
+{ const st = document.querySelector('.sum-total'), orb = st.querySelector('.orb');
+  const rest = () => ({ x: 70, y: st.clientHeight * .45 });
+  let cur = rest(), tgt = rest(), raf = 0, s = 1, sT = 1;
+  const pinta = () => { orb.style.transform = `translate(${cur.x.toFixed(1)}px,${cur.y.toFixed(1)}px) scale(${s.toFixed(3)})`; };
+  const paso = () => {
+    cur.x += (tgt.x - cur.x) * .12; cur.y += (tgt.y - cur.y) * .12; s += (sT - s) * .12; pinta();
+    raf = Math.abs(tgt.x - cur.x) + Math.abs(tgt.y - cur.y) + Math.abs(sT - s) > .3 ? requestAnimationFrame(paso) : 0;
+  };
+  const mueve = () => { if (reduceMotion()) { cur = { ...tgt }; s = sT; pinta(); return; } if (!raf) raf = requestAnimationFrame(paso); };
+  st.addEventListener('pointermove', e => { const r = st.getBoundingClientRect(); tgt = { x: e.clientX - r.left, y: e.clientY - r.top }; sT = 1.15; st.classList.add('orb-on'); mueve(); });
+  st.addEventListener('pointerleave', () => { tgt = rest(); sT = 1; st.classList.remove('orb-on'); mueve(); });
+  // al mostrarse el reporte o cambiar de tamaño, la esfera se acomoda en su lugar de descanso
+  if ('ResizeObserver' in window) new ResizeObserver(() => { if (!st.classList.contains('orb-on')) { cur = rest(); tgt = rest(); pinta(); } }).observe(st);
+  pinta(); }
 $('selRegion').onchange = e => { F.region = e.target.value; F.plaza = ''; limpiarDetalle(); render(); };
 $('selPlaza').onchange = e => { F.plaza = e.target.value; limpiarDetalle(); render(); };
 $('sumReset').onclick = () => { F.plaza = ''; limpiarDetalle(); render(); };

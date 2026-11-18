@@ -917,21 +917,22 @@ svg.ic.spin{animation:spin .8s linear infinite}
 .btn.busy{pointer-events:none;opacity:.75}
 
 /* ===== panel del total: más grande y en azul marino (el rojo queda solo para lo que está en rojo) ===== */
-@media (min-width:901px){.sum-row{grid-template-columns:minmax(380px,440px) minmax(0,1fr)!important;gap:20px!important}}
-.sum-total{padding:18px 24px!important;min-height:150px!important;border-radius:16px!important;gap:18px!important;
+@media (min-width:901px){.sum-row{grid-template-columns:minmax(330px,370px) minmax(0,1fr)!important;gap:18px!important}}
+.sum-total{padding:16px 18px 16px 20px!important;min-height:150px!important;border-radius:16px!important;gap:10px!important;
   background:radial-gradient(120% 140% at 0% 0%,#2f5bd3 0%,#1e3a8a 45%,#0f1f4d 100%)!important;
   box-shadow:0 14px 32px -14px rgba(15,31,77,.65),inset 0 0 0 1px rgba(255,255,255,.06)!important}
 .sum-total::after{width:140px;height:140px;right:-40px;top:-50px;background:rgba(255,255,255,.07)}
-.st-txt{column-gap:18px!important;row-gap:6px!important}
-.sum-total b#sumNum{font-size:76px!important;letter-spacing:-3px;line-height:.9}
-.st-lbl{font-size:13px!important;letter-spacing:1.2px!important;opacity:.9}
+.st-txt{column-gap:14px!important;row-gap:6px!important}
+.sum-total b#sumNum{font-size:72px!important;letter-spacing:-3px;line-height:.9}
+.sum-total b#sumNum.n3{font-size:48px!important;letter-spacing:-2px}
+.st-lbl{font-size:12.5px!important;letter-spacing:1px!important;opacity:.9}
 .st-date{font-size:13px!important;padding:3px 11px 3px 9px!important;background:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.24)!important}
 .st-date svg.ic{--s:14px}
 .st-sub{font-size:14px!important;opacity:.85}
-.st-ring,.st-ring svg{width:92px!important;height:92px!important}
+.st-ring,.st-ring svg{width:84px!important;height:84px!important}
 .rg-bg{stroke:rgba(255,255,255,.16)}
 .rg-fg{stroke:#ff6b81}
-.st-ring span b{font-size:20px!important}
+.st-ring span b{font-size:18px!important}
 .st-ring span small{font-size:9.5px!important;margin-top:3px}
 body.dark .sum-total{background:radial-gradient(120% 140% at 0% 0%,#3461d6 0%,#1e40af 45%,#13245a 100%)!important;box-shadow:0 14px 32px -14px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.1)!important}
 @media (max-width:480px){
@@ -940,6 +941,71 @@ body.dark .sum-total{background:radial-gradient(120% 140% at 0% 0%,#3461d6 0%,#1
   .st-ring,.st-ring svg{width:74px!important;height:74px!important}
   .st-ring span b{font-size:16px!important}
 }
+/* ===== encabezado en azul (mismo tema que el panel del total); las pestañas de plataforma siguen en verde ===== */
+.mark{background:linear-gradient(135deg,#2f5bd3,#1e3a8a 60%,#0f1f4d)!important;box-shadow:0 4px 12px rgba(30,58,138,.3)!important}
+.meta div{background:#eef3ff!important;border-color:#d4e0fb!important;color:#5b6f9c!important}
+.meta b{color:#1e3a8a!important}
+.hbtn,.bell{background:#eef3ff!important;border-color:#d4e0fb!important;color:#1e3a8a!important}
+.hbtn:hover,.bell:hover,.bell[aria-expanded="true"]{background:#e0eaff!important;border-color:#b9cdf6!important}
+.bell.has{color:#1e3a8a!important}
+body.dark .meta div,body.dark .hbtn,body.dark .bell{background:#16264a!important;border-color:#26407a!important;color:#b9c8ee!important}
+body.dark .meta b{color:#e6edff!important}
+body.dark .hbtn:hover,body.dark .bell:hover{background:#1d3160!important}
+.pc-mark{background:linear-gradient(135deg,#2f5bd3,#1e3a8a 60%,#0f1f4d)}
+
+/* ===== fondo animado y reactivo del panel del total =====
+   dos luces que se mueven despacio, un brillo que sigue al mouse y una luz que se vuelve roja según el % en rojo */
+@property --heat{syntax:'<number>';inherits:true;initial-value:0}
+.sum-total{transition:--heat 1.2s ease}
+.st-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;border-radius:inherit}
+.st-bg::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.10) 1px,transparent 1.2px);background-size:14px 14px;
+  -webkit-mask-image:linear-gradient(115deg,transparent 35%,#000 100%);mask-image:linear-gradient(115deg,transparent 35%,#000 100%)}
+.st-bg i{position:absolute;border-radius:50%;filter:blur(30px);will-change:transform}
+.st-bg i:nth-child(1){width:190px;height:190px;left:-50px;top:-80px;background:#4f7dff;opacity:.55;animation:stDrift1 14s ease-in-out infinite alternate}
+.st-bg i:nth-child(2){width:170px;height:170px;right:-40px;bottom:-90px;opacity:.5;
+  background:color-mix(in srgb,#ff4d6d calc(var(--heat) * 100%),#38bdf8);animation:stDrift2 17s ease-in-out infinite alternate}
+.st-bg i:nth-child(3){width:200px;height:200px;left:var(--mx,50%);top:var(--my,50%);transform:translate(-50%,-50%);background:rgba(255,255,255,.22);
+  filter:blur(36px);opacity:0;transition:opacity .35s ease}
+.sum-total:hover .st-bg i:nth-child(3){opacity:1}
+@keyframes stDrift1{0%{transform:translate(0,0) scale(1)}50%{transform:translate(90px,50px) scale(1.15)}100%{transform:translate(170px,10px) scale(.95)}}
+@keyframes stDrift2{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-110px,-40px) scale(1.2)}100%{transform:translate(-200px,-10px) scale(1)}}
+.sum-total::after{z-index:0}
+.sum-total::before{z-index:0}
+
+/* ===== resumen en dos paneles separados: total (azul) + plazas involucradas (tarjeta blanca) ===== */
+#secSum.sumcard{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
+#app #secSum.sumcard:hover{transform:none!important;box-shadow:none!important}
+body.dark #secSum.sumcard{background:transparent!important;border-color:transparent!important}
+.sum-row{align-items:stretch!important}
+.sum-side{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:14px 18px 12px!important;gap:10px!important;justify-content:flex-start!important;transition:box-shadow .2s var(--ease)}
+.sum-side:hover{box-shadow:var(--shadow-hover)}
+body.dark .sum-side{background:var(--card);border-color:var(--line)}
+.sum-head{align-items:center!important;padding-bottom:10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+@media (min-width:1101px){.sum-head{flex-wrap:nowrap!important}.sum-filters{flex-wrap:nowrap!important;flex:none}}
+.sum-tt{display:flex;align-items:center;gap:10px;min-width:0}
+.sum-tt b{display:block;font-size:15.5px;font-weight:700;letter-spacing:-.2px;line-height:1.2}
+.sum-tt small{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:var(--muted);margin-top:2px}
+.lg{display:inline-flex;align-items:center;gap:5px}
+.lg i{display:inline-block;width:10px;height:6px;border-radius:3px;margin-left:4px}
+.lg i:first-child{margin-left:0}
+.lg-b{background:linear-gradient(90deg,#6c9cf2,#3b7ddd)}
+.lg-r{background:var(--brand)}
+.sumcard .shot{border-left:1px solid var(--line)!important;padding-left:6px!important;margin-left:2px!important}
+/* filas de plazas: nombre, barra más gruesa y total con su cantidad en rojo */
+.sum-pz{gap:2px 22px!important;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr))!important}
+.pzrow{grid-template-columns:minmax(80px,var(--pzw,120px)) 1fr auto!important;gap:12px!important;padding:6px 8px!important;border-radius:9px!important;transition:background .15s}
+.pzrow .pzn{font-size:13.5px}
+.pzrow .pzb{height:10px!important;border-radius:6px!important}
+.pzrow .pzb i,.pzrow .pzb em{border-radius:6px!important}
+.pzv{display:inline-flex;align-items:center;gap:6px;justify-content:flex-end;min-width:58px}
+.pzv b{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;text-align:right;min-width:22px}
+.pzr{font-style:normal;font-size:11px;font-weight:700;min-width:22px;height:18px;padding:0 6px;border-radius:9px;display:inline-grid;place-items:center;
+  background:var(--brand-50);color:var(--brand);font-variant-numeric:tabular-nums}
+.pzr.cero{background:var(--soft);color:var(--muted);opacity:.7}
+.pzrow.on{background:var(--brand-50)!important;box-shadow:inset 3px 0 0 var(--brand)}
+body.dark .pzr{background:#3a0e18;color:#ff8fa3}
+@media (max-width:900px){.sum-row{gap:14px!important}}
+@media (max-width:480px){.sum-side{padding:12px 12px 10px!important}.sum-head{gap:8px}}
 /* portada del PDF con el mismo color */
 .pc-total{background:linear-gradient(135deg,#2f5bd3,#1e3a8a 50%,#0f1f4d)}
 </style>
@@ -1043,6 +1109,7 @@ body.dark .sum-total{background:radial-gradient(120% 140% at 0% 0%,#3461d6 0%,#1
     <section class="card sumcard" id="secSum" data-name="resumen-region">
       <div class="sum-row">
         <div class="sum-total">
+          <span class="st-bg" aria-hidden="true"><i></i><i></i><i></i></span>
           <div class="st-txt">
             <span class="st-lbl">CI sin resolver</span>
             <span class="st-date" id="sumDate"><i data-ic="calendar" data-s="13"></i><span>al —</span></span>
@@ -1056,7 +1123,8 @@ body.dark .sum-total{background:radial-gradient(120% 140% at 0% 0%,#3461d6 0%,#1
         </div>
         <div class="sum-side">
           <div class="sum-head">
-            <span class="sum-l">Plazas involucradas</span>
+            <div class="sum-tt"><span class="hic"><i data-ic="pin"></i></span>
+              <div><b>Plazas involucradas</b><small><span class="lg"><i class="lg-b"></i>activos <i class="lg-r"></i>en rojo (7+ días)</span></small></div></div>
             <div class="sum-filters">
               <select id="selRegion" aria-label="Región" title="Región"></select>
               <select id="selPlaza" aria-label="Plaza" title="Plaza"></select>
@@ -1167,6 +1235,7 @@ const ICONS = {
   tag: '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1"/>',
   user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
   loader: '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>',
+  pin: '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
 };
 const ic = (n, s) => `<svg class="ic" viewBox="0 0 24 24"${s ? ` style="--s:${s}px"` : ''} aria-hidden="true">${ICONS[n] || ''}</svg>`;
 // La versión la escribe GitHub al publicar (release); abierto desde el equipo dice "versión local"
@@ -1382,6 +1451,7 @@ function renderSum(rows) {
   const sel = F.plaza ? rows.filter(r => r.plaza === F.plaza) : rows;
   $('sumDate').lastElementChild.textContent = 'al ' + corteDate().toLocaleDateString('es-MX', { day:'numeric', month:'short', year:'numeric' });
   countUp($('sumNum'), sel.length, 800);
+  $('sumNum').classList.toggle('n3', sel.length >= 100);   // 3 cifras: un poco más chico para que quepa en el panel
   // anillo: % de folios en rojo (7+ días)
   const pct = sel.length ? Math.round(sel.filter(r => sem(r.rezago) === 'r').length * 100 / sel.length) : 0;
   const C = 2 * Math.PI * 27, ring = $('sumRing');
@@ -1392,6 +1462,8 @@ function renderSum(rows) {
     requestAnimationFrame(() => requestAnimationFrame(() => { ring.style.strokeDashoffset = `${C * (1 - pct / 100)}`; }));
   } else ring.style.strokeDashoffset = `${C * (1 - pct / 100)}`;
   countUp($('sumPct'), pct, 900, '%');
+  // fondo del panel: la luz de abajo se vuelve roja según el % en rojo (40% o más = roja por completo)
+  document.querySelector('.sum-total').style.setProperty('--heat', Math.min(1, pct / 40).toFixed(2));
   $('sumSub').textContent = F.plaza
     ? F.plaza.replace(/^Plaza\s+/i, '')
     : `en ${plazas.length} plaza${plazas.length === 1 ? '' : 's'}`;
@@ -1401,11 +1473,15 @@ function renderSum(rows) {
   $('sumPz').innerHTML = pzs.map(x => `<button type="button" class="pzrow${F.plaza === x.p ? ' on' : ''}" data-pz="${esc(x.p)}" aria-label="${esc(x.p)}: ${x.n} folios, ${x.r} en rojo" data-tip="${tipFor(x.p, rows.filter(r => r.plaza === x.p), rows.length)}">
       <span class="pzn">${esc(x.p.replace(/^Plaza\s+/i, ''))}</span>
       <span class="pzb"><i style="width:${x.n * 100 / mx}%"><em style="width:${x.n ? x.r * 100 / x.n : 0}%"></em></i></span>
-      <b>${x.n}</b></button>`).join('');
+      <span class="pzv"><b>${x.n}</b><em class="pzr${x.r ? '' : ' cero'}">${x.r}</em></span></button>`).join('');
   // columnas según cuántas plazas haya, para que las filas queden parejas (4 plazas = 2 y 2)
   $('sumPz').style.setProperty('--pzc', Math.max(1, Math.min(3, pzs.length <= 3 ? pzs.length : Math.ceil(pzs.length / 2))));
   $('sumPz').querySelectorAll('.pzrow').forEach(b => b.onclick = () => { F.plaza = F.plaza === b.dataset.pz ? '' : b.dataset.pz; limpiarDetalle(); render(); });
 }
+// brillo del panel del total que sigue al mouse
+{ const st = document.querySelector('.sum-total');
+  st.addEventListener('pointermove', e => { const r = st.getBoundingClientRect();
+    st.style.setProperty('--mx', (e.clientX - r.left) + 'px'); st.style.setProperty('--my', (e.clientY - r.top) + 'px'); }); }
 $('selRegion').onchange = e => { F.region = e.target.value; F.plaza = ''; limpiarDetalle(); render(); };
 $('selPlaza').onchange = e => { F.plaza = e.target.value; limpiarDetalle(); render(); };
 $('sumReset').onclick = () => { F.plaza = ''; limpiarDetalle(); render(); };

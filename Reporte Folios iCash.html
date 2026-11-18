@@ -916,6 +916,64 @@ body.dark .prio-Crítico{color:#ff9b9b}
 svg.ic.spin{animation:spin .8s linear infinite}
 .btn.busy{pointer-events:none;opacity:.75}
 
+/* ===== pantalla de carga rediseñada (tema azul): texto y pasos a la izquierda, recuadro para soltar a la derecha ===== */
+#loader{position:relative;isolation:isolate}
+#loader::before{content:"";position:absolute;z-index:-1;left:-140px;top:-120px;width:560px;height:560px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(47,91,211,.13),rgba(47,91,211,0) 65%)}
+#loader::after{content:"";position:absolute;z-index:-1;right:-40px;bottom:-40px;width:380px;height:300px;pointer-events:none;
+  background-image:radial-gradient(rgba(30,58,138,.13) 1px,transparent 1.3px);background-size:16px 16px;
+  -webkit-mask-image:radial-gradient(closest-side,#000,transparent);mask-image:radial-gradient(closest-side,#000,transparent)}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;padding:4px 11px 4px 9px;border-radius:20px;background:#eaf0ff;color:#1e3a8a;
+  border:1px solid #d4e0fb;font-size:12px;font-weight:600;letter-spacing:.2px;margin-bottom:14px}
+.eyebrow svg.ic{--s:14px}
+.hero h2{font-size:38px!important;line-height:1.12;letter-spacing:-1px!important}
+.hero h2 .hl{background:linear-gradient(90deg,#2f5bd3,#1e3a8a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:16px!important;line-height:1.55;max-width:500px!important}
+/* recuadro para soltar el archivo */
+#drop{min-height:360px;justify-content:center;background:radial-gradient(120% 90% at 50% 0%,#fff 0%,#fff 48%,#eef3ff 100%)!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.04),0 28px 56px -28px rgba(30,58,138,.42)!important}
+#drop:hover,#drop:focus-visible{box-shadow:0 1px 2px rgba(15,23,42,.04),0 32px 60px -26px rgba(30,58,138,.5)!important}
+#drop .ants rect{stroke:#a9bff0}
+#drop:hover .ants rect,#drop.over .ants rect{stroke:#2f5bd3}
+.drop-ic{background:linear-gradient(135deg,#e6edff,#cfdcff)!important;color:#1e3a8a!important;box-shadow:inset 0 0 0 1px rgba(47,91,211,.15)!important}
+.ring{border-color:rgba(47,91,211,.35)!important}
+#drop .btn.pri{background:linear-gradient(135deg,#2f5bd3,#1e3a8a)!important;border-color:#1e3a8a!important;box-shadow:0 10px 20px -10px rgba(30,58,138,.7)!important}
+#drop .btn.pri:hover{background:linear-gradient(135deg,#3a67e0,#1e3a8a)!important}
+#drop.over{background:radial-gradient(120% 90% at 50% 0%,#fff 0%,#eef3ff 60%,#dfe8ff 100%)!important}
+#drop.busy .drop-ic::after{border-color:rgba(47,91,211,.2)!important;border-top-color:#2f5bd3!important}
+/* pasos en vertical con línea que los une */
+.steps2{grid-template-columns:minmax(0,1fr)!important;gap:0!important;padding:8px!important;margin-top:0!important}
+.steps2 .st-arrow{display:none!important}
+.steps2>li:not(.st-arrow){padding:12px 14px!important}
+.steps2>li:not(.st-arrow):not(:last-child)::after{content:"";position:absolute;left:34px;top:60px;bottom:-12px;width:2px;
+  background:repeating-linear-gradient(#c9d6f5 0 4px,transparent 4px 8px)}
+.steps2>li:not(.st-arrow):hover{background:#f5f8ff!important}
+.st-ic{background:#eaf0ff!important;color:#1e3a8a!important;box-shadow:inset 0 0 0 1px #d4e0fb!important}
+.st-n{background:linear-gradient(135deg,#2f5bd3,#1e3a8a)!important}
+.steps2 b{font-size:15px!important}
+.privacy{display:inline-flex!important;align-items:center;gap:7px;padding:6px 12px;border-radius:20px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534!important;font-size:12.5px}
+#loader .privacy{width:max-content;max-width:100%}
+@media (min-width:901px){
+  #loader.empty{max-width:1120px;margin:56px auto 24px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+    grid-template-areas:"hero drop" "steps drop" "privacy drop" "err err";column-gap:48px;align-items:start}
+  #loader .hero{grid-area:hero;text-align:left;margin:0 0 22px}
+  #loader .hero p{margin:12px 0 0!important}
+  #loader #drop{grid-area:drop;align-self:stretch}
+  #loader .steps2{grid-area:steps}
+  #loader .privacy{grid-area:privacy;margin-top:16px!important}
+  #loader #err{grid-area:err}
+}
+@media (max-width:900px){#loader .hero{text-align:center}#loader .privacy{margin-left:auto;margin-right:auto}.hero h2{font-size:30px!important}}
+@media (max-width:480px){.hero h2{font-size:25px!important}#drop{min-height:300px}}
+body.dark .eyebrow{background:#16264a;border-color:#26407a;color:#b9c8ee}
+body.dark .hero h2 .hl{background:linear-gradient(90deg,#7aa5ff,#a9c1ff);-webkit-background-clip:text;background-clip:text}
+body.dark #drop{background:radial-gradient(120% 90% at 50% 0%,#14203a 0%,#111a2e 55%,#16264a 100%)!important}
+body.dark .drop-ic{background:#16264a!important;color:#9db8ff!important}
+body.dark .st-ic{background:#16264a!important;color:#9db8ff!important;box-shadow:inset 0 0 0 1px #26407a!important}
+body.dark .steps2>li:not(.st-arrow):hover{background:#16223a!important}
+body.dark .privacy{background:#123524;border-color:#1f5b3a;color:#86efac!important}
+body.dark #loader::after{background-image:radial-gradient(rgba(157,184,255,.14) 1px,transparent 1.3px)}
+
 /* ===== panel del total: más grande y en azul marino (el rojo queda solo para lo que está en rojo) ===== */
 @media (min-width:901px){.sum-row{grid-template-columns:minmax(330px,370px) minmax(0,1fr)!important;gap:18px!important}}
 .sum-total{padding:16px 18px 16px 20px!important;min-height:150px!important;border-radius:16px!important;gap:10px!important;
@@ -1039,6 +1097,23 @@ body.dark .pzt.on .pzt-num{color:#c7d6ff}
 body.dark .pzt-n{color:#b6c2d6}
 body.dark .pzt-bar{background:#0f182b}
 body.dark .pzt-lg .g{color:#86efac}body.dark .pzt-lg .y{color:#fde68a}body.dark .pzt-lg .r{color:#ff8fa3}
+/* tarjetas más compactas */
+.sum-pz{gap:8px!important}
+.pzt{padding:8px 10px 7px!important;border-radius:11px!important}
+.pzt-n{font-size:12px}
+.pzt-num{font-size:22px!important}
+.pzt-bar{height:7px!important;margin:4px 0!important}
+.pzt-lg{font-size:11px!important}
+.pzt-lg i{width:7px!important;height:7px!important}
+/* plaza elegida: tarjeta azul marino con texto blanco; las demás se atenúan */
+.sum-pz.has-on .pzt:not(.on){opacity:.5}
+.sum-pz.has-on .pzt:not(.on):hover{opacity:.85}
+.pzt.on,body.dark .pzt.on{background:linear-gradient(135deg,#2f5bd3,#1e3a8a)!important;border-color:#1e3a8a!important;
+  box-shadow:0 10px 22px -10px rgba(30,58,138,.7)!important;transform:translateY(-2px)}
+.pzt.on .pzt-n,.pzt.on .pzt-pct,.pzt.on .pzt-num,body.dark .pzt.on .pzt-num{color:#fff!important}
+.pzt.on .pzt-bar{background:rgba(255,255,255,.22)}
+.pzt.on .pzt-lg .g{color:#bbf7d0!important}.pzt.on .pzt-lg .y{color:#fef08a!important}.pzt.on .pzt-lg .r{color:#fecaca!important}
+.pzt.on .pzt-lg .cero{opacity:.6}
 .pzrow{grid-template-columns:minmax(80px,var(--pzw,120px)) 1fr auto!important;gap:12px!important;padding:6px 8px!important;border-radius:9px!important;transition:background .15s}
 .pzrow .pzn{font-size:13.5px}
 .pzrow .pzb{height:10px!important;border-radius:6px!important}
@@ -1096,7 +1171,8 @@ body.dark .pzr{background:#3a0e18;color:#ff8fa3}
   <!-- Paso 0: cargar archivo -->
   <section id="loader" class="empty">
     <div class="hero">
-      <h2>Genera el reporte de folios</h2>
+      <span class="eyebrow"><i data-ic="sheet" data-s="14"></i>Cajas inteligentes · Incidentes ServiceNow</span>
+      <h2>Genera el reporte de <span class="hl">folios iCash</span></h2>
       <p>Carga el export de incidentes de ServiceNow y obtén al instante quién tiene cada folio, su plataforma y los días de rezago.</p>
     </div>
 
@@ -1525,6 +1601,7 @@ function renderSum(rows) {
       <span class="pzt-bar">${seg(x.g, 'g')}${seg(x.y, 'y')}${seg(x.r, 'r')}</span>
       <span class="pzt-lg">${cnt(x.g, 'g', 'en verde')}${cnt(x.y, 'y', 'en amarillo')}${cnt(x.r, 'r', 'en rojo')}</span></button>`).join('');
   // columnas: tantas como plazas hasta 4 (con más, se reparten en filas parejas)
+  $('sumPz').classList.toggle('has-on', !!F.plaza);   // con una plaza elegida, las demás se atenúan
   $('sumPz').style.setProperty('--pzc', pzs.length <= 4 ? Math.max(1, pzs.length) : Math.min(4, Math.ceil(pzs.length / 2)));
   $('sumPz').querySelectorAll('.pzt').forEach(b => b.onclick = () => { F.plaza = F.plaza === b.dataset.pz ? '' : b.dataset.pz; limpiarDetalle(); render(); });
 }

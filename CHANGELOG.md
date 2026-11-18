@@ -2,6 +2,8 @@
 
 ## Sin publicar
 
+- Pantalla de carga rediseñada en tema azul: en pantalla amplia, texto y pasos a la izquierda y recuadro grande para soltar el archivo a la derecha; título con "folios iCash" resaltado, etiqueta superior, pasos en vertical unidos por una línea y aviso de privacidad en una pastilla. En celular se apila.
+- Tarjetas de plaza más compactas; la plaza elegida se pinta en azul marino con texto blanco y las demás se atenúan.
 - Plazas involucradas con tarjetas de semáforo: cada plaza muestra su total, % del total y una barra verde / amarillo / rojo con la cantidad de cada color; 4 en fila o 2 y 2 según el espacio; clic para filtrar.
 - Tabla por plaza: la columna Días rezago ya no pinta toda la celda; muestra una etiqueta de color con mini barra, igual que Casos activos.
 - Tema azul también en los iconos de todas las tarjetas y en las pestañas de plataforma (pastilla, número y línea líquida).

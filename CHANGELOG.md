@@ -2,6 +2,7 @@
 
 ## Sin publicar
 
+- Fotos de las cajas inteligentes Glory (incrustadas, funcionan sin internet): vista de tres cuartos en la pantalla de carga junto a los pasos, y las dos cajas de frente en la portada del PDF. En modo oscuro la foto va en un marco blanco.
 - Pantalla de carga rediseñada en tema azul: en pantalla amplia, texto y pasos a la izquierda y recuadro grande para soltar el archivo a la derecha; título con "folios iCash" resaltado, etiqueta superior, pasos en vertical unidos por una línea y aviso de privacidad en una pastilla. En celular se apila.
 - Tarjetas de plaza más compactas; la plaza elegida se pinta en azul marino con texto blanco y las demás se atenúan.
 - Plazas involucradas con tarjetas de semáforo: cada plaza muestra su total, % del total y una barra verde / amarillo / rojo con la cantidad de cada color; 4 en fila o 2 y 2 según el espacio; clic para filtrar.

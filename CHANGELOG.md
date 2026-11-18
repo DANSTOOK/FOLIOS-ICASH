@@ -2,6 +2,7 @@
 
 ## Sin publicar
 
+- Tema azul también en los iconos de todas las tarjetas y en las pestañas de plataforma (pastilla, número y línea líquida).
 - Panel del total: el fondo animado queda en una sola esfera blanca que sigue al mouse con movimiento suave y regresa detrás del número al salir (se quitan las luces en movimiento, el tono rojo y el brillo que cruzaba el panel).
 - Panel del total más angosto, separado del panel de plazas y con fondo animado y reactivo: luces que se mueven despacio, brillo que sigue al mouse y una luz que se vuelve roja según el % en rojo. Con 100 folios o más el número se ajusta para caber.
 - Plazas involucradas en su propia tarjeta: título con icono y leyenda, barras más gruesas, total y cantidad en rojo por plaza, y la plaza elegida marcada.

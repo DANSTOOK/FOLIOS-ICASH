@@ -598,7 +598,7 @@ body.compact #casesCard .tw{max-height:720px}
 #app #casesCard:hover,#app #secPlazas:hover,#app #secPlat:hover{transform:none!important}
 
 /* ===== 11. onda al hacer clic ===== */
-.btn,.seg button,.pzchip,.ibtn,.chip button,.pzrow,.hbtn,.more,.pbtn{position:relative;overflow:hidden}
+.btn,.seg button,.pzchip,.ibtn,.chip button,.pzt,.hbtn,.more,.pbtn{position:relative;overflow:hidden}
 .ripple{position:absolute;border-radius:50%;pointer-events:none;background:currentColor;opacity:.22;transform:scale(0);animation:ripple-k .6s ease-out forwards}
 .btn.pri .ripple{background:#fff;opacity:.35}
 @keyframes ripple-k{to{transform:scale(1);opacity:0}}
@@ -998,7 +998,47 @@ body.dark .sum-side{background:var(--card);border-color:var(--line)}
 .lg-r{background:var(--brand)}
 .sumcard .shot{border-left:1px solid var(--line)!important;padding-left:6px!important;margin-left:2px!important}
 /* filas de plazas: nombre, barra más gruesa y total con su cantidad en rojo */
-.sum-pz{gap:2px 22px!important;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr))!important}
+/* tabla por plaza: días como etiqueta + mini barra (ya no se pinta toda la celda) */
+.xl td.dd{background:transparent!important}
+.xl td.dd .dz{justify-content:center}
+.xl td.dd .mb{width:56px}
+.fresh .xl .d.r{animation:pulseChip .7s ease-out .5s 1}
+
+/* tarjetas de plaza con semáforo (opción B) */
+/* 4 plazas: 4 en fila si caben, si no 2 y 2 (según el ancho del panel, no de la ventana) */
+.sum-side{container-type:inline-size}
+.sum-pz{gap:10px!important;grid-template-columns:repeat(var(--pzc,4),minmax(0,1fr))!important}
+@container (max-width:660px){.sum-pz{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@container (max-width:290px){.sum-pz{grid-template-columns:minmax(0,1fr)!important}}
+.pzt{display:flex;flex-direction:column;gap:2px;min-width:0;text-align:left;font:inherit;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:12px;
+  padding:10px 12px 9px;cursor:pointer;transition:border-color .15s,background .15s,transform .15s,box-shadow .15s}
+.pzt:hover{border-color:#b9cdf6;background:#fff;transform:translateY(-1px);box-shadow:0 6px 14px -8px rgba(30,58,138,.35)}
+.pzt.on{border-color:#2f5bd3;background:#f5f8ff;box-shadow:inset 0 0 0 1px #2f5bd3}
+.pzt-h{display:flex;justify-content:space-between;align-items:baseline;gap:6px;min-width:0}
+.pzt-n{font-size:12.5px;font-weight:600;color:#475569;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pzt-pct{flex:none;font-size:11px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.pzt-num{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1.1;font-variant-numeric:tabular-nums}
+.pzt.on .pzt-num{color:#1e3a8a}
+.pzt-bar{display:flex;gap:2px;height:9px;border-radius:5px;overflow:hidden;background:#eef1f5;margin:6px 0 5px;transform-origin:left}
+.pzt-bar i{display:block;min-width:4px}
+.pzt-bar i.g,.lg-g,.pzt-lg .g i{background:#86efac}
+.pzt-bar i.y,.lg-y,.pzt-lg .y i{background:var(--yel)}
+.pzt-bar i.r,.pzt-lg .r i{background:var(--red)}
+.pzt-lg{display:flex;justify-content:space-between;gap:4px;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.pzt-lg span{display:inline-flex;align-items:center;gap:4px}
+.pzt-lg i{display:inline-block;width:8px;height:8px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.pzt-lg .g{color:#15803d}.pzt-lg .y{color:#a16207}.pzt-lg .r{color:var(--red)}
+.pzt-lg .cero{opacity:.4}
+.lg i.lg-y{box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.lg i.lg-r{background:var(--red)}
+#app.intro .pzt-bar{animation:growX .8s cubic-bezier(.2,.8,.2,1) both}
+body.dark .pzt{background:#16223a;border-color:#2a3a58}
+body.dark .pzt:hover{background:#1c2b48;border-color:#3d5a94}
+body.dark .pzt.on{background:#18284a;border-color:#5b8cff;box-shadow:inset 0 0 0 1px #5b8cff}
+body.dark .pzt.on .pzt-num{color:#c7d6ff}
+body.dark .pzt-n{color:#b6c2d6}
+body.dark .pzt-bar{background:#0f182b}
+body.dark .pzt-lg .g{color:#86efac}body.dark .pzt-lg .y{color:#fde68a}body.dark .pzt-lg .r{color:#ff8fa3}
 .pzrow{grid-template-columns:minmax(80px,var(--pzw,120px)) 1fr auto!important;gap:12px!important;padding:6px 8px!important;border-radius:9px!important;transition:background .15s}
 .pzrow .pzn{font-size:13.5px}
 .pzrow .pzb{height:10px!important;border-radius:6px!important}
@@ -1130,7 +1170,7 @@ body.dark .pzr{background:#3a0e18;color:#ff8fa3}
         <div class="sum-side">
           <div class="sum-head">
             <div class="sum-tt"><span class="hic"><i data-ic="pin"></i></span>
-              <div><b>Plazas involucradas</b><small><span class="lg"><i class="lg-b"></i>activos <i class="lg-r"></i>en rojo (7+ días)</span></small></div></div>
+              <div><b>Plazas involucradas</b><small id="sumLg"></small></div></div>
             <div class="sum-filters">
               <select id="selRegion" aria-label="Región" title="Región"></select>
               <select id="selPlaza" aria-label="Plaza" title="Plaza"></select>
@@ -1467,19 +1507,26 @@ function renderSum(rows) {
     ring.style.strokeDashoffset = `${C}`;
     requestAnimationFrame(() => requestAnimationFrame(() => { ring.style.strokeDashoffset = `${C * (1 - pct / 100)}`; }));
   } else ring.style.strokeDashoffset = `${C * (1 - pct / 100)}`;
-  countUp($('sumPct'), pct, 900, '%');  $('sumSub').textContent = F.plaza
+  countUp($('sumPct'), pct, 900, '%');
+  $('sumSub').textContent = F.plaza
     ? F.plaza.replace(/^Plaza\s+/i, '')
     : `en ${plazas.length} plaza${plazas.length === 1 ? '' : 's'}`;
-  // plazas involucradas: barra proporcional (mismo estilo que el Top de incidencias) con la parte en rojo; clic para filtrar
-  const pzs = plazas.map(p => { const fr = rows.filter(r => r.plaza === p); return { p, n: fr.length, r: fr.filter(r => sem(r.rezago) === 'r').length }; }).sort((a, b) => b.n - a.n);
-  const mx = Math.max(1, ...pzs.map(x => x.n));
-  $('sumPz').innerHTML = pzs.map(x => `<button type="button" class="pzrow${F.plaza === x.p ? ' on' : ''}" data-pz="${esc(x.p)}" aria-label="${esc(x.p)}: ${x.n} folios, ${x.r} en rojo" data-tip="${tipFor(x.p, rows.filter(r => r.plaza === x.p), rows.length)}">
-      <span class="pzn">${esc(x.p.replace(/^Plaza\s+/i, ''))}</span>
-      <span class="pzb"><i style="width:${x.n * 100 / mx}%"><em style="width:${x.n ? x.r * 100 / x.n : 0}%"></em></i></span>
-      <span class="pzv"><b>${x.n}</b><em class="pzr${x.r ? '' : ' cero'}">${x.r}</em></span></button>`).join('');
-  // columnas según cuántas plazas haya, para que las filas queden parejas (4 plazas = 2 y 2)
-  $('sumPz').style.setProperty('--pzc', Math.max(1, Math.min(3, pzs.length <= 3 ? pzs.length : Math.ceil(pzs.length / 2))));
-  $('sumPz').querySelectorAll('.pzrow').forEach(b => b.onclick = () => { F.plaza = F.plaza === b.dataset.pz ? '' : b.dataset.pz; limpiarDetalle(); render(); });
+  // plazas involucradas: una tarjeta por plaza con su total, % del total y semáforo (verde / amarillo / rojo); clic para filtrar
+  const tot = rows.length || 1;
+  const pzs = plazas.map(p => { const fr = rows.filter(r => r.plaza === p), c = { g: 0, y: 0, r: 0 };
+    fr.forEach(r => { const s = sem(r.rezago); if (c[s] != null) c[s]++; });
+    return { p, n: fr.length, ...c, fr }; }).sort((a, b) => b.n - a.n);
+  $('sumLg').innerHTML = `<span class="lg"><i class="lg-g"></i>0-${cfg.thY - 1} días <i class="lg-y"></i>${cfg.thY}-${cfg.thR - 1} <i class="lg-r"></i>${cfg.thR}+</span>`;
+  const seg = (n, k) => n ? `<i class="${k}" style="flex:${n}"></i>` : '';
+  const cnt = (n, k, t) => `<span class="${k}${n ? '' : ' cero'}" title="${n} ${t}"><i></i>${n}</span>`;
+  $('sumPz').innerHTML = pzs.map(x => `<button type="button" class="pzt${F.plaza === x.p ? ' on' : ''}" data-pz="${esc(x.p)}" aria-label="${esc(x.p)}: ${x.n} folios, ${x.r} en rojo" data-tip="${tipFor(x.p, x.fr, rows.length)}">
+      <span class="pzt-h"><span class="pzt-n">${esc(x.p.replace(/^Plaza\s+/i, ''))}</span><span class="pzt-pct">${Math.round(x.n * 100 / tot)}%</span></span>
+      <b class="pzt-num">${x.n}</b>
+      <span class="pzt-bar">${seg(x.g, 'g')}${seg(x.y, 'y')}${seg(x.r, 'r')}</span>
+      <span class="pzt-lg">${cnt(x.g, 'g', 'en verde')}${cnt(x.y, 'y', 'en amarillo')}${cnt(x.r, 'r', 'en rojo')}</span></button>`).join('');
+  // columnas: tantas como plazas hasta 4 (con más, se reparten en filas parejas)
+  $('sumPz').style.setProperty('--pzc', pzs.length <= 4 ? Math.max(1, pzs.length) : Math.min(4, Math.ceil(pzs.length / 2)));
+  $('sumPz').querySelectorAll('.pzt').forEach(b => b.onclick = () => { F.plaza = F.plaza === b.dataset.pz ? '' : b.dataset.pz; limpiarDetalle(); render(); });
 }
 // esfera blanca del panel del total: sigue al mouse con un movimiento suave (se va quedando atrás y alcanza);
 // al salir regresa a descansar detrás del número. Solo se anima mientras se mueve.
@@ -1548,12 +1595,15 @@ function pivotData(rows) {
 }
 function renderPivot(rows) {
   let h = `<thead><tr><th>Plaza</th><th>Asignado</th><th>Plataforma</th><th>Folios</th><th>Días rezago</th></tr></thead><tbody>`;
+  const mxRz = Math.max(1, ...rows.map(r => r.rezago ?? 0));   // escala de la mini barra
   for (const p of pivotData(rows)) {
     p.people.forEach((x, i) => {
       const s = sem(x.max);
       h += `<tr class="ps${i === 0 ? ' first' : ''}" data-a="${esc(x.a)}" data-pz="${esc(p.pz)}" data-p="${x.p}" data-tip="${tipLista(x.a, x.fr)}">` +
         (i === 0 ? `<td class="pzc${F.plaza === p.pz ? ' on' : ''}" rowspan="${p.people.length}" data-pz="${esc(p.pz)}" data-tip="${tipFor(p.pz, rows.filter(r => r.plaza === p.pz), rows.length)}"><div class="pzn">${esc(p.pz)}</div><div class="pzs">${p.n} folio${p.n === 1 ? '' : 's'}</div></td>` : '') +
-        `<td class="who">${esc(x.a)}</td><td>${plTag(x.p)}</td><td data-count="${x.n}">${x.n}</td><td class="dd ${s}" data-count="${x.max}">${x.max}</td></tr>`;
+        `<td class="who">${esc(x.a)}</td><td>${plTag(x.p)}</td><td data-count="${x.n}">${x.n}</td>` +
+        // días: etiqueta de color con mini barra (igual que en Casos activos), sin pintar toda la celda
+        `<td class="dd"><span class="dz"><span class="d ${s}" data-count="${x.max}">${x.max}</span><span class="mb"><i class="${s}" style="width:${Math.max(4, x.max * 100 / mxRz)}%"></i></span></span></td></tr>`;
     });
   }
   h += `<tr class="tot"><td colspan="3">Total general</td><td data-count="${rows.length}">${rows.length}</td><td></td></tr></tbody>`;
@@ -1975,7 +2025,7 @@ function setupReveal() {
 
 /* ===== 11. onda al hacer clic en botones, plazas y plataformas ===== */
 document.addEventListener('pointerdown', e => {
-  const b = e.target.closest('.btn, .seg button, .pzchip, .ibtn, .chip button, .pzrow, .hbtn, .more, .pbtn');
+  const b = e.target.closest('.btn, .seg button, .pzchip, .ibtn, .chip button, .pzt, .hbtn, .more, .pbtn');
   if (!b || reduceMotion()) return;
   const r = b.getBoundingClientRect(), s = Math.max(r.width, r.height) * 2;
   const w = document.createElement('span'); w.className = 'ripple';

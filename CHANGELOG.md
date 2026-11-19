@@ -2,6 +2,7 @@
 
 ## Sin publicar
 
+- Modo presentación sin huecos: cada diapositiva se agranda hasta llenar la pantalla (en cualquier tamaño, también al entrar a pantalla completa); las tablas largas se desplazan por dentro con su encabezado fijo; la dona va grande con la leyenda al lado; el resumen sin filtros y con más espacio para las plazas. Nuevo encabezado con región, fecha y nombre de la sección, y barra de avance arriba.
 - Tema azul en todo lo que no es alerta: botón Imprimir / PDF, Abrir en ServiceNow, filtros activos, buscador, flecha de orden, folio abierto en Casos activos, barras del Top, botón de regresar arriba. El rojo queda solo para folios en rojo, alertas y prioridad Crítico/Alto.
 - Semáforo único en todo el reporte (verde, amarillo y rojo con los mismos tonos en tabla por plaza, Indicadores, tarjetas de plaza y Casos activos), un poco más suave que el amarillo puro.
 - Casos activos: la prioridad se muestra como etiqueta de color (Crítico rojo, Alto rojo claro, Moderado ámbar, Bajo gris).

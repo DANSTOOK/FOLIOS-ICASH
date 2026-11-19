@@ -1153,6 +1153,44 @@ body.dark .pzr{background:#3a0e18;color:#ff8fa3}
 .pc-total{background:linear-gradient(135deg,#2f5bd3,#1e3a8a 50%,#0f1f4d)}
 
 /* =====================================================================
+   MODO PRESENTACIÓN: cada diapositiva llena la pantalla (el JS calcula el tamaño),
+   encabezado con el nombre de la sección y barra de avance
+   ===================================================================== */
+body.present{overflow:hidden}
+body.present main{max-width:none!important;padding:76px 40px 92px!important;height:100vh;min-height:0;display:flex;flex-direction:column;justify-content:center}
+body.present #app{display:flex;flex-direction:column;align-items:center}
+body.present #app .card.pcur{margin:0!important;opacity:1!important}
+body.present #app .card:hover{transform:none!important}
+body.present #app .card.pcur.ptall{max-height:calc(100vh - 168px);overflow:auto}
+/* tablas largas: se desplazan dentro de la diapositiva con el encabezado fijo */
+body.present #casesCard .tw{max-height:calc(100vh - 340px)!important;overflow:auto!important}
+body.present #secPlazas .piv-w{max-height:calc(100vh - 420px)!important;overflow:auto!important}
+body.present #secPlazas .xl th{position:sticky;top:0;z-index:2}
+/* resumen: sin filtros (es para mostrar) y más espacio para las tarjetas de plaza */
+body.present .sum-filters{display:none!important}
+body.present .sum-row{grid-template-columns:minmax(365px,1fr) minmax(0,1.3fr)!important}
+body.present .sum-head{border-bottom:0;padding-bottom:4px}
+body.present .pzt-n{white-space:normal;overflow:visible}
+/* distribución por plaza: dona grande y leyenda al lado */
+body.present .donut{flex-direction:row!important;justify-content:center;align-items:center;gap:56px}
+body.present #dist svg{width:260px;height:260px}
+body.present #dist .leg{width:340px}
+.phead{position:fixed;top:0;left:0;right:0;z-index:70;display:flex;align-items:center;gap:14px;padding:12px 32px;
+  background:rgba(255,255,255,.88);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid var(--line)}
+.phead .mark{width:38px;height:38px;border-radius:11px}
+.ph-t b{display:block;font-size:16px;letter-spacing:-.3px}
+.ph-t small{display:block;font-size:12px;color:var(--muted)}
+.ph-s{margin-left:auto;display:flex;align-items:center;gap:10px}
+.ph-s span{font-size:15px;font-weight:700;color:var(--acc-dark)}
+.ph-s em{font-style:normal;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--acc),var(--acc-dark));padding:3px 10px;border-radius:20px;font-variant-numeric:tabular-nums}
+.pprog{position:fixed;top:0;left:0;height:3px;z-index:72;background:linear-gradient(90deg,#7aa5ff,var(--acc-dark));transition:width .45s var(--ease)}
+.pbtn.px{background:rgba(255,255,255,.14)!important}
+.pbtn.px:hover{background:#dc2626!important}
+body.dark .phead{background:rgba(11,18,32,.9)}
+body.dark .ph-s span{color:#a9c1ff}
+@media print{.phead,.pprog{display:none!important}}
+
+/* =====================================================================
    1. TEMA AZUL en todo lo que no es alerta (el rojo queda solo para "en rojo", alertas y Crítico/Alto)
    ===================================================================== */
 :root{--acc:#2f5bd3;--acc-dark:#1e3a8a;--acc-50:#eef3ff;--acc-100:#dfe8ff}
@@ -1252,6 +1290,13 @@ body.dark .leg li:hover{background:#1c2b48;border-color:#3d5a94}
 <button class="totop hidden noprint" id="toTop" aria-label="Regresar arriba" title="Regresar arriba"><i data-ic="up" data-s="20"></i></button>
 <div class="tip" id="tip" role="tooltip"></div>
 <!-- controles del modo presentación -->
+<!-- encabezado y barra de avance del modo presentación -->
+<div class="phead hidden" id="phead" aria-hidden="true">
+  <div class="mark"><i data-ic="sheet" data-s="20"></i></div>
+  <div class="ph-t"><b>Estatus de folios iCash</b><small id="phSub"></small></div>
+  <div class="ph-s"><span id="phSlide"></span><em id="phNum"></em></div>
+</div>
+<div class="pprog hidden" id="pprog"></div>
 <div class="pnav hidden" id="pnav" role="toolbar" aria-label="Presentación">
   <button class="pbtn" id="pPrev" title="Anterior (←)" aria-label="Sección anterior"><i data-ic="left" data-s="18"></i></button>
   <span id="pPos">1 / 6</span>
@@ -2255,21 +2300,48 @@ try { setTheme(localStorage.getItem(TKEY) === 'oscuro', false); } catch (e) {}
 /* ===== 5. modo presentación: una sección a la vez, pantalla completa ===== */
 const presCards = () => [...document.querySelectorAll('#app .card[data-name]')];
 let pIdx = 0;
+// cada diapositiva se agranda hasta llenar la pantalla (sin pasarse de alto ni de ancho)
+const P_TOP = 76, P_BOT = 92, P_LADO = 40;
+function fitSlide() {
+  const c = presCards()[pIdx]; if (!c || !document.body.classList.contains('present')) return;
+  const W = document.documentElement.clientWidth - P_LADO * 2, H = document.documentElement.clientHeight - P_TOP - P_BOT;
+  const medir = z => { c.style.zoom = z; c.style.width = (W / z) + 'px'; return c.getBoundingClientRect().height; };
+  if (medir(1) > H) { c.classList.add('ptall'); return; }      // muy alta: tamaño normal y se desplaza por dentro
+  c.classList.remove('ptall');
+  // hasta 1.9 veces (más en pantallas muy anchas): llena la pantalla sin que las secciones cortas salgan gigantes
+  let lo = 1, hi = Math.max(1.9, Math.min(2.5, W / 760));
+  for (let k = 0; k < 8; k++) { const m = (lo + hi) / 2; if (medir(m) <= H) lo = m; else hi = m; }
+  medir(lo);
+}
+const tituloSlide = c => c.id === 'secSum' ? 'Resumen' : (c.querySelector('.card-h h2')?.textContent || '').replace(/\d+\s*folios?$/, '').trim();
 function showSlide(i) {
   const cs = presCards(); pIdx = (i + cs.length) % cs.length;
-  cs.forEach((c, k) => c.classList.toggle('pcur', k === pIdx));
+  cs.forEach((c, k) => { c.classList.toggle('pcur', k === pIdx); if (k !== pIdx) { c.style.zoom = ''; c.style.width = ''; c.classList.remove('ptall'); } });
   $('pPos').textContent = `${pIdx + 1} / ${cs.length}`;
+  $('phSlide').textContent = tituloSlide(cs[pIdx]);
+  $('phNum').textContent = `${pIdx + 1} / ${cs.length}`;
+  $('pprog').style.width = `${(pIdx + 1) * 100 / cs.length}%`;
   scrollTo({ top: 0 });
+  requestAnimationFrame(fitSlide);
 }
 function startPresent() {
-  document.body.classList.add('present'); $('pnav').classList.remove('hidden'); showSlide(0);
+  document.body.classList.add('present'); $('pnav').classList.remove('hidden');
+  $('phead').classList.remove('hidden'); $('pprog').classList.remove('hidden');
+  // encabezado: región, plaza elegida y fecha del reporte
+  const reg = F.region || uniq(active().map(r => r.region)).join(', ');
+  $('phSub').textContent = `${reg}${F.plaza ? ' · ' + F.plaza : ''} · al ${corteDate().toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' })}`;
+  document.querySelectorAll('#app .card.rv').forEach(c => c.classList.add('in'));   // todas visibles
+  showSlide(0);
   const el = document.documentElement; if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
 }
 function stopPresent() {
   document.body.classList.remove('present'); $('pnav').classList.add('hidden');
-  presCards().forEach(c => c.classList.remove('pcur'));
+  $('phead').classList.add('hidden'); $('pprog').classList.add('hidden');
+  presCards().forEach(c => { c.classList.remove('pcur', 'ptall'); c.style.zoom = ''; c.style.width = ''; });
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
 }
+// al cambiar el tamaño (por ejemplo al entrar a pantalla completa) se vuelve a ajustar
+let fitT; addEventListener('resize', () => { clearTimeout(fitT); fitT = setTimeout(fitSlide, 150); });
 $('bPresent').onclick = startPresent;
 $('pPrev').onclick = () => showSlide(pIdx - 1);
 $('pNext').onclick = () => showSlide(pIdx + 1);
